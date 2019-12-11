@@ -10,18 +10,17 @@ class CertKeeper extends Contract {
             throw new Error(`${certID} does not exist`);
         }
         console.log(certAsBytes.toString());
-        return carAsBytes.toString();
+        return certAsBytes.toString();
     }
 
-    async insertCert(ctx, certID, cert){
+    async insertCert(ctx, certID, title, grade){
         console.info("========== START : Insert Certificate ==========");
 
-        if(typeof cert !== "object"){
-            throw new Error("The input is not a JSON object");
-        }
-        if(checkFields(cert) != true){
-            throw new Error("The input has missing fields");
-        }
+        const cert = {
+            id: certID,
+            title: title,
+            grade: grade
+        };
 
         await ctx.stub.putState(certID, Buffer.from(JSON.stringify(cert)));
     

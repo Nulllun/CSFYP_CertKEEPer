@@ -1,5 +1,5 @@
 {
-    "name": "fabcar",
+    "name": "certkeeper",
     "version": "1.0.0",
     "description": "CertKeeper Chaincode",
     "main": "index.js",
