@@ -342,7 +342,6 @@ parsePeerConnectionParameters() {
 # chaincodeInvoke <peer> <org> ...
 # Accepts as many peer/org pairs as desired and requests endorsement from each
 #INVCC='{"Args":["invoke","a-sign","{\"name\":\"Michael\",\"code\":\"IK1901\",\"SID\":\"1234\"}"]}'
-node scripts/rsa-keys/sign.js '{"name":"Michael","code":"IK1901"}' `pwd`/scripts/rsa-keys/org1-sk.pem > scripts/sign.txt
 INVCC='{"Args":["invoke","a-sign","{\"signature\":\"'$(cat scripts/sign.txt)'\"}"]}'
 
 chaincodeInvoke() {
