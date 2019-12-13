@@ -8,37 +8,31 @@ class CertKeeper extends Contract {
         // generate certificates for testing
         const certs = [
             {
-                id: '1',
                 owner: 'Michael',
                 title: 'CSCI2100',
                 grade: 'B+',
             },
             {
-                id: '2',
                 owner: 'Daisy',
                 title: 'CSCI4998',
                 grade: 'PASS',
             },
             {
-                id: '3',
                 owner: 'Matthew',
                 title: 'CSCI4180',
                 grade: 'FAIL',
             },
             {
-                id: '4',
                 owner: 'Sam',
                 title: 'JASP2450',
                 grade: 'B',
             },
             {
-                id: '5',
                 owner: 'MoMo',
                 title: 'CSCI4130',
                 grade: 'A',
             },
             {
-                id: '6',
                 owner: 'Michael',
                 title: 'CSCI4130',
                 grade: 'A-',
@@ -64,9 +58,7 @@ class CertKeeper extends Contract {
     async queryAllCert(ctx){
         const startKey = 'CERT1';
         const endKey = 'CERT6';
-
         const iterator = await ctx.stub.getStateByRange(startKey, endKey);
-
         const allResults = [];
         while (true) {
             const res = await iterator.next();
@@ -93,7 +85,6 @@ class CertKeeper extends Contract {
 
     async queryCertByString(ctx, query){
         const iterator = await ctx.stub.getQueryResult(query);
-        
         const allResults = [];
         while (true) {
             const res = await iterator.next();
@@ -119,16 +110,21 @@ class CertKeeper extends Contract {
     }
 
     async insertCert(ctx, certID, owner, title, grade){
-
         const cert = {
-            id: certID,
             owner: owner,
             title: title,
-            grade: grade
+            grade: grade,
+            docType: 'CERT'
         };
-
         await ctx.stub.putState(certID, Buffer.from(JSON.stringify(cert)));
-    
+    }
+
+    async signCert(ctx, certID, signature){
+        var cert = await ctx.stub.getState(certID);
+        if(cert.digiSign == ''){
+            cert.digiSign = signature;
+            await ctx.stub.putState(certID, Buffer.from(JSON.stringify(cert)));
+        }
     }
 
     async deleteCert(ctx, certID){

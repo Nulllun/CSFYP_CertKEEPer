@@ -1,5 +1,5 @@
 # CSFYP_CertKEEPer
 
 ## To start: 
-- cd hyperledger/fabcar
+- cd hyperledger/certkeeper
 - ./startFabric.sh
