@@ -41,7 +41,7 @@ class CertKeeper extends Contract {
 
         for (let i = 0; i < certs.length ; i++){
             certs[i].docType = "CERT";
-            await ctx.stub.putState('CERT' + certs[i].id, Buffer.from(JSON.stringify(certs[i])));
+            await ctx.stub.putState('CERT' + i, Buffer.from(JSON.stringify(certs[i])));
         }
 
     }
