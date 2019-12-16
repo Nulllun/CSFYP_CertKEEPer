@@ -10,18 +10,19 @@ export default class CertVerifier extends Component {
     async handleSubmit(event) {
         let certID = event.target.certID.value
         event.preventDefault();
+        console.log("certID: " + certID);
         if (certID !== '') {
-            let path = 'http://localhost:5000/test3';
-            // let response = await fetch(path, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         certID: certID
-            //     }),
-            // });
-            let response = await fetch(path);
+            let path = 'http://localhost:5000/test';
+            let response = await fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    certID: certID
+                }),
+            });
             let data = await response.json();
             console.log(data);
         }

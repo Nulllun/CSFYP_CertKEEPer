@@ -4,11 +4,15 @@ var cors = require('cors');
 var app = express();
 
 app.use(cors());
+app.use(express.json());
 
 
-app.get("/test3", function (req, res) {
-    res.json({data: "Hello World!"});
-    console.log("Request received");
+app.get("/test", function (req, res) {
+    res.json({data: "Get Request Success"});
+});
+
+app.post("/test", function (req, res) {
+    res.json({data: "Post Request Success"});
 });
 
 app.listen(port, function () {
