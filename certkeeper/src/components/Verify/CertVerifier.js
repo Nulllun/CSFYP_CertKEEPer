@@ -6,11 +6,18 @@ import Button from 'react-bootstrap/Button';
 
 
 export default class CertVerifier extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            certID: "CERT1"
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
     async handleSubmit(event) {
         let certID = event.target.certID.value
         event.preventDefault();
-        console.log("certID: " + certID);
+        console.log(`Request is sent with {"certID": ${certID}}`);
         if (certID !== '') {
             let path = 'http://localhost:5000/test';
             let response = await fetch(path, {
