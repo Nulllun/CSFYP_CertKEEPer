@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require('cors');
 const app = express();
 const viewCert = require('./viewCert.js');
+const verifyCert = require('./verifyCert.js');
+const issueCert = require('./issueCert.js');
+
 
 app.use(cors());
 app.use(express.json());
@@ -16,6 +19,8 @@ app.post("/test", function (req, res) {
 });
 
 app.use("/view", viewCert);
+app.use("/verify", verifyCert);
+app.use("/issue", issueCert);
 
 const port = 5000;
 

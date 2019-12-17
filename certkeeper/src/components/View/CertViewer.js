@@ -29,7 +29,9 @@ export default class CertViewer extends Component {
             });
             let data = await response.json();
             console.log(data);
-            this.setState({ certs: this.state.certs.concat(data) });
+            if(response.status === 200){
+                this.setState({ certs: this.state.certs.concat(data) });
+            }
         }
     }
 
@@ -37,10 +39,10 @@ export default class CertViewer extends Component {
         return certs.map((cert, arrKey) => {
             return (
                 <div className="certificate" key={arrKey}>
-                    <p>Certificate ID: {cert.Key}</p>
-                    <p>Title: {cert.Record.title}</p>
-                    <p>Grade: {cert.Record.grade}</p>
-                    <p>Owner: {cert.Record.owner}</p>
+                    <p>Certificate ID: {cert.certID}</p>
+                    <p>Title: {cert.title}</p>
+                    <p>Grade: {cert.grade}</p>
+                    <p>Owner: {cert.owner}</p>
                 </div>
             )
         });
@@ -49,7 +51,7 @@ export default class CertViewer extends Component {
     render() {
         return (
             <div>
-                <button onClick={this.getCert}>CertViewer</button>
+                <button onClick={this.getCert}>Show My Certificates</button>
                 {this.renderCerts(this.state.certs)}
             </div>
         );

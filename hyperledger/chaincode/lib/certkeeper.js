@@ -52,7 +52,9 @@ class CertKeeper extends Contract {
             throw new Error(`${certID} does not exist`);
         }
         console.log(certAsBytes.toString());
-        return certAsBytes.toString();
+        let cert = JSON.parse(certAsBytes.toString());
+        cert.certID = certID;
+        return JSON.stringify(cert);
     }
 
     async queryAllCert(ctx){
@@ -92,7 +94,6 @@ class CertKeeper extends Contract {
             if (res.value && res.value.value.toString()) {
                 console.log(res.value.value.toString('utf8'));
 
-                const Key = res.value.key;
                 let Record;
                 try {
                     Record = JSON.parse(res.value.value.toString('utf8'));
@@ -100,7 +101,8 @@ class CertKeeper extends Contract {
                     console.log(err);
                     Record = res.value.value.toString('utf8');
                 }
-                allResults.push({ Key, Record });
+                Record.certID = res.value.key;
+                allResults.push(Record);
             }
             if (res.done) {
                 await iterator.close();
@@ -109,7 +111,7 @@ class CertKeeper extends Contract {
         }
     }
 
-    async insertCert(ctx, certID, owner, title, grade){
+    async issueCert(ctx, certID, owner, title, grade){
         const cert = {
             owner: owner,
             title: title,

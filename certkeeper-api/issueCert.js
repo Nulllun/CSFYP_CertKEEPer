@@ -8,7 +8,10 @@ const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'c
 
 // View user's own certs
 router.post('/', async (req, res) => {
-    let userID = req.body.userID;
+    let certID = req.body.certID;
+    let recipient = req.body.recipient;
+    let courseTitle = req.body.courseTitle;
+    let grade = req.body.grade;
 
     try {
 
@@ -35,9 +38,9 @@ router.post('/', async (req, res) => {
         const contract = network.getContract('certkeeper');
 
         // Evaluate the specified transaction.
-        const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"owner": "${userID}"}}`);
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
-        res.status(200).json(JSON.parse(result.toString()));
+        await contract.submitTransaction('issueCert', certID, recipient, courseTitle, grade);
+        await gateway.disconnect();
+        res.status(200).json({result: "Insertion is proposed to Hyperledger"});
 
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
