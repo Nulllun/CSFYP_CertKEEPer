@@ -16,7 +16,8 @@ export default class MyNavbar extends Component {
                     <Nav.Link href="/verify">Verify</Nav.Link>
                     <Nav.Link href="/issue">Issue</Nav.Link>
                     <Nav.Link href="/view">View</Nav.Link>
-                    <Nav.Link href="/share">Share</Nav.Link>
+                    <Nav.Link href="/Login">Login</Nav.Link>
+                    <Nav.Link href="/Register">Register</Nav.Link>
                 </Nav>
             </Navbar>
         );

@@ -46,7 +46,7 @@ export default class CertVerifier extends Component {
                     <p>Certificate ID: {cert.certID}</p>
                     <p>Title: {cert.title}</p>
                     <p>Grade: {cert.grade}</p>
-                    <p>Owner: {cert.owner}</p>
+                    <p>Recipient: {cert.recipient}</p>
                 </div>
             );
         }

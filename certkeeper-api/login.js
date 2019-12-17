@@ -8,7 +8,7 @@ const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'c
 
 // View user's own certs
 router.post('/', async (req, res) => {
-    let userID = req.body.userID;
+    let certID = req.body.certID;
 
     try {
 
@@ -35,7 +35,8 @@ router.post('/', async (req, res) => {
         const contract = network.getContract('certkeeper');
 
         // Evaluate the specified transaction.
-        const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipient": "${userID}"}}`);
+        const result = await contract.evaluateTransaction('queryCert', certID);
+        await gateway.disconnect();
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         res.status(200).json(JSON.parse(result.toString()));
 

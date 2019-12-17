@@ -8,32 +8,32 @@ class CertKeeper extends Contract {
         // generate certificates for testing
         const certs = [
             {
-                owner: 'Michael',
+                recipient: 'Michael',
                 title: 'CSCI2100',
                 grade: 'B+',
             },
             {
-                owner: 'Daisy',
+                recipient: 'Daisy',
                 title: 'CSCI4998',
                 grade: 'PASS',
             },
             {
-                owner: 'Matthew',
+                recipient: 'Matthew',
                 title: 'CSCI4180',
                 grade: 'FAIL',
             },
             {
-                owner: 'Sam',
+                recipient: 'Sam',
                 title: 'JASP2450',
                 grade: 'B',
             },
             {
-                owner: 'MoMo',
+                recipient: 'MoMo',
                 title: 'CSCI4130',
                 grade: 'A',
             },
             {
-                owner: 'Michael',
+                recipient: 'Michael',
                 title: 'CSCI4130',
                 grade: 'A-',
             },
@@ -111,9 +111,9 @@ class CertKeeper extends Contract {
         }
     }
 
-    async issueCert(ctx, certID, owner, title, grade){
+    async issueCert(ctx, certID, recipient, title, grade){
         const cert = {
-            owner: owner,
+            recipient: recipient,
             title: title,
             grade: grade,
             docType: 'CERT'

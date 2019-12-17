@@ -1,15 +1,13 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- */
+const express = require('express');
+const router = express.Router();
 
-'use strict';
-
-const { FileSystemWallet, InMemoryWallet, Gateway, X509WalletMixin } = require('fabric-network');
+const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
-const util = require('util');
+
 const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'connection-org1.json');
 
-async function main() {
+// View user's own certs
+router.post('/', async (req, res) => {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -41,20 +39,18 @@ async function main() {
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user17', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'user17', enrollmentSecret: secret });
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user1', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'user1', enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-        let newWallet = new InMemoryWallet();
-        await newWallet.import('user17', userIdentity);
-        let tmp = await newWallet.export('user17');
-        console.log(tmp);
-        // console.log(util.inspect(newWallet));
-        console.log('Successfully registered and enrolled admin user "user17" and imported it into the wallet');
+        await wallet.import('user1', userIdentity);
+        console.log(userIdentity);
+        console.log('Successfully registered and enrolled admin user "user1" and imported it into the wallet');
+        res.status(200).json({});
 
     } catch (error) {
-        console.error(`Failed to register user "user17": ${error}`);
-        process.exit(1);
+        console.error(`Failed to register user "user4": ${error}`);
+        res.status(500).json({result: "Fail"});
     }
-}
+});
 
-main();
+module.exports = router;
