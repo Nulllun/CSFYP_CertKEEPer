@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { FileSystemWallet, Gateway } = require('fabric-network');
+const { FileSystemWallet, InMemoryWallet, Gateway, X509WalletMixin } = require('fabric-network');
 const path = require('path');
 
 const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'connection-org1.json');
@@ -16,9 +16,9 @@ router.post('/', async (req, res) => {
         console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists('user1');
+        const userExists = await wallet.exists('user1-2');
         if (userExists) {
-            console.log('An identity for the user "user1" already exists in the wallet');
+            console.log('An identity for the user "user1-2" already exists in the wallet');
             return;
         }
 
@@ -39,17 +39,18 @@ router.post('/', async (req, res) => {
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user1', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'user1', enrollmentSecret: secret });
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user1-2', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'user1-2', enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-        await wallet.import('user1', userIdentity);
-        console.log(userIdentity);
-        console.log('Successfully registered and enrolled admin user "user1" and imported it into the wallet');
-        res.status(200).json({});
+
+        let newWallet = await new InMemoryWallet(userIdentity);
+        console.log(newWallet);
+        console.log('Successfully registered and enrolled admin user "user1-2" and imported it into the wallet');
+        res.status(200).json(newWallet);
 
     } catch (error) {
-        console.error(`Failed to register user "user4": ${error}`);
-        res.status(500).json({result: "Fail"});
+        console.error(`Failed to register user "user1-2": ${error}`);
+        res.status(500).json({ result: "Fail" });
     }
 });
 

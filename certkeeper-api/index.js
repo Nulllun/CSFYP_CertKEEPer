@@ -4,7 +4,7 @@ const app = express();
 const viewCert = require('./viewCert.js');
 const verifyCert = require('./verifyCert.js');
 const issueCert = require('./issueCert.js');
-const login = register('/login.js');
+const login = require('./login.js');
 const register = require('./register.js');
 
 
