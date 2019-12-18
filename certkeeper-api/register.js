@@ -9,18 +9,11 @@ const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'c
 // View user's own certs
 router.post('/', async (req, res) => {
     try {
-
+        const userID = req.body.userID;
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
-
-        // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists('user1-2');
-        if (userExists) {
-            console.log('An identity for the user "user1-2" already exists in the wallet');
-            return;
-        }
 
         // Check to see if we've already enrolled the admin user.
         const adminExists = await wallet.exists('admin');
@@ -39,18 +32,17 @@ router.post('/', async (req, res) => {
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user1-2', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'user1-2', enrollmentSecret: secret });
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: userID, role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: userID, enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
 
         let newWallet = await new InMemoryWallet(userIdentity);
         console.log(newWallet);
-        console.log('Successfully registered and enrolled admin user "user1-2" and imported it into the wallet');
+        console.log(`Successfully registered and enrolled admin user ${userID} and imported it into the wallet`);
         res.status(200).json(newWallet);
 
     } catch (error) {
-        console.error(`Failed to register user "user1-2": ${error}`);
-        res.status(500).json({ result: "Fail" });
+        res.status(500).json({ result: `Failed to register user ${userID}: ${error}`});
     }
 });
 

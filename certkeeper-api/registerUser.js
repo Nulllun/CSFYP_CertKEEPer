@@ -40,25 +40,26 @@ async function main() {
         const adminIdentity = gateway.getCurrentIdentity();
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user7', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'user7', enrollmentSecret: secret });
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user11', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'user11', enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
         
         let newWallet = new InMemoryWallet(userIdentity);
 
-        //await newWallet.import('user7-1', userIdentity);
-        //await newWallet.import('user7-2', userIdentity2);
+        //await newWallet.import('user11-1', userIdentity);
+        //await newWallet.import('user11-2', userIdentity2);
 
-        //let tmp = await newWallet.export('user7-1');
-        //let tmp2 = await newWallet.export('user7-2');
+        let tmp = await newWallet.export('user11');
+        //let tmp2 = await newWallet.export('user11-2');
 
         //console.log(tmp);
         //console.log(tmp2)
-        console.log(newWallet);
-        console.log('Successfully registered and enrolled admin user "user7" and imported it into the wallet');
+        //console.log(newWallet);
+        console.log(tmp)
+        console.log('Successfully registered and enrolled admin user "user11" and imported it into the wallet');
         resizeBy.status(200).json(newWallet);
     } catch (error) {
-        console.error(`Failed to register user "user7": ${error}`);
+        console.error(`Failed to register user "user11": ${error}`);
         process.exit(1);
     }
 }
