@@ -14,6 +14,7 @@ router.post('/', async (req, res) => {
         let userID = walletJson.userID;
         let wallet = new InMemoryWallet();
         await wallet.import(userID, walletJson);
+        
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
         await gateway.connect(ccpPath, { wallet, identity: userID, discovery: { enabled: true, asLocalhost: true } });
@@ -25,7 +26,8 @@ router.post('/', async (req, res) => {
         const contract = network.getContract('certkeeper');
 
         // Evaluate the specified transaction.
-        const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipient": "${userID}"}}`);
+        const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipient": "${userID}", "docType": "CERT"}}`);
+        await gateway.disconnect();
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         res.status(200).json(JSON.parse(result.toString()));
 
