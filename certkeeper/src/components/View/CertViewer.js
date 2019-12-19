@@ -5,7 +5,6 @@ export default class CertViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userID: "Michael",
             certs: []
         };
         this.getCert = this.getCert.bind(this);
@@ -13,9 +12,9 @@ export default class CertViewer extends Component {
     }
 
     async getCert() {
-        let userID = this.state.userID;
-        console.log(`Request is sent with {"userID": ${userID}}`);
-        if (userID !== '') {
+        let wallet = sessionStorage['wallet'];
+        console.log('Request is sent');
+        if (wallet !== undefined && wallet !== null) {
             let path = 'http://localhost:5000/view';
             let response = await fetch(path, {
                 method: 'POST',
@@ -24,13 +23,13 @@ export default class CertViewer extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userID: userID
+                    wallet: wallet
                 }),
             });
-            let data = await response.json();
-            console.log(data);
+            let certList = await response.json();
+            console.log(certList);
             if(response.status === 200){
-                this.setState({ certs: this.state.certs.concat(data) });
+                this.setState({ certs: this.state.certs.concat(certList) });
             }
         }
     }

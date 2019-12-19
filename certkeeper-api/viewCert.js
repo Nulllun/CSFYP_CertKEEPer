@@ -1,32 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-const { FileSystemWallet, Gateway } = require('fabric-network');
+const { InMemoryWallet, Gateway } = require('fabric-network');
 const path = require('path');
 
 const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'connection-org1.json');
 
 // View user's own certs
 router.post('/', async (req, res) => {
-    let userID = req.body.userID;
-
+    let walletStr = req.body.wallet;
     try {
-
-        const walletPath = path.join(process.cwd(), 'wallet');
-        const wallet = new FileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
-
-        // Check to see if we've already enrolled the user.
-        const userExists = await wallet.exists('user1');
-        if (!userExists) {
-            console.log('An identity for the user "user1" does not exist in the wallet');
-            console.log('Run the registerUser.js application before retrying');
-            return;
-        }
-
+        let walletJson = JSON.parse(walletStr);
+        let userID = walletJson.userID;
+        let wallet = new InMemoryWallet();
+        await wallet.import(userID, walletJson);
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccpPath, { wallet, identity: 'user1', discovery: { enabled: true, asLocalhost: true } });
+        await gateway.connect(ccpPath, { wallet, identity: userID, discovery: { enabled: true, asLocalhost: true } });
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
