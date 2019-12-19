@@ -8,8 +8,8 @@ const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'c
 
 // View user's own certs
 router.post('/', async (req, res) => {
+    const userID = req.body.userID;
     try {
-        const userID = req.body.userID;
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = new FileSystemWallet(walletPath);
@@ -34,12 +34,11 @@ router.post('/', async (req, res) => {
         // Register the user, enroll the user, and import the new identity into the wallet.
         const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: userID, role: 'client' }, adminIdentity);
         const enrollment = await ca.enroll({ enrollmentID: userID, enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-
-        let newWallet = await new InMemoryWallet(userIdentity);
-        console.log(newWallet);
-        console.log(`Successfully registered and enrolled admin user ${userID} and imported it into the wallet`);
-        res.status(200).json(newWallet);
+        let userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
+        userIdentity.publicKey = enrollment.key.getPublicKey().toBytes();
+        userIdentity.userID = userID;
+        console.log(`Successfully registered and enrolled user ${userID}`);
+        res.status(200).json(userIdentity);
 
     } catch (error) {
         res.status(500).json({ result: `Failed to register user ${userID}: ${error}`});

@@ -4,7 +4,7 @@
 
 'use strict';
 
-const { FileSystemWallet, InMemoryWallet, Gateway, X509WalletMixin } = require('fabric-network');
+const { FileSystemWallet, InMemoryWallet, Gateway, X509WalletMixin, IdentityService } = require('fabric-network');
 const path = require('path');
 const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'connection-org1.json');
 
@@ -38,28 +38,33 @@ async function main() {
         // Get the CA client object from the gateway for interacting with the CA.
         const ca = gateway.getClient().getCertificateAuthority();
         const adminIdentity = gateway.getCurrentIdentity();
+        //const registar = ca.getRegistar();
+        const  x = await ca.newIdentityService().getOne('Michael' ,adminIdentity);
+        console.log(x);
+        // console.log(Object.getPrototypeOf(adminIdentity));
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user11', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'user11', enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-        
-        let newWallet = new InMemoryWallet(userIdentity);
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'test34', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'test34', enrollmentSecret: secret });
+        let userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
+        userIdentity.enrollmentID = 'test34';
+        console.log(enrollment.key.getPublicKey().toBytes());
+        console.log(enrollment.key.getSKI());
 
-        //await newWallet.import('user11-1', userIdentity);
-        //await newWallet.import('user11-2', userIdentity2);
 
-        let tmp = await newWallet.export('user11');
-        //let tmp2 = await newWallet.export('user11-2');
+        console.log('=================================');
+        let newWallet = new InMemoryWallet();
+        await newWallet.import('GGWP', userIdentity);
 
-        //console.log(tmp);
-        //console.log(tmp2)
-        //console.log(newWallet);
-        console.log(tmp)
-        console.log('Successfully registered and enrolled admin user "user11" and imported it into the wallet');
-        resizeBy.status(200).json(newWallet);
+        const gateway2 = new Gateway();
+        await gateway2.connect(ccpPath, { wallet: newWallet, identity: 'GGWP', discovery: { enabled: true, asLocalhost: true } });
+        const newUserIdentity = gateway2.getCurrentIdentity();
+        //console.log(newUserIdentity);
+
+        console.log('Successfully registered and enrolled admin user "test34" and imported it into the wallet');
+
     } catch (error) {
-        console.error(`Failed to register user "user11": ${error}`);
+        console.error(`Failed to register user "test34": ${error}`);
         process.exit(1);
     }
 }
