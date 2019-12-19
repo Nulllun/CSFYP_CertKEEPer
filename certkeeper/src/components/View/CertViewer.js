@@ -39,11 +39,19 @@ export default class CertViewer extends Component {
             return (
                 <div className="certificate" key={arrKey}>
                     <p>Certificate ID: {cert.certID}</p>
+                    <p>Issue Platform: {cert.issuePlatform}</p>
+                    <p>Institution: {cert.institution}</p>
                     <p>Title: {cert.courseTitle}</p>
-                    <p>Grade: {cert.grade}</p>
+                    <p>Description: {cert.courseDescription}</p>
+                    <p>TeacherID: {cert.teacherID}</p>
+                    <p>TeacherName: {cert.teacherName}</p>
                     <p>RecipientID: {cert.recipientID}</p>
                     <p>RecipientName: {cert.recipientName}</p>
+                    <p>Grade: {cert.grade}</p>
+                    <p>Issue Date: {cert.issueDate}</p>
                     <p>Signature: {cert.signature}</p>
+                    <p>SignerID: {cert.signerID}</p>
+                    <p>SignerName: {cert.signerName}</p>
                 </div>
             )
         });

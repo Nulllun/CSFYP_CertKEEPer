@@ -8,40 +8,15 @@ class CertKeeper extends Contract {
         // generate certificates for testing
         const certs = [
             {
-                recipientID: 'Michael',
-                title: 'CSCI2100',
-                grade: 'B+',
-            },
-            {
-                recipientID: 'Daisy',
-                title: 'CSCI4998',
-                grade: 'PASS',
-            },
-            {
-                recipientID: 'Matthew',
-                title: 'CSCI4180',
-                grade: 'FAIL',
-            },
-            {
-                recipientID: 'Sam',
-                title: 'JASP2450',
-                grade: 'B',
-            },
-            {
-                recipientID: 'MoMo',
-                title: 'CSCI4130',
-                grade: 'A',
-            },
-            {
-                recipientID: 'Michael',
-                title: 'CSCI4130',
-                grade: 'A-',
+                recipientID: 'CERT-testID',
+                courseTitle: 'testCourseTitle',
+                grade: 'testGrade',
             },
         ];
 
         for (let i = 0; i < certs.length ; i++){
             certs[i].docType = "CERT";
-            await ctx.stub.putState('CERT' + i, Buffer.from(JSON.stringify(certs[i])));
+            await ctx.stub.putState(certs[i].certID, Buffer.from(JSON.stringify(certs[i])));
         }
 
     }
@@ -55,34 +30,6 @@ class CertKeeper extends Contract {
         let cert = JSON.parse(certAsBytes.toString());
         cert.certID = certID;
         return JSON.stringify(cert);
-    }
-
-    async queryAllCert(ctx){
-        const startKey = 'CERT1';
-        const endKey = 'CERT6';
-        const iterator = await ctx.stub.getStateByRange(startKey, endKey);
-        const allResults = [];
-        while (true) {
-            const res = await iterator.next();
-
-            if (res.value && res.value.value.toString()) {
-                console.log(res.value.value.toString('utf8'));
-
-                const Key = res.value.key;
-                let Record;
-                try {
-                    Record = JSON.parse(res.value.value.toString('utf8'));
-                } catch (err) {
-                    console.log(err);
-                    Record = res.value.value.toString('utf8');
-                }
-                allResults.push({ Key, Record });
-            }
-            if (res.done) {
-                await iterator.close();
-                return JSON.stringify(allResults);
-            }
-        }
     }
 
     async queryCertByString(ctx, query){
@@ -119,8 +66,8 @@ class CertKeeper extends Contract {
 
     async signCert(ctx, certID, signature){
         var cert = await ctx.stub.getState(certID);
-        if(cert.digiSign == ''){
-            cert.digiSign = signature;
+        if(cert.signature == ''){
+            cert.signature = signature;
             await ctx.stub.putState(certID, Buffer.from(JSON.stringify(cert)));
         }
     }
@@ -129,8 +76,21 @@ class CertKeeper extends Contract {
         await ctx.stub.deleteState(certID);
     }
 
-    checkFields(cert){
-        return true;
+    async insertPubKey(ctx, userID, publicKey){
+        const turple = {
+            userID: userID,
+            publicKey: publicKey,
+            docType: "PUBKEY"
+        }
+        await ctx.stub.putState("PUBKEY-" + turple.userID, Buffer.from(JSON.stringify(turple)));
+    }
+
+    async queryPubKey(ctx, userID){
+        const publicKey = await ctx.stub.getState("PUBKEY-" + userID);
+        if (!publicKey || publicKey.length === 0) {
+            throw new Error(`${userID} does not exist`);
+        }
+        return JSON.stringify({publicKey: publicKey});
     }
 
 }
