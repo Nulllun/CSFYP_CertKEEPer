@@ -8,32 +8,32 @@ class CertKeeper extends Contract {
         // generate certificates for testing
         const certs = [
             {
-                recipient: 'Michael',
+                recipientID: 'Michael',
                 title: 'CSCI2100',
                 grade: 'B+',
             },
             {
-                recipient: 'Daisy',
+                recipientID: 'Daisy',
                 title: 'CSCI4998',
                 grade: 'PASS',
             },
             {
-                recipient: 'Matthew',
+                recipientID: 'Matthew',
                 title: 'CSCI4180',
                 grade: 'FAIL',
             },
             {
-                recipient: 'Sam',
+                recipientID: 'Sam',
                 title: 'JASP2450',
                 grade: 'B',
             },
             {
-                recipient: 'MoMo',
+                recipientID: 'MoMo',
                 title: 'CSCI4130',
                 grade: 'A',
             },
             {
-                recipient: 'Michael',
+                recipientID: 'Michael',
                 title: 'CSCI4130',
                 grade: 'A-',
             },
@@ -111,14 +111,10 @@ class CertKeeper extends Contract {
         }
     }
 
-    async issueCert(ctx, certID, recipient, title, grade){
-        const cert = {
-            recipient: recipient,
-            title: title,
-            grade: grade,
-            docType: 'CERT'
-        };
-        await ctx.stub.putState(certID, Buffer.from(JSON.stringify(cert)));
+    async issueCert(ctx, certStr){
+        let cert = JSON.parse(certStr);
+        cert.docType = 'CERT';
+        await ctx.stub.putState(cert.certID, Buffer.from(JSON.stringify(cert)));
     }
 
     async signCert(ctx, certID, signature){

@@ -5,16 +5,16 @@ export default class CertViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            certs: []
+            certList: []
         };
         this.getCert = this.getCert.bind(this);
         this.renderCerts = this.renderCerts.bind(this);
     }
 
     async getCert() {
-        let wallet = sessionStorage['wallet'];
+        let walletStr = sessionStorage['wallet'];
         console.log('Request is sent');
-        if (wallet !== undefined && wallet !== null) {
+        if (walletStr !== undefined && walletStr !== null) {
             let path = 'http://localhost:5000/view';
             let response = await fetch(path, {
                 method: 'POST',
@@ -23,25 +23,27 @@ export default class CertViewer extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    wallet: wallet
+                    wallet: JSON.parse(walletStr)
                 }),
             });
             let certList = await response.json();
             console.log(certList);
-            if(response.status === 200){
-                this.setState({ certs: this.state.certs.concat(certList) });
+            if (response.status === 200) {
+                this.setState({ certList: this.state.certList.concat(certList) });
             }
         }
     }
 
-    renderCerts(certs) {
-        return certs.map((cert, arrKey) => {
+    renderCerts(certList) {
+        return certList.map((cert, arrKey) => {
             return (
                 <div className="certificate" key={arrKey}>
                     <p>Certificate ID: {cert.certID}</p>
-                    <p>Title: {cert.title}</p>
+                    <p>Title: {cert.courseTitle}</p>
                     <p>Grade: {cert.grade}</p>
-                    <p>Recipient: {cert.recipient}</p>
+                    <p>RecipientID: {cert.recipientID}</p>
+                    <p>RecipientName: {cert.recipientName}</p>
+                    <p>Signature: {cert.signature}</p>
                 </div>
             )
         });
@@ -51,7 +53,7 @@ export default class CertViewer extends Component {
         return (
             <div>
                 <button onClick={this.getCert}>Show My Certificates</button>
-                {this.renderCerts(this.state.certs)}
+                {this.renderCerts(this.state.certList)}
             </div>
         );
     }

@@ -8,8 +8,8 @@ class CertKeeperCert {
         this.institution = '';
         // information of the course taken {ID, title, description}
         this.course = {};
-        // information of the teachers. For example, [{ID: 0001 , name: Prof. King}, {...}]
-        this.teachers = [];
+        // information of the teachers. For example, {ID: 0001 , name: Prof. King}
+        this.teacher = {};
         // information of the recipient {ID, name}
         this.recipient = {};
         this.grade = '';
@@ -24,7 +24,7 @@ class CertKeeperCert {
         this.issuePlatform = json.issuePlatform;
         this.institution = json.institution;
         this.course = json.course;
-        this.teachers = json.teachers;
+        this.teacher = json.teacher;
         this.recipient = json.recipient;
         this.grade = json.grade;
         this.issueDate = '';
