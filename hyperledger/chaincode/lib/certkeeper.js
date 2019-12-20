@@ -8,7 +8,7 @@ class CertKeeper extends Contract {
         // generate certificates for testing
         const certs = [
             {
-                recipientID: 'CERT-testID',
+                recipientID: 'testID',
                 courseTitle: 'testCourseTitle',
                 grade: 'testGrade',
             },
@@ -16,7 +16,7 @@ class CertKeeper extends Contract {
 
         for (let i = 0; i < certs.length ; i++){
             certs[i].docType = "CERT";
-            await ctx.stub.putState(certs[i].certID, Buffer.from(JSON.stringify(certs[i])));
+            await ctx.stub.putState('CERT-test', Buffer.from(JSON.stringify(certs[i])));
         }
 
     }
@@ -28,7 +28,6 @@ class CertKeeper extends Contract {
         }
         console.log(certAsBytes.toString());
         let cert = JSON.parse(certAsBytes.toString());
-        cert.certID = certID;
         return JSON.stringify(cert);
     }
 
@@ -86,11 +85,12 @@ class CertKeeper extends Contract {
     }
 
     async queryPubKey(ctx, userID){
-        const publicKey = await ctx.stub.getState("PUBKEY-" + userID);
-        if (!publicKey || publicKey.length === 0) {
+        const publicKeyTurple = await ctx.stub.getState("PUBKEY-" + userID);
+        if (!publicKeyTurple || publicKeyTurple.length === 0) {
             throw new Error(`${userID} does not exist`);
         }
-        return JSON.stringify({publicKey: publicKey});
+        let turple = JSON.parse(publicKeyTurple.toString());
+        return JSON.stringify(turple);
     }
 
 }

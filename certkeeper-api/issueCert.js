@@ -4,6 +4,9 @@ const router = express.Router();
 const { InMemoryWallet, Gateway } = require('fabric-network');
 const path = require('path');
 
+const { CertKeeperCert } = require('./CertKeeperCert');
+const CryptoSuite_ECDSA_AES = require('fabric-ca-client/lib/impl/CryptoSuite_ECDSA_AES');
+
 const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'connection-org1.json');
 
 // View user's own certs
@@ -20,7 +23,10 @@ router.post('/', async (req, res) => {
         await gateway.connect(ccpPath, { wallet, identity: userID, discovery: { enabled: true, asLocalhost: true } });
         let crypto = gateway.getClient().getCryptoSuite();
         let key = await crypto.importKey(walletJson.privateKey);
-        let signature = crypto.sign(key, Buffer.from(JSON.stringify(cert))).toString('hex');
+        let targetCert = new CertKeeperCert();
+        targetCert.readFromJson(cert);
+        let signature = await crypto.sign(key, Buffer.from(JSON.stringify(targetCert.outputCertContent()))).toString('hex');
+
         cert.signerID = walletJson.userID;
         cert.signerName = walletJson.userID + "(Name)";
         cert.signature = signature;

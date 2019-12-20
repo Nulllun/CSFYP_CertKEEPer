@@ -6,7 +6,8 @@ export default class CertVerifier extends Component {
         super(props);
         this.state = {
             certID: '',
-            cert: null
+            cert: null,
+            verifyResult: '',
         };
         this.handleInput = this.handleInput.bind(this);
         this.verifyCert = this.verifyCert.bind(this);
@@ -30,7 +31,7 @@ export default class CertVerifier extends Component {
             let data = await response.json();
             console.log(data);
             if (response.status === 200) {
-                this.setState({ cert: data });
+                this.setState({ cert: data.cert, verifyResult: data.verifyResult });
             }
         }
     }
@@ -57,6 +58,7 @@ export default class CertVerifier extends Component {
                     <p>Signature: {cert.signature}</p>
                     <p>SignerID: {cert.signerID}</p>
                     <p>SignerName: {cert.signerName}</p>
+                    <h3>Verifiy Result: {this.state.verifyResult}</h3>
                 </div>
             );
         }

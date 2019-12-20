@@ -37,6 +37,15 @@ router.post('/', async (req, res) => {
         let userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
         userIdentity.publicKey = enrollment.key.getPublicKey().toBytes();
         userIdentity.userID = userID;
+        
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
+
+        // Get the contract from the network.
+        const contract = network.getContract('certkeeper');
+
+        await contract.submitTransaction('insertPubKey', userIdentity.userID, userIdentity.publicKey)
+
         console.log(`Successfully registered and enrolled user ${userID}`);
         res.status(200).json(userIdentity);
 
