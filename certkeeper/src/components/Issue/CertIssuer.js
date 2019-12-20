@@ -69,9 +69,9 @@ export default class CertIssuer extends Component {
                 <input id="recipientName" onChange={this.handleInput} placeholder="Enter recipientName" /><br/>
                 <input id="grade" onChange={this.handleInput} placeholder="Enter grade" /><br/>
                 <input id="issueDate" onChange={this.handleInput} placeholder="Enter issueDate" /><br/>
-                <input id="signature" onChange={this.handleInput} placeholder="Enter signature" /><br/>
+                {/* <input id="signature" onChange={this.handleInput} placeholder="Enter signature" /><br/>
                 <input id="signerID" onChange={this.handleInput} placeholder="Enter signerID" /><br/>
-                <input id="signerName" onChange={this.handleInput} placeholder="Enter signerName" /><br/>
+                <input id="signerName" onChange={this.handleInput} placeholder="Enter signerName" /><br/> */}
                 <button onClick={this.issueCert}>Issue</button>
                 <button onClick={() => console.log(this.state)}>Show</button>
             </div>

@@ -122,6 +122,9 @@ docker exec \
     --tlsRootCertFiles ${ORG1_TLS_ROOTCERT_FILE} \
     --tlsRootCertFiles ${ORG2_TLS_ROOTCERT_FILE}
     
+cd ../../certkeeper-api/
+rm -rf wallet/* && node enrollAdmin.js
+
 set +x
 
 echo "<=====  Hyperledger Fabric is started  =====>"
