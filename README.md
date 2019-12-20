@@ -2,7 +2,7 @@
 
 ## To start: 
 
-```css
+```
 // To start the Hyperledger Fabric
 cd hyperledger/certkeeper
 ./startFabric.sh
