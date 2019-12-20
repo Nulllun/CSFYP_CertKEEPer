@@ -4,6 +4,8 @@ const router = express.Router();
 const { FileSystemWallet, InMemoryWallet, Gateway, X509WalletMixin } = require('fabric-network');
 const path = require('path');
 
+const NodeRSA = require('node-rsa');
+
 const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'connection-org1.json');
 
 // View user's own certs
@@ -35,8 +37,14 @@ router.post('/', async (req, res) => {
         const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: userID, role: 'client' }, adminIdentity);
         const enrollment = await ca.enroll({ enrollmentID: userID, enrollmentSecret: secret });
         let userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-        userIdentity.publicKey = enrollment.key.getPublicKey().toBytes();
+        
+        let rsa = new NodeRSA();
+        let keyPair = await rsa.generateKeyPair();
+        let rsaPubKey = await keyPair.exportKey('pkcs8-public-pem');
+        let rsaPrvKey = await keyPair.exportKey('pkcs8-private-pem');
         userIdentity.userID = userID;
+        userIdentity.rsaPubKey = rsaPubKey;
+        userIdentity.rsaPrvKey = rsaPrvKey;
         
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
@@ -44,7 +52,7 @@ router.post('/', async (req, res) => {
         // Get the contract from the network.
         const contract = network.getContract('certkeeper');
 
-        await contract.submitTransaction('insertPubKey', userIdentity.userID, userIdentity.publicKey)
+        await contract.submitTransaction('insertPubKey', userIdentity.userID, userIdentity.rsaPubKey)
 
         console.log(`Successfully registered and enrolled user ${userID}`);
         res.status(200).json(userIdentity);

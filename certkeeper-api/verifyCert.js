@@ -4,6 +4,8 @@ const router = express.Router();
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
 
+const NodeRSA = require('node-rsa');
+
 const { CertKeeperCert } = require('./CertKeeperCert');
 
 const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'first-network', 'connection-org1.json');
@@ -39,10 +41,11 @@ router.post('/', async (req, res) => {
             certContent.readFromJson(certJson);
 
             const keyBytes = await contract.evaluateTransaction('queryPubKey', certJson.signerID);
-
-            const keyPEM = JSON.parse(keyBytes.toString()).publicKey;
-            const publicKey = await crypto.importKey(keyPEM);
-            verifyResult = await crypto.verify(publicKey, Buffer.from(certJson.signature, 'hex'), Buffer.from(JSON.stringify(certContent.outputCertContent())));
+            let rsa = new NodeRSA();
+            let rsaPubKey = JSON.parse(keyBytes.toString()).publicKey;
+            console.log(rsaPubKey);
+            await rsa.importKey(rsaPubKey, 'pkcs8-public-pem');
+            verifyResult = await rsa.verify(Buffer.from(JSON.stringify(certContent.outputCertContent())), Buffer.from(certJson.signature, 'hex'));
             verifyResult = verifyResult.toString();
         }
         await gateway.disconnect();

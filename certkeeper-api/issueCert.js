@@ -4,6 +4,8 @@ const router = express.Router();
 const { InMemoryWallet, Gateway } = require('fabric-network');
 const path = require('path');
 
+const NodeRSA = require('node-rsa');
+
 const { CertKeeperCert } = require('./CertKeeperCert');
 const CryptoSuite_ECDSA_AES = require('fabric-ca-client/lib/impl/CryptoSuite_ECDSA_AES');
 
@@ -21,11 +23,11 @@ router.post('/', async (req, res) => {
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
         await gateway.connect(ccpPath, { wallet, identity: userID, discovery: { enabled: true, asLocalhost: true } });
-        let crypto = gateway.getClient().getCryptoSuite();
-        let key = await crypto.importKey(walletJson.privateKey);
+        let rsa = new NodeRSA();
+        await rsa.importKey(walletJson.rsaPrvKey, 'pkcs8-private-pem');
         let targetCert = new CertKeeperCert();
         targetCert.readFromJson(cert);
-        let signature = await crypto.sign(key, Buffer.from(JSON.stringify(targetCert.outputCertContent()))).toString('hex');
+        let signature = await rsa.sign(Buffer.from(JSON.stringify(targetCert.outputCertContent()))).toString('hex');
 
         cert.signerID = walletJson.userID;
         cert.signerName = walletJson.userID + "(Name)";
