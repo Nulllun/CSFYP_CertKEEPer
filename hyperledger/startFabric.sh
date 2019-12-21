@@ -18,7 +18,7 @@ CC_SRC_PATH=/opt/gopath/src/github.com/chaincode/
 rm -rf ./hfc-key-store
 
 # launch network; create channel and join peer to channel
-cd ../first-network
+cd ./first-network
 echo y | ./byfn.sh down
 echo y | ./byfn.sh up -a -n -s couchdb
 
