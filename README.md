@@ -1,10 +1,16 @@
 # CSFYP_CertKEEPer
 
+## Prerequisites:
+Follow the instruction on this link and install the prerequisities:  
+https://hyperledger-fabric.readthedocs.io/en/release-1.4/prereqs.html
+
 ## To start: 
 
 ```
+git clone git@github.com:Nulllun/CSFYP_CertKEEPer.git
+
 // To start the Hyperledger Fabric
-cd hyperledger/certkeeper
+cd hyperledger
 ./startFabric.sh
 
 // To start the front end
