@@ -76,12 +76,12 @@ class CertKeeper extends Contract {
     }
 
     async insertPubKey(ctx, userID, publicKey){
-        const turple = {
+        const tuple = {
             userID: userID,
             publicKey: publicKey,
             docType: "PUBKEY"
         }
-        await ctx.stub.putState("PUBKEY-" + turple.userID, Buffer.from(JSON.stringify(turple)));
+        await ctx.stub.putState("PUBKEY-" + tuple.userID, Buffer.from(JSON.stringify(tuple)));
     }
 
     async queryPubKey(ctx, userID){
