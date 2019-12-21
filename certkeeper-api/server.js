@@ -4,7 +4,6 @@ const app = express();
 const viewCert = require('./viewCert.js');
 const verifyCert = require('./verifyCert.js');
 const issueCert = require('./issueCert.js');
-const login = require('./login.js');
 const register = require('./register.js');
 
 
@@ -27,7 +26,6 @@ app.post("/file", function (req, res) {
 app.use("/view", viewCert);
 app.use("/verify", verifyCert);
 app.use("/issue", issueCert);
-app.use("/login", login);
 app.use("/register", register);
 
 const port = 5000;
