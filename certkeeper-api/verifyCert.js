@@ -23,8 +23,6 @@ router.post('/', async (req, res) => {
         const gateway = new Gateway();
         await gateway.connect(ccpPath, { wallet, identity: 'admin', discovery: { enabled: true, asLocalhost: true } });
 
-        let crypto = gateway.getClient().getCryptoSuite();
-
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
 
