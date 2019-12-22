@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../main.css';
 
 
 export default class Login extends Component {
@@ -46,6 +47,7 @@ export default class Login extends Component {
         return (
             <div>
                 <h2>Login Page</h2>
+                <p>Please upload your .json file downloaded automatiaclly when you registered.</p>
                 {this.renderWallet()}
             </div>
         );

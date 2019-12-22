@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-
-
+import '../main.css';
+import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
+  
 export default class Register extends Component {
     constructor(props) {
         super(props);
@@ -15,6 +17,7 @@ export default class Register extends Component {
     async registerUser() {
         const userID = this.state.userID;
         console.log(`Request is sent with {"userID": ${userID}}`);
+
         if (userID !== '') {
             let path = 'http://localhost:5000/register';
             let response = await fetch(path, {
@@ -32,7 +35,10 @@ export default class Register extends Component {
                 this.downloadWallet(wallet);
             }
             console.log(wallet);
-
+            document.body.innerHTML += '<p>A .json file is downloaded actomactically. Please save it in a location you would remember as you will need this to login into CertKEEPer.</p>';
+        }
+        else{
+            document.body.innerHTML += '<p>ID is null or has been registered. Please enter a new one.</p>'
         }
     }
 
@@ -55,8 +61,9 @@ export default class Register extends Component {
         return (
             <div>
                 <h2>Register Page</h2>
+                <p>Please input the userID you want to use.</p>
                 <input onChange={this.handleInput} placeholder="User ID"/>
-                <button onClick={this.registerUser}>Register</button>
+                <Button variant="info" onClick={this.registerUser}>Register</Button>
             </div>
         );
     }

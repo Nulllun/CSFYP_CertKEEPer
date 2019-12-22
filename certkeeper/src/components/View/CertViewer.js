@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../main.css';
 
 
 export default class CertViewer extends Component {
@@ -60,6 +61,7 @@ export default class CertViewer extends Component {
     render() {
         return (
             <div>
+                <br></br>
                 <button onClick={this.getCert}>Show My Certificates</button>
                 {this.renderCerts(this.state.certList)}
             </div>

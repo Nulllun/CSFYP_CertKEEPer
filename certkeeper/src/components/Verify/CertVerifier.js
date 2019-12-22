@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import '../main.css';
 
 export default class CertVerifier extends Component {
     constructor(props) {
@@ -66,7 +66,8 @@ export default class CertVerifier extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
+                <br></br>
                 <input onChange={this.handleInput} placeholder="Enter certID" />
                 <button onClick={this.verifyCert}>Verifiy</button>
                 {this.renderCert(this.state.cert)}

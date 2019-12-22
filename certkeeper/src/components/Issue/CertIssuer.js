@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../main.css';
 
 
 export default class CertIssuer extends Component {
@@ -57,6 +58,7 @@ export default class CertIssuer extends Component {
     render() {
         return (
             <div>
+                <br></br>
                 <input id="certID" onChange={this.handleInput} placeholder="Enter certID" /><br/>
                 <input id="issuePlatform" onChange={this.handleInput} placeholder="Enter issuePlatform" /><br/>
                 <input id="institution" onChange={this.handleInput} placeholder="Enter institution" /><br/>
