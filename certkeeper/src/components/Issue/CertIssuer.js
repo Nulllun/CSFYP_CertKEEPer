@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import '../main.css';
 import Button from 'react-bootstrap/Button';
-
+import { isModuleDeclaration } from '@babel/types';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
 export default class CertIssuer extends Component {
     constructor(props) {
@@ -56,6 +58,23 @@ export default class CertIssuer extends Component {
         this.setState({[event.target.id]: event.target.value})
     }
 
+    submit = () => {
+        confirmAlert({
+          title: 'Confirm to issue',
+          message: 'Please confirm the information is correct (If need edit just click outside the box)',
+          buttons: [
+            {
+              label: 'Yes',
+              onClick: () => this.issueCert()
+            },
+            // {
+            //   label: 'No',
+            //   onClick: () => alert('Click No')
+            // }
+          ]
+        });
+    };
+
     render() {
         return (
             <div>
@@ -71,12 +90,12 @@ export default class CertIssuer extends Component {
                 <input id="recipientID" onChange={this.handleInput} placeholder="Enter recipientID" /><br/>
                 <input id="recipientName" onChange={this.handleInput} placeholder="Enter recipientName" /><br/>
                 <input id="grade" onChange={this.handleInput} placeholder="Enter grade" /><br/>
-                <input id="issueDate" onChange={this.handleInput} placeholder="Enter issueDate" /><br/>
+                <input id="issueDate" onChange={this.handleInput} placeholder="Enter issueDate" /><br/><br/>
                 {/* <input id="signature" onChange={this.handleInput} placeholder="Enter signature" /><br/>
                 <input id="signerID" onChange={this.handleInput} placeholder="Enter signerID" /><br/>
                 <input id="signerName" onChange={this.handleInput} placeholder="Enter signerName" /><br/> */}
-                <Button variant="info" onClick={this.issueCert}>Issue</Button>
-                <Button variant="info" onClick={() => console.log(this.state)}>Show</Button>
+                <Button variant="info" onClick={this.submit}>Issue</Button>
+                {/* <Button variant="info" onClick={() => console.log(this.state)}>Show</Button> */}
             </div>
         );
     }
