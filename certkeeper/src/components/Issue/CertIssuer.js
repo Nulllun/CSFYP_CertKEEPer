@@ -61,7 +61,7 @@ export default class CertIssuer extends Component {
     submit = () => {
         confirmAlert({
           title: 'Confirm to issue',
-          message: 'Please confirm the information is correct (If need edit just click outside the box)',
+          message: 'Please confirm the information is correct (To edit please click outside the box)',
           buttons: [
             {
               label: 'Yes',
@@ -77,7 +77,9 @@ export default class CertIssuer extends Component {
 
     render() {
         return (
+            <div id='padding'>
             <div>
+                <h4>Enter required information to issue certificate</h4>
                 <br></br>
                 <input id="certID" onChange={this.handleInput} placeholder="Enter certID" /><br/>
                 <input id="issuePlatform" onChange={this.handleInput} placeholder="Enter issuePlatform" /><br/>
@@ -96,6 +98,7 @@ export default class CertIssuer extends Component {
                 <input id="signerName" onChange={this.handleInput} placeholder="Enter signerName" /><br/> */}
                 <Button variant="info" onClick={this.submit}>Issue</Button>
                 {/* <Button variant="info" onClick={() => console.log(this.state)}>Show</Button> */}
+            </div>
             </div>
         );
     }

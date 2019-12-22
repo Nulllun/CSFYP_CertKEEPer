@@ -67,7 +67,7 @@ export default class CertVerifier extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div id="padding">
                 <br></br>
                 <input onChange={this.handleInput} placeholder="Enter certID" />
                 <Button variant="info" onClick={this.verifyCert}>Verifiy</Button>

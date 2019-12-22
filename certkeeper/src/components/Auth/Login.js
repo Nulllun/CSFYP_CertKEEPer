@@ -45,7 +45,7 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div>
+            <div id="padding">
                 <h2>Login Page</h2>
                 <p>Please upload your .json file downloaded automatiaclly when you registered.</p>
                 {this.renderWallet()}

@@ -60,7 +60,7 @@ export default class CertViewer extends Component {
 
     render() {
         return (
-            <div>
+            <div id="padding">
                 <br></br>
                 <Button variant="info" onClick={this.getCert}>Show My Certificates</Button>
                 {this.renderCerts(this.state.certList)}

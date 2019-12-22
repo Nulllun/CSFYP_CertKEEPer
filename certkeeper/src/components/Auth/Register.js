@@ -35,10 +35,10 @@ export default class Register extends Component {
                 this.downloadWallet(wallet);
             }
             console.log(wallet);
-            document.body.innerHTML += '<p>A .json file is downloaded actomactically. Please save it in a location you would remember as you will need this to login into CertKEEPer.</p>';
+            document.body.innerHTML += '<br/><p style="background-color:#FFFFFF">A .json file is downloaded actomactically. Please save it in a location you would remember as you will need this to login into CertKEEPer.</p>';
         }
         else{
-            document.body.innerHTML += '<p>ID is null or has been registered. Please enter a new one.</p>'
+            document.body.innerHTML += '<br/><p style="background-color:#FFFFFF">ID is null or has been registered. Please enter a new one.</p>'
         }
     }
 
@@ -59,7 +59,7 @@ export default class Register extends Component {
 
     render() {
         return (
-            <div>
+            <div id="padding">
                 <h2>Register Page</h2>
                 <p>Please input the userID you want to use.</p>
                 <input onChange={this.handleInput} placeholder="User ID"/>
