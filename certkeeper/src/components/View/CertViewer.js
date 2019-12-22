@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../main.css';
-
+import Button from 'react-bootstrap/Button';
 
 export default class CertViewer extends Component {
     constructor(props) {
@@ -62,7 +62,7 @@ export default class CertViewer extends Component {
         return (
             <div>
                 <br></br>
-                <button onClick={this.getCert}>Show My Certificates</button>
+                <Button variant="info" onClick={this.getCert}>Show My Certificates</Button>
                 {this.renderCerts(this.state.certList)}
             </div>
         );

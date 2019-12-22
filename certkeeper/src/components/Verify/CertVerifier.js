@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../main.css';
+import Button from 'react-bootstrap/Button';
 
 export default class CertVerifier extends Component {
     constructor(props) {
@@ -69,7 +70,7 @@ export default class CertVerifier extends Component {
             <div className="container">
                 <br></br>
                 <input onChange={this.handleInput} placeholder="Enter certID" />
-                <button onClick={this.verifyCert}>Verifiy</button>
+                <Button variant="info" onClick={this.verifyCert}>Verifiy</Button>
                 {this.renderCert(this.state.cert)}
             </div>
         );

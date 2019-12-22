@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../main.css';
+import Button from 'react-bootstrap/Button';
 
 
 export default class CertIssuer extends Component {
@@ -74,8 +75,8 @@ export default class CertIssuer extends Component {
                 {/* <input id="signature" onChange={this.handleInput} placeholder="Enter signature" /><br/>
                 <input id="signerID" onChange={this.handleInput} placeholder="Enter signerID" /><br/>
                 <input id="signerName" onChange={this.handleInput} placeholder="Enter signerName" /><br/> */}
-                <button onClick={this.issueCert}>Issue</button>
-                <button onClick={() => console.log(this.state)}>Show</button>
+                <Button variant="info" onClick={this.issueCert}>Issue</Button>
+                <Button variant="info" onClick={() => console.log(this.state)}>Show</Button>
             </div>
         );
     }
