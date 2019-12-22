@@ -1,5 +1,11 @@
 # CSFYP_CertKEEPer
 
+The Chinese University of Hong Kong
+Department of Computer Science and Engineering
+Final Year Project 2019-2020
+
+Group: IK1901
+
 ## Prerequisites:
 Follow the instruction on this link and install the prerequisities:  
 https://hyperledger-fabric.readthedocs.io/en/release-1.4/prereqs.html
@@ -23,6 +29,3 @@ cd certkeeper-api
 npm install
 npm start
 ```
-
-## edited on 1222
-testing
