@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../main.css';
-import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
   
 export default class Register extends Component {
@@ -35,7 +34,7 @@ export default class Register extends Component {
                 this.downloadWallet(wallet);
             }
             console.log(wallet);
-            document.body.innerHTML += '<br/><p style="background-color:#FFFFFF">A .json file is downloaded actomactically. Please save it in a location you would remember as you will need this to login into CertKEEPer.</p>';
+            document.body.innerHTML += '<br/><p style="background-color:#FFFFFF">wallet.json file is downloaded actomactically. Please save it in a location you would remember as you will need this to login into CertKEEPer.</p>';
         }
         else{
             document.body.innerHTML += '<br/><p style="background-color:#FFFFFF">ID is null or has been registered. Please enter a new one.</p>'
