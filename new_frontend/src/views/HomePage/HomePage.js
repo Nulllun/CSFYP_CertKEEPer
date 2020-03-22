@@ -1,11 +1,6 @@
 import React from "react";
-// nodejs library that concatenates classes
-// import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-
-// @material-ui/icons
-
 // core components
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
@@ -29,7 +24,7 @@ export default function HomePage(props) {
       <Header
         color="transparent"
         routes={dashboardRoutes}
-        brand="Material Kit React"
+        brand="certKEEPer"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
@@ -55,7 +50,6 @@ export default function HomePage(props) {
                 color="danger"
                 size="lg"
                 href="./login-page"
-                // target="_blank"
                 rel="noopener noreferrer"
               >
                 Get Started

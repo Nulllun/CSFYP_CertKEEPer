@@ -1,7 +1,5 @@
 /*eslint-disable*/
 import React from "react";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 
@@ -12,7 +10,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
+import { Apps } from "@material-ui/icons";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -70,10 +68,8 @@ export default function HeaderLinks(props) {
           <Button
             color="transparent"
             href="/profile-page" //account profile page
-            // target="_blank"
             className={classes.navLink}
           >
-            {/* <i className={classes.socialIcons + " fab fa-facebook"} /> */}
             <AccountBoxIcon />
           </Button>
         </Tooltip>
@@ -88,10 +84,8 @@ export default function HeaderLinks(props) {
           <Button
             color="transparent"
             href="./login-page"
-            // target="_blank"
             className={classes.navLink}
           >
-            {/* <i className={classes.socialIcons + " fab fa-instagram"} /> */}
             <ExitToAppIcon fontSize="large"/>
           </Button>
         </Tooltip>

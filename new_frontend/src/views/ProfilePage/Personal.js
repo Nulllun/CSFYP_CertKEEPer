@@ -1,7 +1,5 @@
 import React from "react";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// import classNames from "classnames";
 
 // @material-ui/icons
 import EditIcon from "@material-ui/icons/Edit";
@@ -18,10 +16,6 @@ import Grid from "@material-ui/core/Grid";
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
 const useStyles = makeStyles(styles);
-
-// const Transition = React.forwardRef(function Transition(props, ref) {
-//   return <Slide direction="down" ref={ref} {...props} />;
-// });
 
 export default function InfoSection() {
   const classes = useStyles();

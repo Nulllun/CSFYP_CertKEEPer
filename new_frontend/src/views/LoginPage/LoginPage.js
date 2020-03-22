@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
-import Email from "@material-ui/icons/Email";
 import People from "@material-ui/icons/People";
 import SchoolIcon from "@material-ui/icons/School";
 // core components
@@ -20,9 +19,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 
-import styles from "assets/jss/material-kit-react/views/loginPage.js";
-
 import image from "assets/img/bg-white.jpg";
+
+import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 const useStyles = makeStyles(styles);
 
@@ -38,7 +37,7 @@ export default function LoginPage(props) {
       <Header
         absolute
         color="transparent"
-        brand="Material Kit React"
+        brand="Login"
         rightLinks={<HeaderLinks />}
         {...rest}
       />
@@ -56,16 +55,10 @@ export default function LoginPage(props) {
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
                   <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4>Login through school portal</h4>
-                    <div className={classes.socialLine}>
-                      <Button
-                        justIcon
-                        href="#pablo" //to SSO login
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <SchoolIcon style={{ fontSize: 40 }} />
+                    <div>
+                      <Button color="transparent">
+                        Login through KEEP
+                        <SchoolIcon />
                       </Button>
                     </div>
                   </CardHeader>
@@ -74,8 +67,8 @@ export default function LoginPage(props) {
                   </p>
                   <CardBody>
                     <CustomInput
-                      labelText="First Name..."
-                      id="first"
+                      labelText="Username"
+                      id="username"
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -84,21 +77,6 @@ export default function LoginPage(props) {
                         endAdornment: (
                           <InputAdornment position="end">
                             <People className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <CustomInput
-                      labelText="Email..."
-                      id="email"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "email",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Email className={classes.inputIconsColor} />
                           </InputAdornment>
                         )
                       }}

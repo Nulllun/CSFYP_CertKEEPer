@@ -8,9 +8,6 @@ import classNames from "classnames";
 import { List, ListItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-// @material-ui/icons
-import Favorite from "@material-ui/icons/Favorite";
-
 import styles from "assets/jss/material-kit-react/components/footerStyle.js";
 
 const useStyles = makeStyles(styles);
@@ -34,32 +31,11 @@ export default function Footer(props) {
             <ListItem className={classes.inlineBlock}>
               <p>All rights reserved.</p>
             </ListItem>
-            {/* <ListItem className={classes.inlineBlock}>
-              <a
-                href="https://www.creative-tim.com/presentation?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                About us
-              </a>
-            </ListItem> */}
             <ListItem className={classes.inlineBlock}>
               <p>By Lun Yin Fung, Michael & Mang Long Ting, Daisy</p>
             </ListItem>
           </List>
         </div>
-        {/* <div className={classes.right}>
-          &copy; {1900 + new Date().getYear()} , made with{" "}
-          <Favorite className={classes.icon} /> by{" "}
-          <a
-            href="https://www.creative-tim.com?ref=mkr-footer"
-            className={aClasses}
-            target="_blank"
-          >
-            Creative Tim
-          </a>{" "}
-          for a better web.
-        </div> */}
       </div>
     </footer>
   );

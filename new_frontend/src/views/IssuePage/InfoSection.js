@@ -1,7 +1,5 @@
 import React from "react";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// import classNames from "classnames";
 import Datetime from "react-datetime";
 
 // @material-ui/icons
@@ -13,16 +11,14 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import InfoArea from "components/InfoArea/InfoArea.js";
 import Button from "components/CustomButtons/Button.js";
-// import Slide from "@material-ui/core/Slide";
+
+// material-ui core components
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
-
-// import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-// import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Paper from "@material-ui/core/Paper";
@@ -30,14 +26,9 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 
-// import modalStyle from "assets/jss/material-dashboard-pro-react/modalStyle.js";
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
 const useStyles = makeStyles(styles);
-
-// const Transition = React.forwardRef(function Transition(props, ref) {
-//   return <Slide direction="down" ref={ref} {...props} />;
-// });
 
 export default function InfoSection() {
   const classes = useStyles();
@@ -214,7 +205,6 @@ export default function InfoSection() {
               paper: classes.modal
             }}
             open={modal}
-            // TransitionComponent={Transition}
             keepMounted
             onClose={() => setModal(false)}
             aria-labelledby="modal-slide-title"
