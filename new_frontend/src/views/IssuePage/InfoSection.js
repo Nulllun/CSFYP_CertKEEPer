@@ -39,7 +39,7 @@ const useStyles = makeStyles(styles);
 //   return <Slide direction="down" ref={ref} {...props} />;
 // });
 
-export default function ProductSection() {
+export default function InfoSection() {
   const classes = useStyles();
   const [courseID, setCourseID] = React.useState("");
   const [recipientID, setRecipientID] = React.useState("");

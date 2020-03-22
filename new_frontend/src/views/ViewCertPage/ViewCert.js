@@ -15,7 +15,7 @@ import Footer from "components/Footer/Footer.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import Parallax from "components/Parallax/Parallax.js";
 
-import InfoSection from "./InfoSection.js";
+import DisplaySection from "./DisplaySection.js";
 
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
@@ -23,7 +23,7 @@ const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
 
-export default function IssuePage(props) {
+export default function ViewCertPage(props) {
   const classes = useStyles();
   const { ...rest } = props;
   return (
@@ -42,14 +42,15 @@ export default function IssuePage(props) {
       />
       <Parallax filter image={require("assets/img/bg-white.jpg")}>
         <div className={classes.container}>
-          <h1 className={classes.title}>Issue certificates</h1>
+          <h1 className={classes.title}>View certificates</h1>
           <br />
+          <h3>View the certificates you issued here</h3>
           <h3>Scroll down for more</h3>
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
-          <InfoSection />
+          <DisplaySection />
         </div>
       </div>
       <Footer />

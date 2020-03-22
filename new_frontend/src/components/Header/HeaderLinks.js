@@ -53,7 +53,7 @@ export default function HeaderLinks(props) {
       </ListItem>
       <ListItem className={classes.listItem}>
         <Button
-          href="/" //link to my-cert
+          href="/view-cert" //link to my-cert
           color="transparent"
           className={classes.navLink}
         >
