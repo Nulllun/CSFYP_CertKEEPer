@@ -103,9 +103,9 @@ export default function InfoSection() {
         </div>
       </GridItem>
 
-      <div>
-        <Typography>-</Typography>
-      </div>
+      <Typography>
+        <br />
+      </Typography>
 
       <GridItem>
         <div className={classes.root}>
@@ -140,9 +140,9 @@ export default function InfoSection() {
         </div>
       </GridItem>
 
-      <div>
-        <Typography>-</Typography>
-      </div>
+      <Typography>
+        <br />
+      </Typography>
 
       <GridItem>
         <div className={classes.root}>
@@ -175,9 +175,9 @@ export default function InfoSection() {
         </div>
       </GridItem>
 
-      <div>
-        <Typography>-</Typography>
-      </div>
+      <Typography>
+        <br />
+      </Typography>
 
       <GridItem>
         <div className={classes.root}>
@@ -196,9 +196,9 @@ export default function InfoSection() {
         </div>
       </GridItem>
 
-      <div>
-        <Typography>-</Typography>
-      </div>
+      <Typography>
+        <br />
+      </Typography>
 
       {/* modal for confirm action */}
       <GridItem>

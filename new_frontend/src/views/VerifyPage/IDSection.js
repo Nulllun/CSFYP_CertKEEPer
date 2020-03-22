@@ -17,6 +17,7 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "components/CustomButtons/Button.js";
+import Grid from "@material-ui/core/Grid";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
@@ -37,7 +38,7 @@ export default function ProductSection() {
             title="Enter the ID of certificate / URL"
             // description="We've created the marketing campaign of the website. It was a very interesting collaboration."
             icon={PageviewIcon}
-            iconColor="rose"
+            iconColor="info"
           />
         </GridItem>
         <GridItem>
@@ -49,7 +50,7 @@ export default function ProductSection() {
           />
         </GridItem>
         <GridContainer xs={6}>
-          <GridItem>
+          <Grid item xs={12} sm={6}>
             <div className={wrapperDiv}>
               <FormControlLabel
                 control={
@@ -76,8 +77,8 @@ export default function ProductSection() {
                 label="ID of certificate"
               />
             </div>
-          </GridItem>
-          <GridItem>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <div className={wrapperDiv}>
               <FormControlLabel
                 control={
@@ -104,10 +105,10 @@ export default function ProductSection() {
                 label="URL"
               />
             </div>
-          </GridItem>
+          </Grid>
         </GridContainer>
         <GridItem>
-          <Button type="button" color="rose">
+          <Button type="button" color="info">
             Submit
           </Button>
         </GridItem>

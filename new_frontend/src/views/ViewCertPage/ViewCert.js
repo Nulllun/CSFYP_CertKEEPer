@@ -35,17 +35,16 @@ export default function ViewCertPage(props) {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 400,
+          height: 200,
           color: "white"
         }}
         {...rest}
       />
-      <Parallax filter image={require("assets/img/bg-white.jpg")}>
+      <Parallax small filter image={require("assets/img/bg-white.jpg")}>
         <div className={classes.container}>
           <h1 className={classes.title}>View certificates</h1>
           <br />
           <h3>View the certificates you issued here</h3>
-          <h3>Scroll down for more</h3>
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>

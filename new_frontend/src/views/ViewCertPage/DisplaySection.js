@@ -87,6 +87,8 @@ export default function DisplaySection() {
         </ExpansionPanelDetails>
       </ExpansionPanel>
 
+      <Typography>-</Typography>
+
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -144,6 +146,8 @@ export default function DisplaySection() {
           </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
+
+      <Typography>-</Typography>
 
       <ExpansionPanel>
         <ExpansionPanelSummary

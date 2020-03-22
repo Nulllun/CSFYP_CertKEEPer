@@ -35,16 +35,15 @@ export default function IssuePage(props) {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 400,
+          height: 200,
           color: "white"
         }}
         {...rest}
       />
-      <Parallax filter image={require("assets/img/bg-white.jpg")}>
+      <Parallax small filter image={require("assets/img/bg-white.jpg")}>
         <div className={classes.container}>
           <h1 className={classes.title}>Issue certificates</h1>
           <br />
-          <h3>Scroll down for more</h3>
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>

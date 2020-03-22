@@ -69,7 +69,7 @@ export default function HeaderLinks(props) {
         >
           <Button
             color="transparent"
-            href="/" //account profile page
+            href="/profile-page" //account profile page
             // target="_blank"
             className={classes.navLink}
           >
