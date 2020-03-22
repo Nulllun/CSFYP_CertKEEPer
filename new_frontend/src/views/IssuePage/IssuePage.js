@@ -15,7 +15,7 @@ import Footer from "components/Footer/Footer.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import Parallax from "components/Parallax/Parallax.js";
 
-import IDSection from "./IDSection.js";
+import InfoSection from "./InfoSection.js";
 
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
@@ -42,14 +42,14 @@ export default function VerifyPage(props) {
       />
       <Parallax filter image={require("assets/img/bg-white.jpg")}>
         <div className={classes.container}>
-          <h1 className={classes.title}>Verify a certificate by its ID</h1>
+          <h1 className={classes.title}>Issue certificates</h1>
           <br />
           <h3>Scroll down for more</h3>
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
-          <IDSection />
+          <InfoSection />
         </div>
       </div>
       <Footer />

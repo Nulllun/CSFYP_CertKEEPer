@@ -43,7 +43,7 @@ export default function HeaderLinks(props) {
               Verify
             </Link>,
             <a
-              href="/" //link to issue page
+              href="/issue-page" //link to issue page
               className={classes.dropdownLink}
             >
               Issue
