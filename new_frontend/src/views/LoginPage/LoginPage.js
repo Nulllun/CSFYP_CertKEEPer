@@ -32,6 +32,59 @@ export default function LoginPage(props) {
   }, 700);
   const classes = useStyles();
   const { ...rest } = props;
+
+  const [wallet, setWallet] = React.useState(null);
+  const [walletFile, setWalletFile] = React.useState(null);
+
+  const importWallet = async () => {
+    // if (event.target.files[0] !== undefined) {
+    //     this.setState({ walletFile: event.target.files[0] }, () => {
+    //         const reader = new FileReader();
+    //         reader.readAsText(this.state.walletFile, "UTF-8");
+    //         reader.onload = (event) => {
+    //             let wallet = JSON.parse(event.target.result)
+    //             this.setState({ wallet:  wallet});
+    //             window.sessionStorage.setItem("wallet", JSON.stringify(wallet));
+    //         }
+    //         reader.onerror = (event) => {
+    //             alert('Fail to read walle file')
+    //         }
+    //     });
+    // }
+    console.log(walletFile);
+    const reader = new FileReader();
+    reader.readAsText(walletFile, "UTF-8");
+    reader.onload = (event) => {
+      let wallett = JSON.parse(event.target.result)
+      this.setWallet(wallett);
+      window.sessionStorage.setItem("wallet", JSON.stringify(wallet));
+    }
+    reader.onerror = (event) => {
+        alert('Fail to read walle file')
+  }
+  }
+
+  const renderWallet = event => {
+    console.log("file changed");
+    console.log(typeof(event.target.files[0]));
+    console.log(event.target.files[0]);
+    
+    setWalletFile(event.target.files[0]);
+    console.log("ahhhhh  " + walletFile);
+
+    // if (walletFile !== null) {
+    //     return (
+    //         <p>Login Success</p>
+    //     );
+    // }
+    // else{
+    //     return(
+    //         <input onChange={importWallet} type="file" />
+    //     );
+    // }
+    // importWallet();
+}
+
   return (
     <div>
       <Header
@@ -67,7 +120,20 @@ export default function LoginPage(props) {
                     Or Register <a href="/register-page">here</a>
                   </p>
                   <CardBody>
-                    <CustomInput
+                    {/* <Button inputProps={type: file}>Upload wallet.json here
+                    </Button> */}
+                    <Button
+                      variant="contained"
+                      component="label"
+                    >
+                      Upload wallet.json here
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={renderWallet}
+                      />
+                    </Button>
+                    {/* <CustomInput
                       labelText="Username"
                       id="username"
                       formControlProps={{
@@ -81,8 +147,8 @@ export default function LoginPage(props) {
                           </InputAdornment>
                         )
                       }}
-                    />
-                    <CustomInput
+                    /> */}
+                    {/* <CustomInput
                       labelText="Password"
                       id="pass"
                       formControlProps={{
@@ -99,7 +165,7 @@ export default function LoginPage(props) {
                         ),
                         autoComplete: "off"
                       }}
-                    />
+                    /> */}
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
                     <Button simple color="primary" size="lg">

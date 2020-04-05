@@ -36,6 +36,57 @@ export default function RegisterPage(props) {
   }, 700);
   const classes = useStyles();
   const { ...rest } = props;
+  const [userID, setUserID] = React.useState("");
+
+  const registerUser = async () => {
+    // const userID = { userID };
+    console.log(`Request is sent with {"userID": ${userID}}`);
+    console.log({ userID });
+
+    if (userID !== "") {
+      let path = "http://localhost:5000/register";
+      let response = await fetch(path, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userID: userID
+        })
+      });
+      let wallet = await response.json();
+      if (response.status === 200) {
+        console.log("response status == 200");
+        downloadWallet(wallet);
+      } else {
+        console.log("response status != 200");
+      }
+      console.log(wallet);
+      // document.body.innerHTML += '<br/><p style="background-color:#FFFFFF">wallet.json file is downloaded actomactically. Please save it in a location you would remember as you will need this to login into CertKEEPer.</p>';
+    } else {
+      // document.body.innerHTML += '<br/><p style="background-color:#FFFFFF">ID is null or has been registered. Please enter a new one.</p>'
+      console.log("empty userid");
+    }
+  };
+
+  const downloadWallet = wallet => {
+    console.log("download wallet");
+
+    const walletString = JSON.stringify(wallet);
+    const element = document.createElement("a");
+    const file = new Blob([walletString], { type: "application/json" });
+    element.href = URL.createObjectURL(file);
+    element.download = "wallet.json";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+    document.body.removeChild(element);
+  };
+
+  const handleChangeUserID = event => {
+    console.log("change userid");
+    setUserID(event.target.value);
+  };
 
   return (
     <div>
@@ -155,7 +206,8 @@ export default function RegisterPage(props) {
                           <InputAdornment position="end">
                             <VpnKeyIcon className={classes.inputIconsColor} />
                           </InputAdornment>
-                        )
+                        ),
+                        onChange: handleChangeUserID
                       }}
                     />
                     {/* <CustomInput
@@ -178,7 +230,12 @@ export default function RegisterPage(props) {
                     /> */}
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg">
+                    <Button
+                      simple
+                      color="primary"
+                      size="lg"
+                      onClick={registerUser}
+                    >
                       Login
                     </Button>
                   </CardFooter>
