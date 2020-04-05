@@ -63,7 +63,8 @@ export default function LoginPage(props) {
                     </div>
                   </CardHeader>
                   <p className={classes.divider}>
-                    Or Login by registered info on KEEP
+                    {/* Or Login by registered info on KEEP */}
+                    Or Register <a href="/register-page">here</a>
                   </p>
                   <CardBody>
                     <CustomInput

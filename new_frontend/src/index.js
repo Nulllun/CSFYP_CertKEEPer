@@ -12,6 +12,7 @@ import HomePage from "views/HomePage/HomePage.js";
 import VerifyPage from "views/VerifyPage/VerifyPage.js";
 import IssuePage from "views/IssuePage/IssuePage.js";
 import ViewCertPage from "views/ViewCertPage/ViewCert.js";
+import RegisterPage from "views/RegisterPage/RegisterPage.js";
 
 var hist = createBrowserHistory();
 
@@ -24,6 +25,7 @@ ReactDOM.render(
       <Route path="/verify-page" component={VerifyPage} />
       <Route path="/issue-page" component={IssuePage} />
       <Route path="/view-cert" component={ViewCertPage} />
+      <Route path="/register-page" component={RegisterPage} />
       <Route path="/" component={HomePage} />
     </Switch>
   </Router>,
