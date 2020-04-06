@@ -12,10 +12,10 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "fabric-ca-client": "^1.4.4",
+    "fabric-ca-client": "beta",
     "fabric-client": "^1.4.4",
     "fabric-common": "^1.4.4",
-    "fabric-network": "^1.4.4",
+    "fabric-network": "beta",
     "node-rsa": "^1.0.7",
     "nodemon": "^2.0.2"
   }

@@ -39,15 +39,13 @@ async function main() {
         const ca = gateway.getClient().getCertificateAuthority();
         const adminIdentity = gateway.getCurrentIdentity();
         //const registar = ca.getRegistar();
-        const  x = await ca.newIdentityService().getOne('Michael' ,adminIdentity);
-        console.log(x);
         // console.log(Object.getPrototypeOf(adminIdentity));
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'test34', role: 'client' }, adminIdentity);
-        const enrollment = await ca.enroll({ enrollmentID: 'test34', enrollmentSecret: secret });
+        const secret = await ca.register({ affiliation: 'org1.department1', enrollmentID: 'user1', role: 'client' }, adminIdentity);
+        const enrollment = await ca.enroll({ enrollmentID: 'user1', enrollmentSecret: secret });
         let userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-        userIdentity.enrollmentID = 'test34';
+        userIdentity.enrollmentID = 'user1';
         console.log(enrollment.key.getPublicKey().toBytes());
         console.log(enrollment.key.getSKI());
 
@@ -61,10 +59,10 @@ async function main() {
         const newUserIdentity = gateway2.getCurrentIdentity();
         //console.log(newUserIdentity);
 
-        console.log('Successfully registered and enrolled admin user "test34" and imported it into the wallet');
+        console.log('Successfully registered and enrolled admin user "user1" and imported it into the wallet');
 
     } catch (error) {
-        console.error(`Failed to register user "test34": ${error}`);
+        console.error(`Failed to register user "user1": ${error}`);
         process.exit(1);
     }
 }
