@@ -31,6 +31,8 @@ import Divider from "@material-ui/core/Divider";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
+import Chip from "@material-ui/core/Chip";
+import Input from "@material-ui/core/Input";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
@@ -66,14 +68,27 @@ function a11yProps(index) {
   };
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
+
 export default function InfoSection() {
   const classes = useStyles();
   const [courseID, setCourseID] = React.useState("");
   const [recipientID, setRecipientID] = React.useState("");
   const [certType, setCertType] = React.useState("");
+  const [recipientIDMultiple, setRecipientIDMultiple] = React.useState([]);
 
   const handleChangeCID = event => {
     setCourseID(event.target.value);
+    setRecipientIDMultiple([]);
   };
 
   const handleChangeRID = event => {
@@ -82,6 +97,10 @@ export default function InfoSection() {
 
   const handleChangeCertType = event => {
     setCertType(event.target.value);
+  };
+
+  const handleChangeMultiple = event => {
+    setRecipientIDMultiple(event.target.value);
   };
 
   const [modal, setModal] = React.useState(false);
@@ -354,9 +373,12 @@ export default function InfoSection() {
                           <MenuItem value="">
                             <em>None</em>
                           </MenuItem>
-                          <MenuItem value={2100}>CSCI2100</MenuItem>
-                          <MenuItem value={3310}>CSCI3310</MenuItem>
-                          <MenuItem value={1110}>PHYS1110</MenuItem>
+                          {setCourseCodeMenuItem()}
+                          {course_string.map((course_code, index) => (
+                            <MenuItem key={index} value={course_code}>
+                              {course_code}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </Grid>
@@ -379,22 +401,45 @@ export default function InfoSection() {
                     <Typography>recipient ID</Typography>
                   </Grid>
                   <Grid item xs={12} sm={6} container>
-                    <Grid item xs container direction="column" spacing={2}>
+                    <Grid
+                      item
+                      container
+                      zeroMinWidth
+                      direction="column"
+                      spacing={2}
+                      wrap="nowrap"
+                    >
                       <FormControl className={classes.formControl}>
                         <Select
-                          value={recipientID}
-                          onChange={handleChangeRID}
-                          displayEmpty
-                          className={classes.selectEmpty}
+                          labelId="demo-mutiple-chip-label"
+                          id="demo-mutiple-chip"
+                          multiple
+                          value={recipientIDMultiple}
+                          onChange={handleChangeMultiple}
+                          input={<Input id="select-multiple-chip" />}
+                          renderValue={selected => (
+                            <div className={classes.chips}>
+                              {selected.map(value => (
+                                <Chip
+                                  key={value}
+                                  label={value}
+                                  className={classes.chip}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          MenuProps={MenuProps}
                         >
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
-                          <MenuItem value={1}>1155090001</MenuItem>
-                          <MenuItem value={2}>1155090002</MenuItem>
-                          <MenuItem value={3}>1155090003</MenuItem>
-                          <MenuItem value={4}>1155090004</MenuItem>
-                          <MenuItem value={5}>1155090005</MenuItem>
+                          {setSIDMenuItem()}
+                          {sid_string.map(sid => (
+                            <MenuItem
+                              key={sid}
+                              value={sid}
+                              // style={getStyles(sid, personName, theme)}
+                            >
+                              {sid}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </Grid>

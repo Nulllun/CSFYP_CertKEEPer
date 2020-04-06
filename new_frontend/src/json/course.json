@@ -19,5 +19,12 @@
   "institution":"The Chinese University of Hong Kong",
   "teacher_name":"Prof. Michael Lyu",
   "student":[1155090001, 1155090002, 1155090003, 1155090004, 1155090005, 1155089876, 1155073432]
+},{
+  "id": 4,
+  "course_code":"JASP2460",
+  "course_name":"New Practical Japanese IV",
+  "institution":"The Chinese University of Hong Kong",
+  "teacher_name":"Ms. Winkki Choi",
+  "student":[1155098903, 1155093475, 1155112345, 1155109283, 1155082148, 1155100987, 1155123378, 1155099090, 1155102335]
 }
 ]
