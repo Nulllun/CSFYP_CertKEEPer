@@ -1,3 +1,7 @@
 fabric-samples
 frontend
 hyperledger/.DS_Store
+hyperledger/first-network/connection-org1.json
+hyperledger/first-network/connection-org1.yaml
+hyperledger/first-network/connection-org2.json
+hyperledger/first-network/connection-org2.yaml
