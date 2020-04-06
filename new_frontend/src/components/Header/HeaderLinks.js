@@ -14,6 +14,7 @@ import { Apps } from "@material-ui/icons";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import DescriptionIcon from '@material-ui/icons/Description';
+import BackspaceIcon from '@material-ui/icons/Backspace';
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
@@ -27,6 +28,22 @@ export default function HeaderLinks(props) {
   const classes = useStyles();
   return (
     <List className={classes.list}>
+      <ListItem className={classes.listItem}>
+        <Tooltip
+          id="backtokeep"
+          title="Back To KEEP"
+          placement={window.innerWidth > 959 ? "top" : "left"}
+          classes={{ tooltip: classes.tooltip }}
+        >
+          <Button
+            color="transparent"
+            href="https://course.keep.edu.hk/" //to keep course
+            className={classes.navLink}
+          >
+            <BackspaceIcon />
+          </Button>
+        </Tooltip>
+      </ListItem>
       <ListItem className={classes.listItem}>
         <CustomDropdown
           noLiPadding

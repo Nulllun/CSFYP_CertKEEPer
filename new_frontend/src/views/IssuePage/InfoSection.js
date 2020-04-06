@@ -38,6 +38,8 @@ import styles from "assets/jss/material-kit-react/views/landingPageSections/prod
 
 const useStyles = makeStyles(styles);
 
+const writeJsonFile = require("write-json-file");
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -121,16 +123,38 @@ export default function InfoSection() {
 
   var sid_string = [];
   function setSIDMenuItem() {
-    console.log("is ok " + courseID);
+    console.log("current courseID" + courseID);
     for (var i = 0; i < jsonData.length; i++) {
       var obj = jsonData[i];
       if (obj.course_code == courseID) {
-        console.log("ywy = " + obj.student);
+        console.log("all sid = " + obj.student);
         for (var j = 0; j < obj.student.length; j++)
           sid_string[j] = obj.student[j];
       }
     }
   }
+
+  const writeJsonFile = require("write-json-file");
+  function handleIssueSubmit() {
+    console.log("issued clicked");
+    setModal(false);
+    handleClickOpen();
+    // {
+    //   (async () => {
+    //     await writeJsonFile("foo.json", { foo: true });
+    //   })();
+    // }
+    // still cannot make this json part
+  }
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={classes.section}>
@@ -331,16 +355,29 @@ export default function InfoSection() {
                   }
                 >
                   <Button onClick={() => setModal(false)}>Go Back</Button>
-                  <Button onClick={() => setModal(false)} color="success">
+                  <Button onClick={() => handleIssueSubmit()} color="success">
                     Yes
                   </Button>
                 </DialogActions>
               </Dialog>
             </div>
           </GridItem>
+          <Dialog
+            onClose={handleClose}
+            aria-labelledby="customized-dialog-title"
+            open={open}
+          >
+            <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+              Notification
+            </DialogTitle>
+            <DialogContent dividers>
+              <Typography gutterBottom>Issued.</Typography>
+            </DialogContent>
+          </Dialog>
         </Paper>
       </TabPanel>
 
+      {/* ========================================================== */}
       {/* second tab */}
       <TabPanel value={value} index={1}>
         <Paper>
