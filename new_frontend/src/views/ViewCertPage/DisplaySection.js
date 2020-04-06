@@ -186,6 +186,7 @@ export default function DisplaySection() {
   }
 
   function determineWhichPDF(obj) {
+    console.log(obj.course_code);
     if (obj.course_code == "CSCI2100") genPDF1();
     else if (obj.course_code == "UGFN1000") genPDF2();
     else if (obj.course_code == "CSCI3100") genPDF3();
