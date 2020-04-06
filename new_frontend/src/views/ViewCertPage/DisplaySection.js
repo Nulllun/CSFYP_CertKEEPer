@@ -1,10 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
-import ReactPDF from "@react-pdf/renderer";
+// import ReactPDF from "@react-pdf/renderer";
 import ReactDOM from "react-dom";
 import { PDFViewer } from "@react-pdf/renderer";
 import jsonData from "../../json/cert.json";
+// import CertData from "./certData";
 
 // @material-ui/icons
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -43,7 +44,7 @@ export default function DisplaySection() {
   });
 
   // Create Document Component
-  const MyDocument = () => (
+  const MyDocument1 = () => (
     <Document>
       <Page size="A4" style={PDFstyle.page}>
         <View style={PDFstyle.section}>
@@ -63,15 +64,117 @@ export default function DisplaySection() {
     </Document>
   );
 
-  const App = () => (
+  const App1 = () => (
     <PDFViewer>
-      <MyDocument />
+      <MyDocument1 />
     </PDFViewer>
   );
 
-  function genPDF() {
+  function genPDF1() {
     console.log("will gen PDF");
-    ReactDOM.render(<App />, document.getElementById("root"));
+    const rootElement = document.getElementById("root");
+    ReactDOM.render(<App1 />, rootElement);
+  }
+
+  // Create Document Component
+  const MyDocument2 = () => (
+    <Document>
+      <Page size="A4" style={PDFstyle.page}>
+        <View style={PDFstyle.section}>
+          <Text>certKEEPer</Text>
+          <Text>Certificate ID: CERT-1000-01</Text>
+          <Text>Institution: The Chinese University of Hong Kong</Text>
+          <Text>Course Code: UGFN1000</Text>
+          <Text>Course Name: In Dialogue With Nature</Text>
+          <Text>Teacher Name: Dr. Kiang Kai Ming</Text>
+          <Text>Certificate Description: Pass</Text>
+          <Text>Issue Date: 06-04-2020</Text>
+        </View>
+        {/* <View style={PDFstyle.section}>
+          <Text>Section #2</Text>
+        </View> */}
+      </Page>
+    </Document>
+  );
+
+  const App2 = () => (
+    <PDFViewer>
+      <MyDocument2 />
+    </PDFViewer>
+  );
+
+  function genPDF2() {
+    console.log("will gen PDF");
+    const rootElement = document.getElementById("root");
+    ReactDOM.render(<App2 />, rootElement);
+  }
+
+  // Create Document Component
+  const MyDocument3 = () => (
+    <Document>
+      <Page size="A4" style={PDFstyle.page}>
+        <View style={PDFstyle.section}>
+          <Text>certKEEPer</Text>
+          <Text>Certificate ID: CERT-3310-01</Text>
+          <Text>Institution: The Chinese University of Hong Kong</Text>
+          <Text>Course Code: CSCI3100</Text>
+          <Text>
+            Course Name: Mobile Computing and Applications Development
+          </Text>
+          <Text>Teacher Name: Prof. Michael Lyu</Text>
+          <Text>Certificate Description: B grade</Text>
+          <Text>Issue Date: 06-04-2020</Text>
+        </View>
+        {/* <View style={PDFstyle.section}>
+          <Text>Section #2</Text>
+        </View> */}
+      </Page>
+    </Document>
+  );
+
+  const App3 = () => (
+    <PDFViewer>
+      <MyDocument3 />
+    </PDFViewer>
+  );
+
+  function genPDF3() {
+    console.log("will gen PDF");
+    const rootElement = document.getElementById("root");
+    ReactDOM.render(<App3 />, rootElement);
+  }
+
+  // Create Document Component
+  const MyDocument4 = () => (
+    <Document>
+      <Page size="A4" style={PDFstyle.page}>
+        <View style={PDFstyle.section}>
+          <Text>certKEEPer</Text>
+          <Text>Certificate ID: CERT-2460-01</Text>
+          <Text>Institution: The Chinese University of Hong Kong</Text>
+          <Text>Course Code: JASP2460</Text>
+          <Text>Course Name: New Practical Japanese IV</Text>
+          <Text>Teacher Name: Ms. Winkki Choi</Text>
+          <Text>Certificate Description: A grade</Text>
+          <Text>Issue Date: 06-04-2020</Text>
+        </View>
+        {/* <View style={PDFstyle.section}>
+          <Text>Section #2</Text>
+        </View> */}
+      </Page>
+    </Document>
+  );
+
+  const App4 = () => (
+    <PDFViewer>
+      <MyDocument4 />
+    </PDFViewer>
+  );
+
+  function genPDF4() {
+    console.log("will gen PDF");
+    const rootElement = document.getElementById("root");
+    ReactDOM.render(<App4 />, rootElement);
   }
 
   var jsonobject_string = [];
@@ -80,6 +183,13 @@ export default function DisplaySection() {
       var obj = jsonData[i];
       jsonobject_string[i] = obj;
     }
+  }
+
+  function determineWhichPDF(obj) {
+    if (obj.course_code == "CSCI2100") genPDF1();
+    else if (obj.course_code == "UGFN1000") genPDF2();
+    else if (obj.course_code == "CSCI3100") genPDF3();
+    else if (obj.course_code == "JASP2460") genPDF4();
   }
 
   return (
@@ -145,7 +255,11 @@ export default function DisplaySection() {
                 </div>
               </Grid>
               <Grid>
-                <Button color="warning" round onClick={() => genPDF(obj)}>
+                <Button
+                  color="warning"
+                  round
+                  onClick={() => determineWhichPDF(obj)}
+                >
                   Download PDF
                 </Button>
               </Grid>
