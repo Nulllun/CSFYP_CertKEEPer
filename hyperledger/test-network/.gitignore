@@ -11,4 +11,5 @@ organizations/ordererOrganizations/*
 organizations/peerOrganizations/*
 system-genesis-block/*
 fabcar.tar.gz
+certkeeper.tar.gz
 log.txt
