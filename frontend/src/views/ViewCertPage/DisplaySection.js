@@ -41,17 +41,14 @@ var course_name,
   course_code,
   institute,
   certID,
-  targetButton = "button2";
+  targetButton = "button2",
+  pdfname;
 
 export default function DisplaySection() {
   const classes = useStyles();
   const [dense] = React.useState(false);
-  // const [courseCode, setCourseCode] = React.useState("");
-  // const [courseName, setCourseName] = React.useState("");
-  // const [institution, setInstitution] = React.useState("");
   const [dlButtonVisibility, setDlButtonVisibility] = React.useState(true);
   const [buttonText, setButtonText] = React.useState("Generate PDF");
-  // const [targetButton, setTargetButton] = React.useState("button3");
 
   const PDFstyle = StyleSheet.create({
     body: {
@@ -120,7 +117,7 @@ export default function DisplaySection() {
 
   const App = () => (
     <div>
-      <PDFDownloadLink document={<MyDocument />} fileName="test.pdf">
+      <PDFDownloadLink document={<MyDocument />} fileName={pdfname}>
         {({ blob, url, loading, error }) =>
           loading ? "Loading document..." : "Download now!"
         }
@@ -128,16 +125,9 @@ export default function DisplaySection() {
     </div>
   );
 
-  function loadingPDF() {
-    setButtonText("Loading document");
-  }
-
-  function PDFready() {
-    setButtonText("Download now!");
-  }
-
   function genPDF() {
     console.log("generating PDF");
+    pdfname = certID + ".pdf";
     // <BlobProvider document={<App />}>
     //   {({ url }) => (
     //     <a href={url} target="_blank">
@@ -157,19 +147,7 @@ export default function DisplaySection() {
     }
   }
 
-  // const getid = event => {
-  //   console.log(event.target.id);
-  // };
-
-  // function getid(){
-  //   console.log("ID: " + event.target.id);
-  // }
-
   const setCertValue = obj => {
-    // setCourseCode("DLLM0000");
-    // setCourseName(obj.course_name);
-    // setInstitution(obj.institution);
-
     course_name = obj.course_name;
     course_code = obj.course_code;
     institute = obj.institution;
