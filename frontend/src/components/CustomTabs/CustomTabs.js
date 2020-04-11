@@ -8,17 +8,19 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Icon from "@material-ui/core/Icon";
 // core components
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 
-import styles from "assets/jss/material-dashboard-react/components/customTabsStyle.js";
+import styles from "assets/jss/material-kit-react/components/customTabsStyle.js";
 
 const useStyles = makeStyles(styles);
 
 export default function CustomTabs(props) {
   const [value, setValue] = React.useState(0);
+
   const handleChange = (event, value) => {
     setValue(value);
   };
@@ -37,23 +39,26 @@ export default function CustomTabs(props) {
           onChange={handleChange}
           classes={{
             root: classes.tabsRoot,
-            indicator: classes.displayNone,
-            scrollButtons: classes.displayNone
+            indicator: classes.displayNone
           }}
-          variant="scrollable"
-          scrollButtons="auto"
         >
           {tabs.map((prop, key) => {
             var icon = {};
             if (prop.tabIcon) {
               icon = {
-                icon: <prop.tabIcon />
+                icon:
+                  typeof prop.tabIcon === "string" ? (
+                    <Icon>{prop.tabIcon}</Icon>
+                  ) : (
+                    <prop.tabIcon />
+                  )
               };
             }
             return (
               <Tab
                 classes={{
                   root: classes.tabRootButton,
+                  label: classes.tabLabel,
                   selected: classes.tabSelected,
                   wrapper: classes.tabWrapper
                 }}

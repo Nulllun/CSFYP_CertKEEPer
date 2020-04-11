@@ -22,7 +22,7 @@ cd hyperledger
 ./startFabric.sh
 
 // To start the front end
-cd certkeeper
+cd frontend
 npm install
 npm start
 
