@@ -9,7 +9,7 @@ const NodeRSA = require('node-rsa');
 
 const { CertKeeperCert } = require('./CertKeeperCert');
 
-const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com','connection-org1.json');
+const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'test-network', 'organizations', 'peerOrganizations', 'org3.example.com','connection-org3.json');
 const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
 // View user's own certs
