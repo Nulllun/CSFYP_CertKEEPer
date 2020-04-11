@@ -1,11 +1,19 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
-// import ReactPDF from "@react-pdf/renderer";
+import {
+  Page,
+  Text,
+  Image,
+  View,
+  Document,
+  StyleSheet,
+  Font
+} from "@react-pdf/renderer";
 import ReactDOM from "react-dom";
 import { PDFViewer } from "@react-pdf/renderer";
 import jsonData from "../../json/cert.json";
 // import CertData from "./certData";
+import keepLogo from "../../assets/img/keep_logo.png";
 
 // @material-ui/icons
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -30,151 +38,71 @@ const useStyles = makeStyles(styles);
 export default function DisplaySection() {
   const classes = useStyles();
   const [dense] = React.useState(false);
+  // const [courseCode, setCourseCode] = React.useState("");
+  // const [courseName, setCourseName] = React.useState("");
+  // const [institution, setInstitution] = React.useState("");
+
+  var course_name, course_code, institute;
 
   const PDFstyle = StyleSheet.create({
-    page: {
-      flexDirection: "row",
-      backgroundColor: "#E4E4E4"
+    body: {
+      paddingTop: 35,
+      paddingBottom: 65,
+      paddingHorizontal: 35
     },
-    section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1
+    title: {
+      fontSize: 24,
+      textAlign: "center"
+    },
+    author: {
+      fontSize: 12,
+      textAlign: "center",
+      marginBottom: 40
+    },
+    logo: {
+      width: 250
+    },
+    header: {
+      fontSize: 12,
+      marginBottom: 20,
+      textAlign: "center",
+      color: "grey"
     }
   });
 
   // Create Document Component
-  const MyDocument1 = () => (
+  const MyDocument = () => (
     <Document>
-      <Page size="A4" style={PDFstyle.page}>
-        <View style={PDFstyle.section}>
-          <Text>certKEEPer</Text>
-          <Text>Certificate ID: CERT-2100-01</Text>
-          <Text>Institution: The Chinese University of Hong Kong</Text>
-          <Text>Course Code: CSCI2100</Text>
-          <Text>Course Name: Data Structure</Text>
-          <Text>Teacher Name: Prof. King</Text>
-          <Text>Certificate Description: Best Programmer</Text>
-          <Text>Issue Date: 06-04-2020</Text>
-        </View>
-        {/* <View style={PDFstyle.section}>
-          <Text>Section #2</Text>
-        </View> */}
+      <Page size="A4" style={PDFstyle.body}>
+        <Image style={PDFstyle.logo} src={keepLogo} />
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>This is to certify that</Text>
+        <Text style={PDFstyle.title}>Chris Wong</Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>
+          successfuly completed and received a passing grade in
+        </Text>
+        <Text style={PDFstyle.title}>
+          {course_code}: {course_name}
+        </Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>in</Text>
+        <Text style={PDFstyle.header}>{institute}</Text>
       </Page>
     </Document>
   );
 
-  const App1 = () => (
+  const App = () => (
     <PDFViewer>
-      <MyDocument1 />
+      <MyDocument />
     </PDFViewer>
   );
 
-  function genPDF1() {
-    console.log("will gen PDF");
+  function genPDF() {
+    console.log("generating PDF");
     const rootElement = document.getElementById("root");
-    ReactDOM.render(<App1 />, rootElement);
-  }
-
-  // Create Document Component
-  const MyDocument2 = () => (
-    <Document>
-      <Page size="A4" style={PDFstyle.page}>
-        <View style={PDFstyle.section}>
-          <Text>certKEEPer</Text>
-          <Text>Certificate ID: CERT-1000-01</Text>
-          <Text>Institution: The Chinese University of Hong Kong</Text>
-          <Text>Course Code: UGFN1000</Text>
-          <Text>Course Name: In Dialogue With Nature</Text>
-          <Text>Teacher Name: Dr. Kiang Kai Ming</Text>
-          <Text>Certificate Description: Pass</Text>
-          <Text>Issue Date: 06-04-2020</Text>
-        </View>
-        {/* <View style={PDFstyle.section}>
-          <Text>Section #2</Text>
-        </View> */}
-      </Page>
-    </Document>
-  );
-
-  const App2 = () => (
-    <PDFViewer>
-      <MyDocument2 />
-    </PDFViewer>
-  );
-
-  function genPDF2() {
-    console.log("will gen PDF");
-    const rootElement = document.getElementById("root");
-    ReactDOM.render(<App2 />, rootElement);
-  }
-
-  // Create Document Component
-  const MyDocument3 = () => (
-    <Document>
-      <Page size="A4" style={PDFstyle.page}>
-        <View style={PDFstyle.section}>
-          <Text>certKEEPer</Text>
-          <Text>Certificate ID: CERT-3310-01</Text>
-          <Text>Institution: The Chinese University of Hong Kong</Text>
-          <Text>Course Code: CSCI3100</Text>
-          <Text>
-            Course Name: Mobile Computing and Applications Development
-          </Text>
-          <Text>Teacher Name: Prof. Michael Lyu</Text>
-          <Text>Certificate Description: B grade</Text>
-          <Text>Issue Date: 06-04-2020</Text>
-        </View>
-        {/* <View style={PDFstyle.section}>
-          <Text>Section #2</Text>
-        </View> */}
-      </Page>
-    </Document>
-  );
-
-  const App3 = () => (
-    <PDFViewer>
-      <MyDocument3 />
-    </PDFViewer>
-  );
-
-  function genPDF3() {
-    console.log("will gen PDF");
-    const rootElement = document.getElementById("root");
-    ReactDOM.render(<App3 />, rootElement);
-  }
-
-  // Create Document Component
-  const MyDocument4 = () => (
-    <Document>
-      <Page size="A4" style={PDFstyle.page}>
-        <View style={PDFstyle.section}>
-          <Text>certKEEPer</Text>
-          <Text>Certificate ID: CERT-2460-01</Text>
-          <Text>Institution: The Chinese University of Hong Kong</Text>
-          <Text>Course Code: JASP2460</Text>
-          <Text>Course Name: New Practical Japanese IV</Text>
-          <Text>Teacher Name: Ms. Winkki Choi</Text>
-          <Text>Certificate Description: A grade</Text>
-          <Text>Issue Date: 06-04-2020</Text>
-        </View>
-        {/* <View style={PDFstyle.section}>
-          <Text>Section #2</Text>
-        </View> */}
-      </Page>
-    </Document>
-  );
-
-  const App4 = () => (
-    <PDFViewer>
-      <MyDocument4 />
-    </PDFViewer>
-  );
-
-  function genPDF4() {
-    console.log("will gen PDF");
-    const rootElement = document.getElementById("root");
-    ReactDOM.render(<App4 />, rootElement);
+    ReactDOM.render(<App />, rootElement);
   }
 
   var jsonobject_string = [];
@@ -185,13 +113,19 @@ export default function DisplaySection() {
     }
   }
 
-  function determineWhichPDF(obj) {
-    console.log(obj.course_code);
-    if (obj.course_code == "CSCI2100") genPDF1();
-    else if (obj.course_code == "UGFN1000") genPDF2();
-    else if (obj.course_code == "CSCI3100") genPDF3();
-    else if (obj.course_code == "JASP2460") genPDF4();
-  }
+  const setCertValue = obj => {
+    // setCourseCode("DLLM0000");
+    // setCourseName(obj.course_name);
+    // setInstitution(obj.institution);
+
+    course_name = obj.course_name;
+    course_code = obj.course_code;
+    institute = obj.institution;
+
+    setTimeout(function() {
+      genPDF();
+    }, 3000);
+  };
 
   return (
     <div className={classes.section}>
@@ -205,7 +139,6 @@ export default function DisplaySection() {
               id="panel1a-header"
             >
               <Typography className={classes.heading}>
-                {/* CSCI2100 - Best Programmer */}
                 {obj.course_code} - {obj.description}
               </Typography>
             </ExpansionPanelSummary>
@@ -256,11 +189,7 @@ export default function DisplaySection() {
                 </div>
               </Grid>
               <Grid>
-                <Button
-                  color="warning"
-                  round
-                  onClick={() => determineWhichPDF(obj)}
-                >
+                <Button color="warning" round onClick={() => setCertValue(obj)}>
                   Download PDF
                 </Button>
               </Grid>
