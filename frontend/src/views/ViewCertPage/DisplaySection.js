@@ -7,7 +7,9 @@ import {
   View,
   Document,
   StyleSheet,
-  Font
+  Font,
+  BlobProvider,
+  PDFDownloadLink
 } from "@react-pdf/renderer";
 import ReactDOM from "react-dom";
 import { PDFViewer } from "@react-pdf/renderer";
@@ -35,14 +37,21 @@ import styles from "assets/jss/material-kit-react/views/landingPageSections/prod
 
 const useStyles = makeStyles(styles);
 
+var course_name,
+  course_code,
+  institute,
+  certID,
+  targetButton = "button2";
+
 export default function DisplaySection() {
   const classes = useStyles();
   const [dense] = React.useState(false);
   // const [courseCode, setCourseCode] = React.useState("");
   // const [courseName, setCourseName] = React.useState("");
   // const [institution, setInstitution] = React.useState("");
-
-  var course_name, course_code, institute;
+  const [dlButtonVisibility, setDlButtonVisibility] = React.useState(true);
+  const [buttonText, setButtonText] = React.useState("Generate PDF");
+  // const [targetButton, setTargetButton] = React.useState("button3");
 
   const PDFstyle = StyleSheet.create({
     body: {
@@ -93,15 +102,50 @@ export default function DisplaySection() {
     </Document>
   );
 
+  // const App = () => (
+  //   <PDFViewer>
+  //     <MyDocument />
+  //   </PDFViewer>
+  // );
+
+  // const App = () => (
+  //   <BlobProvider document={MyDocument}>
+  //     {({ url }) => (
+  //       <a href={url} target={"_blank"}>
+  //         Open in new tab
+  //       </a>
+  //     )}
+  //   </BlobProvider>
+  // );
+
   const App = () => (
-    <PDFViewer>
-      <MyDocument />
-    </PDFViewer>
+    <div>
+      <PDFDownloadLink document={<MyDocument />} fileName="test.pdf">
+        {({ blob, url, loading, error }) =>
+          loading ? "Loading document..." : "Download now!"
+        }
+      </PDFDownloadLink>
+    </div>
   );
+
+  function loadingPDF() {
+    setButtonText("Loading document");
+  }
+
+  function PDFready() {
+    setButtonText("Download now!");
+  }
 
   function genPDF() {
     console.log("generating PDF");
-    const rootElement = document.getElementById("root");
+    // <BlobProvider document={<App />}>
+    //   {({ url }) => (
+    //     <a href={url} target="_blank">
+    //       Open in new tab
+    //     </a>
+    //   )}
+    // </BlobProvider>;
+    const rootElement = document.getElementById(targetButton);
     ReactDOM.render(<App />, rootElement);
   }
 
@@ -113,6 +157,14 @@ export default function DisplaySection() {
     }
   }
 
+  // const getid = event => {
+  //   console.log(event.target.id);
+  // };
+
+  // function getid(){
+  //   console.log("ID: " + event.target.id);
+  // }
+
   const setCertValue = obj => {
     // setCourseCode("DLLM0000");
     // setCourseName(obj.course_name);
@@ -121,11 +173,19 @@ export default function DisplaySection() {
     course_name = obj.course_name;
     course_code = obj.course_code;
     institute = obj.institution;
+    certID = obj.certid;
+    targetButton = "button" + obj.id;
 
-    setTimeout(function() {
-      genPDF();
-    }, 3000);
+    console.log(targetButton);
+
+    genPDF();
+
+    setDlButtonVisibility(false);
   };
+
+  function buttonID(obj) {
+    return "button" + obj.id;
+  }
 
   return (
     <div className={classes.section}>
@@ -189,7 +249,26 @@ export default function DisplaySection() {
                 </div>
               </Grid>
               <Grid>
-                <Button color="warning" round onClick={() => setCertValue(obj)}>
+                <Button
+                  // id={buttonID(obj)}
+                  color="warning"
+                  round
+                  onClick={() => setCertValue(obj)}
+                  // onClick={() => console.log("click!")}
+                >
+                  {/* Generate PDF */}
+                  {buttonText}
+                </Button>
+              </Grid>
+              <Grid>
+                <Button
+                  id={buttonID(obj)}
+                  color="warning"
+                  disabled={dlButtonVisibility}
+                  round
+                  // onClick={() => setCertValue(obj)}
+                  // onClick={() => genPDF()}
+                >
                   Download PDF
                 </Button>
               </Grid>
