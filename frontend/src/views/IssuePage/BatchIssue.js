@@ -89,7 +89,7 @@ export default function SingleIssue() {
   function setSIDMenuItem() {
     for (var i = 0; i < courseJsonData.length; i++) {
       var obj = courseJsonData[i];
-      if (obj.course_code == courseID) {
+      if (obj.course_code === courseID) {
         for (var j = 0; j < obj.student.length; j++)
           sid_string[j] = obj.student[j];
       }

@@ -8,13 +8,10 @@ import {
   Document,
   StyleSheet,
   Font,
-  BlobProvider,
   PDFDownloadLink
 } from "@react-pdf/renderer";
 import ReactDOM from "react-dom";
-import { PDFViewer } from "@react-pdf/renderer";
 import jsonData from "../../json/cert.json";
-// import CertData from "./certData";
 import keepLogo from "../../assets/img/keep_logo.png";
 
 // @material-ui/icons
@@ -41,7 +38,9 @@ var course_name,
   course_code,
   institute,
   certID,
-  targetButton = "button2",
+  teacher_name,
+  date,
+  targetButton,
   pdfname;
 
 export default function DisplaySection() {
@@ -73,6 +72,10 @@ export default function DisplaySection() {
       marginBottom: 20,
       textAlign: "center",
       color: "grey"
+    },
+    line: {
+      fontSize: 12,
+      color: "grey"
     }
   });
 
@@ -95,25 +98,16 @@ export default function DisplaySection() {
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>in</Text>
         <Text style={PDFstyle.header}>{institute}</Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.line}>__________________</Text>
+        <Text style={PDFstyle.line}> </Text>
+        <Text style={PDFstyle.line}>{teacher_name}</Text>
+        <Text style={PDFstyle.line}> </Text>
+        <Text style={PDFstyle.line}>{date}</Text>
       </Page>
     </Document>
   );
-
-  // const App = () => (
-  //   <PDFViewer>
-  //     <MyDocument />
-  //   </PDFViewer>
-  // );
-
-  // const App = () => (
-  //   <BlobProvider document={MyDocument}>
-  //     {({ url }) => (
-  //       <a href={url} target={"_blank"}>
-  //         Open in new tab
-  //       </a>
-  //     )}
-  //   </BlobProvider>
-  // );
 
   const App = () => (
     <div>
@@ -128,13 +122,6 @@ export default function DisplaySection() {
   function genPDF() {
     console.log("generating PDF");
     pdfname = certID + ".pdf";
-    // <BlobProvider document={<App />}>
-    //   {({ url }) => (
-    //     <a href={url} target="_blank">
-    //       Open in new tab
-    //     </a>
-    //   )}
-    // </BlobProvider>;
     const rootElement = document.getElementById(targetButton);
     ReactDOM.render(<App />, rootElement);
   }
@@ -152,6 +139,8 @@ export default function DisplaySection() {
     course_code = obj.course_code;
     institute = obj.institution;
     certID = obj.certid;
+    teacher_name = obj.teacher_name;
+    date = obj.date;
     targetButton = "button" + obj.id;
 
     console.log(targetButton);
@@ -247,7 +236,7 @@ export default function DisplaySection() {
                   // onClick={() => setCertValue(obj)}
                   // onClick={() => genPDF()}
                 >
-                  Download PDF
+                  Not Ready
                 </Button>
               </Grid>
             </ExpansionPanelDetails>
