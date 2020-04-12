@@ -34,3 +34,10 @@ npm install
 node enrollAdmin_new.js
 npm start
 ```
+
+admin frontend is in progress, to view
+```
+cd frontend_admin
+npm install
+npm start
+```

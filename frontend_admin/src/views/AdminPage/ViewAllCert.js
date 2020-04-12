@@ -57,7 +57,7 @@ export default function ViewAllCert() {
   const classes = useStyles();
   const [dense] = React.useState(false);
   const [dlButtonVisibility, setDlButtonVisibility] = React.useState(true);
-  const [buttonText, setButtonText] = React.useState("Generate PDF");
+  // const [buttonText, setButtonText] = React.useState("Generate PDF");
   const [modal, setModal] = React.useState(false);
   const [course_name_edit, setCourse_name_edit] = React.useState("");
 
@@ -158,7 +158,6 @@ export default function ViewAllCert() {
     // console.log(targetButton);
 
     genPDF();
-
     setDlButtonVisibility(false);
   };
 
@@ -166,12 +165,23 @@ export default function ViewAllCert() {
     return "button" + obj.id;
   }
 
-  function editCert(obj) {
-    setCourse_name_edit(course_name);
+  React.useEffect(() => {
+    console.log("Do something after counter has changed", course_name_edit);
+  }, [course_name_edit]);
+
+  const editCert = obj => {
+    setCertValue(obj);
+    setCourse_name_edit("TEST4000");
+    console.log("course name state is " + course_name_edit);
     setTimeout(function() {
       setModal(true);
     }, 100);
-  }
+  };
+
+  const handleChangeCourseName = event => {
+    console.log("course name ahhhhhhh!!!!!");
+    setCourse_name_edit(event.target.value);
+  };
 
   return (
     <div className={classes.section}>
@@ -254,8 +264,8 @@ export default function ViewAllCert() {
                           onClick={() => setCertValue(obj)}
                           // onClick={() => console.log("click!")}
                         >
-                          {/* Generate PDF */}
-                          {buttonText}
+                          Generate PDF
+                          {/* {buttonText} */}
                         </Button>
                       </Grid>
                       <Grid>
@@ -320,6 +330,7 @@ export default function ViewAllCert() {
                               id="standard-basic"
                               label="Course Name"
                               defaultValue={course_name_edit}
+                              onChange={handleChangeCourseName}
                             />
                           </DialogContent>
                           <DialogActions
