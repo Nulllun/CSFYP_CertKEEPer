@@ -1,0 +1,38 @@
+[{
+  "id":0,
+  "certid":"CERT-2100-01",
+  "institution":"The Chinese University of Hong Kong",
+  "course_code":"CSCI2100",
+  "course_name":"Data Structure",
+  "teacher_name":"Prof. Irwin King",
+  "description":"Best Programmer",
+  "date":"06-04-2020"
+},{
+  "id":1,
+  "certid":"CERT-1000-01",
+  "institution":"The Chinese University of Hong Kong",
+  "course_code":"UGFN1000",
+  "course_name":"In Dialogue With Nature",
+  "teacher_name":"Dr. Kiang Kai Ming",
+  "description":"Pass",
+  "date":"06-04-2020"
+},{
+  "id":2,
+  "certid":"CERT-3310-01",
+  "institution":"The Chinese University of Hong Kong",
+  "course_code":"CSCI3310",
+  "course_name":"Mobile Computing and Applications Development",
+  "teacher_name":"Prof. Michael Lyu",
+  "description":"B grade",
+  "date":"06-04-2020"
+},{
+  "id":3,
+  "certid":"CERT-2460-01",
+  "institution":"The Chinese University of Hong Kong",
+  "course_code":"JASP2460",
+  "course_name":"New Practical Japanese IV",
+  "teacher_name":"Ms. Winkki Choi",
+  "description":"A grade",
+  "date":"06-04-2020"
+}
+]
