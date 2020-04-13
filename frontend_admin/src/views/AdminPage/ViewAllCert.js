@@ -20,7 +20,6 @@ import Close from "@material-ui/icons/Close";
 
 // core components
 import Button from "components/CustomButtons/Button.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
 
 // import component from "@material-ui/core
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -57,9 +56,15 @@ export default function ViewAllCert() {
   const classes = useStyles();
   const [dense] = React.useState(false);
   const [dlButtonVisibility, setDlButtonVisibility] = React.useState(true);
-  // const [buttonText, setButtonText] = React.useState("Generate PDF");
   const [modal, setModal] = React.useState(false);
   const [course_name_edit, setCourse_name_edit] = React.useState("");
+  const [course_code_edit, setCourse_code_edit] = React.useState("");
+  const [institution_edit, setInstitution_edit] = React.useState("");
+  const [certID_edit, setCertID_edit] = React.useState("");
+  const [teacher_name_edit, setTeacher_name_edit] = React.useState("");
+  const [date_edit, setDate_edit] = React.useState("");
+  const [certDescription_edit, setCertDescription_edit] = React.useState("");
+  const [activeModal, setActiveModal] = React.useState(null);
 
   const PDFstyle = StyleSheet.create({
     body: {
@@ -170,17 +175,58 @@ export default function ViewAllCert() {
   }, [course_name_edit]);
 
   const editCert = obj => {
-    setCertValue(obj);
+    setActiveModal(obj.id);
     setCourse_name_edit("TEST4000");
     console.log("course name state is " + course_name_edit);
     setTimeout(function() {
       setModal(true);
-    }, 100);
+    }, 1000);
   };
 
+  function closeAction() {
+    setModal(false);
+    setActiveModal(null);
+  }
+
+  function confirmEditAction(){
+    console.log("confirm edit certificate");
+    setModal(false);
+    setActiveModal(null);
+    // need implement
+  }
+
+  function deleteCert(){
+    console.log("delete certificate");
+    // need implement
+  }
+
   const handleChangeCourseName = event => {
-    console.log("course name ahhhhhhh!!!!!");
     setCourse_name_edit(event.target.value);
+    console.log(course_name_edit);
+  };
+
+  const handleChangeCourseCode = event => {
+    setCourse_code_edit(event.target.value);
+  };
+
+  const handleChangeInstitution = event => {
+    setInstitution_edit(event.target.value);
+  };
+
+  const handleChangeTeacherName = event => {
+    setTeacher_name_edit(event.target.value);
+  };
+
+  const handleChangeCertDescription = event => {
+    setCertDescription_edit(event.target.value);
+  };
+
+  const handleChangeCertID = event => {
+    setCertID_edit(event.target.value);
+  };
+
+  const handleChangeDate = event => {
+    setDate_edit(event.target.value);
   };
 
   return (
@@ -217,7 +263,7 @@ export default function ViewAllCert() {
                       <ListItem>
                         <ListItemText
                           primary="Institution"
-                          secondary={obj.institution}
+                          secondary={obj.institute}
                         />
                       </ListItem>
                       <ListItem>
@@ -228,7 +274,7 @@ export default function ViewAllCert() {
                       </ListItem>
                       <ListItem>
                         <ListItemText
-                          primary="Title"
+                          primary="Course Name"
                           secondary={obj.course_name}
                         />
                       </ListItem>
@@ -262,10 +308,8 @@ export default function ViewAllCert() {
                           color="warning"
                           round
                           onClick={() => setCertValue(obj)}
-                          // onClick={() => console.log("click!")}
                         >
                           Generate PDF
-                          {/* {buttonText} */}
                         </Button>
                       </Grid>
                       <Grid>
@@ -274,8 +318,6 @@ export default function ViewAllCert() {
                           color="warning"
                           disabled={dlButtonVisibility}
                           round
-                          // onClick={() => setCertValue(obj)}
-                          // onClick={() => genPDF()}
                         >
                           Not Ready
                         </Button>
@@ -288,7 +330,6 @@ export default function ViewAllCert() {
                           color="success"
                           round
                           onClick={() => editCert(obj)}
-                          // onClick={() => console.log("click!")}
                         >
                           Edit
                         </Button>
@@ -297,7 +338,8 @@ export default function ViewAllCert() {
                             root: classes.center,
                             paper: classes.modal
                           }}
-                          open={modal}
+                          fullWidth={true}
+                          open={activeModal == obj.id}
                           keepMounted
                           onClose={() => setModal(false)}
                           aria-labelledby="modal-slide-title"
@@ -313,7 +355,7 @@ export default function ViewAllCert() {
                               key="close"
                               aria-label="Close"
                               color="inherit"
-                              onClick={() => setModal(false)}
+                              onClick={() => closeAction()}
                             >
                               <Close className={classes.modalClose} />
                             </IconButton>
@@ -328,9 +370,58 @@ export default function ViewAllCert() {
                             <TextField
                               required
                               id="standard-basic"
+                              label="Certificate ID"
+                              fullWidth
+                              defaultValue={obj.certid}
+                              onChange={handleChangeCertID}
+                            />
+                            <TextField
+                              required
+                              id="standard-basic"
+                              label="Institution"
+                              fullWidth
+                              defaultValue={obj.institution}
+                              onChange={handleChangeInstitution}
+                            />
+                            <TextField
+                              required
+                              id="standard-basic"
+                              label="Course Code"
+                              fullWidth
+                              defaultValue={obj.course_code}
+                              onChange={handleChangeCourseCode}
+                            />
+                            <TextField
+                              required
+                              id="standard-basic"
                               label="Course Name"
-                              defaultValue={course_name_edit}
+                              fullWidth
+                              defaultValue={obj.course_name}
                               onChange={handleChangeCourseName}
+                            />
+                            <TextField
+                              required
+                              id="standard-basic"
+                              label="Teacher Name"
+                              fullWidth
+                              defaultValue={obj.teacher_name}
+                              onChange={handleChangeTeacherName}
+                            />
+                            <TextField
+                              required
+                              id="standard-basic"
+                              label="Certificate Description"
+                              fullWidth
+                              defaultValue={obj.description}
+                              onChange={handleChangeCertDescription}
+                            />
+                            <TextField
+                              required
+                              id="standard-basic"
+                              label="Issue Date"
+                              fullWidth
+                              defaultValue={obj.date}
+                              onChange={handleChangeDate}
                             />
                           </DialogContent>
                           <DialogActions
@@ -340,11 +431,11 @@ export default function ViewAllCert() {
                               classes.modalFooterCenter
                             }
                           >
-                            <Button onClick={() => setModal(false)}>
+                            <Button onClick={() => closeAction()}>
                               Never Mind
                             </Button>
                             <Button
-                              onClick={() => setModal(false)}
+                              onClick={() => confirmEditAction()}
                               color="success"
                             >
                               Yes
@@ -359,7 +450,7 @@ export default function ViewAllCert() {
                           // id={buttonID(obj)}
                           color="danger"
                           round
-                          onClick={() => setCertValue(obj)}
+                          onClick={() => deleteCert()}
                           // onClick={() => console.log("click!")}
                         >
                           Delete
