@@ -122,7 +122,7 @@ export default function SingleIssue() {
 
         <GridItem>
           <div className={classes.root}>
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} m={2}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <Typography>course ID</Typography>

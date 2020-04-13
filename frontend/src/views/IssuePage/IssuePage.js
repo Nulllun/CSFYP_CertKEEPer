@@ -8,7 +8,8 @@ import Footer from "components/Footer/Footer.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import Parallax from "components/Parallax/Parallax.js";
 
-import TabSection from "./TabSection.js";
+// import TabSection from "./TabSection.js";
+import SingleIssue from "./SingleIssue.js";
 
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
@@ -40,8 +41,9 @@ export default function IssuePage(props) {
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
-        <div className={classes.container}>
-          <TabSection />
+        {/* <div className={classes.container}> */}
+        <div className={classes.section}>
+          <SingleIssue />
         </div>
       </div>
       <Footer />
