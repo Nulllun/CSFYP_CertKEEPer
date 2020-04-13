@@ -22,7 +22,7 @@ cd hyperledger/test-network
 ./network.sh up createChannel -ca -s couchdb
 ./network.sh deployCC
 
-after use, remember execute the following line
+// After use, remember execute the following line
 ./network.sh down 
 
 // To start the front end
