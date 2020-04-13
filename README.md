@@ -22,7 +22,9 @@ cd hyperledger/test-network
 ./network.sh up createChannel -ca -s couchdb
 ./network.sh deployCC
 
-(The front end is not ready, use Postman to test the API if needed)
+after use, remember execute the following line
+./network.sh down 
+
 // To start the front end
 cd frontend
 npm install
@@ -40,4 +42,10 @@ admin frontend is in progress, to view
 cd frontend_admin
 npm install
 npm start
+```
+
+if you want to issue certificate, you should enroll admin identity first by running the following command
+```
+cd certkeeper-api
+node enrollAdmin_new.js
 ```

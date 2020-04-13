@@ -236,7 +236,7 @@ export default function RegisterPage(props) {
                       size="lg"
                       onClick={registerUser}
                     >
-                      Login
+                      Register
                     </Button>
                   </CardFooter>
                 </form>

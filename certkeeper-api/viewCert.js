@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
         const contract = network.getContract('certkeeper');
 
         // Evaluate the specified transaction.
-        const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipientID": "${req.body.recipientID}", "docType": "CERT"}}`);
+        const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipientID": ${req.body.recipientID}, "docType": "CERT"}}`);
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
         res.status(200).json(JSON.parse(result.toString()));
 
