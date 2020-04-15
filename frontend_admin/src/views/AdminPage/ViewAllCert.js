@@ -39,6 +39,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
@@ -51,6 +55,7 @@ var course_name,
   teacher_name,
   message,
   date,
+  recipient_id,
   targetButton,
   pdfname;
 
@@ -69,10 +74,16 @@ export default function ViewAllCert() {
   const [issuePlatform_edit, setIssuePlatform_edit] = React.useState("");
   const [activeModal, setActiveModal] = React.useState(null);
   const [certList, setCertList] = React.useState([]);
-  const [recipientID, setRecipientID] = React.useState(null);
+  const [recipientID, setRecipientID] = React.useState("");
+  const [searchField, setSearchField] = React.useState(null);
+  const [searchBy, setSearchBy] = React.useState(2);
 
   const handleChangeRecipientID = event => {
     setRecipientID(event.target.value);
+  };
+
+  const handleChangeSearchField = event => {
+    setSearchField(event.target.value);
   };
 
   const handleChangeCourseName = event => {
@@ -107,30 +118,75 @@ export default function ViewAllCert() {
     setIssuePlatform_edit(event.target.value);
   };
 
+  const handleChangeSearchBy = event => {
+    setSearchBy(event.target.value);
+  };
+
   async function getCert() {
-    let RID = recipientID;
-    if (RID !== undefined && RID !== null) {
-      let path = "http://localhost:5000/view";
-      let response = await fetch(path, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          recipientID: JSON.parse(RID)
-        })
-      });
-      let certList = await response.json();
-      console.log(certList);
-      if (response.status === 200) {
-        setCertList(certList);
+    let input = searchField;
+    if (input !== undefined && input !== null) {
+      if (searchBy == 1) {
+        console.log("certid");
+        let path = "http://localhost:5000/view";
+        let response = await fetch(path, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            searchBy: JSON.parse(1),
+            certID: input
+          })
+        });
+        let certList = await response.json();
+        console.log(certList);
+        if (response.status === 200) {
+          setCertList(certList);
+        }
+      } else if (searchBy == 2) {
+        console.log("rid");
+        let path = "http://localhost:5000/view";
+        let response = await fetch(path, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            searchBy: JSON.parse(2),
+            recipientID: JSON.parse(input)
+          })
+        });
+        let certList = await response.json();
+        console.log(certList);
+        if (response.status === 200) {
+          setCertList(certList);
+        }
+      } else {
+        console.log("date");
+        let path = "http://localhost:5000/view";
+        let response = await fetch(path, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            searchBy: JSON.parse(3),
+            issueDate: input
+          })
+        });
+        let certList = await response.json();
+        console.log(certList);
+        if (response.status === 200) {
+          setCertList(certList);
+        }
       }
     }
   }
 
   async function issueCert() {
-    let RID = JSON.parse(recipientID);
     let cert = {
       certID: certID_edit,
       issuePlatform: issuePlatform_edit,
@@ -138,7 +194,7 @@ export default function ViewAllCert() {
       courseID: course_code_edit,
       courseTitle: course_name_edit,
       teacherName: teacher_name_edit,
-      recipientID: RID,
+      recipientID: recipientID,
       certMsg: certDescription_edit,
       issueDate: date_edit,
       signature: ""
@@ -277,15 +333,17 @@ export default function ViewAllCert() {
 
   const editCert = obj => {
     setActiveModal(obj.certID);
-    setCourse_name_edit("TEST4000");
-    console.log("course name state is " + course_name_edit);
     setTimeout(function() {
       setModal(true);
     }, 1000);
     presetEditCertValue(obj);
   };
 
-  function closeAction() {
+  function closeAction(obj) {
+    console.log("close modal");
+    presetEditCertValue(obj);
+    console.log(obj.institution);
+    console.log(institution_edit);
     setModal(false);
     setActiveModal(null);
   }
@@ -303,6 +361,7 @@ export default function ViewAllCert() {
   }
 
   function presetEditCertValue(obj) {
+    console.log("setting...");
     setCertID_edit(obj.certID);
     setInstitution_edit(obj.institution);
     setCourse_code_edit(obj.courseID);
@@ -311,28 +370,43 @@ export default function ViewAllCert() {
     setCertDescription_edit(obj.certMsg);
     setDate_edit(obj.issueDate);
     setIssuePlatform_edit(obj.issuePlatform);
+    setRecipientID(obj.recipientID);
   }
-
 
   return (
     <div className={classes.section}>
       <div>
         <Paper className={classes.paper}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+          <Grid container spacing={1}>
+            <Grid item xs={4}>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-label">Search by</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={searchBy}
+                  onChange={handleChangeSearchBy}
+                >
+                  <MenuItem value={1}>Certificate ID</MenuItem>
+                  <MenuItem value={2}>Student ID</MenuItem>
+                  <MenuItem value={3}>Issue Date</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={4}>
               <CustomInput
-                id="recipientid"
-                labelText="Enter student ID"
+                id="searchCriteria"
+                labelText="Enter here"
                 inputProps={{
                   fullWidth: true,
-                  onChange: handleChangeRecipientID
+                  onChange: handleChangeSearchField
                 }}
                 formControlProps={{
                   fullWidth: true
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={4}>
               <Button color="info" round onClick={() => getCert()}>
                 Query
               </Button>
@@ -373,6 +447,12 @@ export default function ViewAllCert() {
                         <ListItemText
                           primary="Issue Platform"
                           secondary={obj.issuePlatform}
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemText
+                          primary="Student ID"
+                          secondary={obj.recipientID}
                         />
                       </ListItem>
                       <ListItem>
@@ -464,7 +544,7 @@ export default function ViewAllCert() {
                               key="close"
                               aria-label="Close"
                               color="inherit"
-                              onClick={() => closeAction()}
+                              onClick={() => closeAction(obj)}
                             >
                               <Close className={classes.modalClose} />
                             </IconButton>
@@ -478,7 +558,8 @@ export default function ViewAllCert() {
                           >
                             <TextField
                               required
-                              id="disabled"
+                              id="filled-disabled"
+                              variant="filled"
                               label="Certificate ID"
                               inputProps={{
                                 disabled: true
@@ -502,6 +583,17 @@ export default function ViewAllCert() {
                               fullWidth
                               defaultValue={obj.issuePlatform}
                               onChange={handleChangeIssuePlatform}
+                            />
+                            <TextField
+                              required
+                              id="filled-disabled"
+                              variant="filled"
+                              label="Recipient ID"
+                              inputProps={{
+                                disabled: true
+                              }}
+                              fullWidth
+                              defaultValue={obj.recipientID}
                             />
                             <TextField
                               required
@@ -551,7 +643,7 @@ export default function ViewAllCert() {
                               classes.modalFooterCenter
                             }
                           >
-                            <Button onClick={() => closeAction()}>
+                            <Button onClick={() => closeAction(obj)}>
                               Cancel
                             </Button>
                             <Button

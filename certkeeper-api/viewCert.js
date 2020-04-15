@@ -10,6 +10,8 @@ const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
 // View user's own certs
 router.post('/', async (req, res) => {
+    let searchCriteria = req.body.searchBy;
+
     try {
         // let walletJson = req.body.wallet;
         // let userID = walletJson.userID;
@@ -29,9 +31,25 @@ router.post('/', async (req, res) => {
         const contract = network.getContract('certkeeper');
 
         // Evaluate the specified transaction.
-        const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipientID": ${req.body.recipientID}, "docType": "CERT"}}`);
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
-        res.status(200).json(JSON.parse(result.toString()));
+        if (searchCriteria == 1){
+            const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"certID": "${req.body.certID}", "docType": "CERT"}}`);
+            console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+            res.status(200).json(JSON.parse(result.toString()));
+        }
+        else if (searchCriteria == 2){
+            const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipientID": ${req.body.recipientID}, "docType": "CERT"}}`);
+            console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+            res.status(200).json(JSON.parse(result.toString()));
+        }
+        else if (searchCriteria == 3){
+            const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"issueDate": "${req.body.issueDate}", "docType": "CERT"}}`);
+            console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+            res.status(200).json(JSON.parse(result.toString()));
+        }
+
+        // const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipientID": ${req.body.recipientID}, "docType": "CERT"}}`);
+        // console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        // res.status(200).json(JSON.parse(result.toString()));
 
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
