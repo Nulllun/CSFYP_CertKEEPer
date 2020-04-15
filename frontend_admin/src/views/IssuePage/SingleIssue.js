@@ -34,6 +34,7 @@ const useStyles = makeStyles(styles);
 
 export default function SingleIssue() {
   const classes = useStyles();
+  const [certID, setCertID] = React.useState("");
   const [courseID, setCourseID] = React.useState("");
   const [recipientID, setRecipientID] = React.useState("");
   const [certMsg, setCertMsg] = React.useState("");
@@ -41,8 +42,13 @@ export default function SingleIssue() {
   const [certDateMonth, setCertDateMonth] = React.useState("");
   const [certDateYear, setCertDateYear] = React.useState("");
   const [certDate, setCertDate] = React.useState("");
+  const [signature, setSignature] = React.useState("");
   const [modal, setModal] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+
+  const handleChangeCertID = event => {
+    setCertID(event.target.value);
+  };
 
   const handleChangeCID = event => {
     setCourseID(event.target.value);
@@ -57,11 +63,12 @@ export default function SingleIssue() {
   };
 
   const handleChangeCertDate = date => {
-    console.log("here");
     setCertDateDay(new Date(date).getDate());
     setCertDateMonth(new Date(date).getMonth() + 1);
     setCertDateYear(new Date(date).getFullYear());
     setCertDate(certDateDay + "/" + certDateMonth + "/" + certDateYear);
+
+    console.log("date: " + certDate);
   };
 
   var course_string = [];
@@ -73,30 +80,64 @@ export default function SingleIssue() {
   }
 
   var sid_string = [];
+  var issuePlatform, course_name, institution, teacher_name;
   function setSIDMenuItem() {
     for (var i = 0; i < courseJsonData.length; i++) {
       var obj = courseJsonData[i];
       if (obj.course_code === courseID) {
-        for (var j = 0; j < obj.student.length; j++)
+        for (var j = 0; j < obj.student.length; j++) {
           sid_string[j] = obj.student[j];
+        }
+        issuePlatform = "KEEP";
+        course_name = obj.course_name;
+        institution = obj.institution;
+        teacher_name = obj.teacher_name;
       }
     }
   }
 
   function handleIssueSubmit() {
-    console.log("issued clicked");
+    console.log("issue button clicked");
     setModal(false);
+    issueCert();
     handleClickOpen();
-    console.log(
-      "inputted data: " +
-        certDate +
-        "," +
-        courseID +
-        "," +
-        recipientID +
-        "," +
-        certMsg
-    );
+  }
+
+  async function issueCert() {
+    let cert = {
+      certID: certID,
+      issuePlatform: issuePlatform,
+      institution: institution,
+      courseID: courseID,
+      courseTitle: course_name,
+      teacherName: teacher_name,
+      recipientID: recipientID,
+      certMsg: certMsg,
+      issueDate: certDate,
+      signature: signature
+    };
+    console.log(`Request is sent with ${cert}`);
+    console.log(typeof JSON.stringify(recipientID));
+    console.log(typeof recipientID);
+    if (cert !== null) {
+      let path = "http://localhost:5000/issue";
+      let response = await fetch(path, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          cert: cert,
+          recipientID: JSON.parse(recipientID)
+        })
+      });
+      let data = await response.json();
+      console.log(data);
+      if (response.status === 200) {
+        console.log("Certificates issued");
+      }
+    }
   }
 
   const handleClickOpen = () => {
@@ -121,8 +162,36 @@ export default function SingleIssue() {
         </GridContainer>
 
         <GridItem>
+          <Paper className={classes.paper}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography>certificate ID</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} container>
+                <Grid item xs container direction="column" spacing={2}>
+                  <CustomInput
+                    id="certid"
+                    inputProps={{
+                      placeholder: "None",
+                      onChange: handleChangeCertID
+                    }}
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </GridItem>
+
+        <Typography>
+          <br />
+        </Typography>
+
+        <GridItem>
           <div className={classes.root}>
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} m={2}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <Typography>course ID</Typography>
@@ -230,7 +299,7 @@ export default function SingleIssue() {
             <Paper className={classes.paper}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <Typography>issue date and time</Typography>
+                  <Typography>issue date</Typography>
                 </Grid>
                 <Grid item xs={12} sm={6} container>
                   <FormControl fullWidth>

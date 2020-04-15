@@ -36,9 +36,10 @@ export default function ProductSection() {
   // const [cert, setCert] = React.useState(null);
   const [verifyResult, setVerifyResult] = React.useState(false);
   const [verificationResultText, setVerificationResultText] = React.useState(
-    "False"
+    "True"
   );
   const [boxState, setBoxState] = React.useState("none");
+  const [boxStateError, setBoxStateError] = React.useState("none");
   const [dense] = React.useState(false);
   const [certID, setCertID] = React.useState("");
   const [institution, setInstitution] = React.useState("");
@@ -62,6 +63,7 @@ export default function ProductSection() {
     console.log("clicked");
     console.log(input);
     setBoxState("none");
+    setBoxStateError("none");
     verifyCert();
   }
 
@@ -94,6 +96,9 @@ export default function ProductSection() {
         setMessage(data.cert.certMsg);
         setIssueDate(data.cert.issueDate);
         setBoxState("block");
+      }
+      else{
+        setBoxStateError("block");
       }
     }
   }
@@ -131,7 +136,7 @@ export default function ProductSection() {
             }}
           />
         </GridItem>
-        <GridContainer>
+        {/* <GridContainer>
           <Grid item xs={12} sm={6}>
             <div className={wrapperDiv}>
               <FormControlLabel
@@ -188,7 +193,7 @@ export default function ProductSection() {
               />
             </div>
           </Grid>
-        </GridContainer>
+        </GridContainer> */}
         <GridItem>
           <Button type="button" color="info" onClick={handleClick}>
             Submit
@@ -267,6 +272,21 @@ export default function ProductSection() {
                 />
               </ListItem>
             </List>
+          </div>
+        </Paper>
+      </Box>
+      <Box display={boxStateError}>
+        <Divider />
+        <Paper>
+          <InfoArea
+            title="Verification Result"
+            description=""
+            icon={WbIncandescentIcon}
+            iconColor="info"
+          />
+          <div>
+            <h4>Result: False</h4>
+            <h6>This certificate either not exists or not issued by KEEP</h6>
           </div>
         </Paper>
       </Box>

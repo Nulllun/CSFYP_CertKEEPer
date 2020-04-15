@@ -49,7 +49,7 @@ export default function HomePage(props) {
               <Button
                 color="danger"
                 size="lg"
-                href="./admin-page"
+                href="./admin-panel"
                 rel="noopener noreferrer"
               >
                 Get Started

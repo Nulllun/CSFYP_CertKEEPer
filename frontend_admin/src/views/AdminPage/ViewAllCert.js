@@ -4,14 +4,14 @@ import {
   Page,
   Text,
   Image,
-  View,
+  // View,
   Document,
   StyleSheet,
-  Font,
+  // Font,
   PDFDownloadLink
 } from "@react-pdf/renderer";
 import ReactDOM from "react-dom";
-import jsonData from "../../json/cert.json";
+// import jsonData from "../../json/cert.json";
 import keepLogo from "../../assets/img/keep_logo.png";
 
 // @material-ui/icons
@@ -20,6 +20,7 @@ import Close from "@material-ui/icons/Close";
 
 // core components
 import Button from "components/CustomButtons/Button.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
 
 // import component from "@material-ui/core
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -48,6 +49,7 @@ var course_name,
   institute,
   certID,
   teacher_name,
+  message,
   date,
   targetButton,
   pdfname;
@@ -64,7 +66,105 @@ export default function ViewAllCert() {
   const [teacher_name_edit, setTeacher_name_edit] = React.useState("");
   const [date_edit, setDate_edit] = React.useState("");
   const [certDescription_edit, setCertDescription_edit] = React.useState("");
+  const [issuePlatform_edit, setIssuePlatform_edit] = React.useState("");
   const [activeModal, setActiveModal] = React.useState(null);
+  const [certList, setCertList] = React.useState([]);
+  const [recipientID, setRecipientID] = React.useState(null);
+
+  const handleChangeRecipientID = event => {
+    setRecipientID(event.target.value);
+  };
+
+  const handleChangeCourseName = event => {
+    setCourse_name_edit(event.target.value);
+  };
+
+  const handleChangeCourseCode = event => {
+    setCourse_code_edit(event.target.value);
+  };
+
+  const handleChangeInstitution = event => {
+    setInstitution_edit(event.target.value);
+  };
+
+  const handleChangeTeacherName = event => {
+    setTeacher_name_edit(event.target.value);
+  };
+
+  const handleChangeCertDescription = event => {
+    setCertDescription_edit(event.target.value);
+  };
+
+  const handleChangeCertID = event => {
+    setCertID_edit(event.target.value);
+  };
+
+  const handleChangeDate = event => {
+    setDate_edit(event.target.value);
+  };
+
+  const handleChangeIssuePlatform = event => {
+    setIssuePlatform_edit(event.target.value);
+  };
+
+  async function getCert() {
+    let RID = recipientID;
+    if (RID !== undefined && RID !== null) {
+      let path = "http://localhost:5000/view";
+      let response = await fetch(path, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          recipientID: JSON.parse(RID)
+        })
+      });
+      let certList = await response.json();
+      console.log(certList);
+      if (response.status === 200) {
+        setCertList(certList);
+      }
+    }
+  }
+
+  async function issueCert() {
+    let RID = JSON.parse(recipientID);
+    let cert = {
+      certID: certID_edit,
+      issuePlatform: issuePlatform_edit,
+      institution: institution_edit,
+      courseID: course_code_edit,
+      courseTitle: course_name_edit,
+      teacherName: teacher_name_edit,
+      recipientID: RID,
+      certMsg: certDescription_edit,
+      issueDate: date_edit,
+      signature: ""
+    };
+    console.log(`Request is sent with ${cert}`);
+    if (cert !== null) {
+      let path = "http://localhost:5000/issue";
+      let response = await fetch(path, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          cert: cert,
+          recipientID: JSON.parse(recipientID)
+        })
+      });
+      let data = await response.json();
+      console.log(data);
+      if (response.status === 200) {
+        console.log("Certificates re-issued");
+        getCert();
+      }
+    }
+  }
 
   const PDFstyle = StyleSheet.create({
     body: {
@@ -107,7 +207,7 @@ export default function ViewAllCert() {
         <Text style={PDFstyle.title}>Chris Wong</Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>
-          successfuly completed and received a passing grade in
+          successfuly completed and received {message} in
         </Text>
         <Text style={PDFstyle.title}>
           {course_code}: {course_name}
@@ -143,22 +243,23 @@ export default function ViewAllCert() {
     ReactDOM.render(<App />, rootElement);
   }
 
-  var jsonobject_string = [];
-  function getJsonObject() {
-    for (var i = 0; i < jsonData.length; i++) {
-      var obj = jsonData[i];
-      jsonobject_string[i] = obj;
-    }
-  }
+  // var jsonobject_string = [];
+  // function getJsonObject() {
+  //   for (var i = 0; i < jsonData.length; i++) {
+  //     var obj = jsonData[i];
+  //     jsonobject_string[i] = obj;
+  //   }
+  // }
 
   const setCertValue = obj => {
-    course_name = obj.course_name;
-    course_code = obj.course_code;
+    course_name = obj.courseTitle;
+    course_code = obj.courseID;
     institute = obj.institution;
-    certID = obj.certid;
-    teacher_name = obj.teacher_name;
-    date = obj.date;
-    targetButton = "button" + obj.id;
+    certID = obj.certID;
+    teacher_name = obj.teacherName;
+    message = obj.certMsg;
+    date = obj.issueDate;
+    targetButton = "button" + obj.certID;
 
     // console.log(targetButton);
 
@@ -167,20 +268,21 @@ export default function ViewAllCert() {
   };
 
   function buttonID(obj) {
-    return "button" + obj.id;
+    return "button" + obj.certID;
   }
 
-  React.useEffect(() => {
-    console.log("Do something after counter has changed", course_name_edit);
-  }, [course_name_edit]);
+  // React.useEffect(() => {
+  //   console.log("Do something after counter has changed", course_name_edit);
+  // }, [course_name_edit]);
 
   const editCert = obj => {
-    setActiveModal(obj.id);
+    setActiveModal(obj.certID);
     setCourse_name_edit("TEST4000");
     console.log("course name state is " + course_name_edit);
     setTimeout(function() {
       setModal(true);
     }, 1000);
+    presetEditCertValue(obj);
   };
 
   function closeAction() {
@@ -188,58 +290,59 @@ export default function ViewAllCert() {
     setActiveModal(null);
   }
 
-  function confirmEditAction(){
+  function confirmEditAction() {
     console.log("confirm edit certificate");
     setModal(false);
     setActiveModal(null);
-    // need implement
+    issueCert();
   }
 
-  function deleteCert(){
+  function deleteCert() {
     console.log("delete certificate");
     // need implement
   }
 
-  const handleChangeCourseName = event => {
-    setCourse_name_edit(event.target.value);
-    console.log(course_name_edit);
-  };
+  function presetEditCertValue(obj) {
+    setCertID_edit(obj.certID);
+    setInstitution_edit(obj.institution);
+    setCourse_code_edit(obj.courseID);
+    setCourse_name_edit(obj.courseTitle);
+    setTeacher_name_edit(obj.teacherName);
+    setCertDescription_edit(obj.certMsg);
+    setDate_edit(obj.issueDate);
+    setIssuePlatform_edit(obj.issuePlatform);
+  }
 
-  const handleChangeCourseCode = event => {
-    setCourse_code_edit(event.target.value);
-  };
-
-  const handleChangeInstitution = event => {
-    setInstitution_edit(event.target.value);
-  };
-
-  const handleChangeTeacherName = event => {
-    setTeacher_name_edit(event.target.value);
-  };
-
-  const handleChangeCertDescription = event => {
-    setCertDescription_edit(event.target.value);
-  };
-
-  const handleChangeCertID = event => {
-    setCertID_edit(event.target.value);
-  };
-
-  const handleChangeDate = event => {
-    setDate_edit(event.target.value);
-  };
 
   return (
     <div className={classes.section}>
       <div>
-        <Paper>
-          <h4>Search bar</h4>
+        <Paper className={classes.paper}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <CustomInput
+                id="recipientid"
+                labelText="Enter student ID"
+                inputProps={{
+                  fullWidth: true,
+                  onChange: handleChangeRecipientID
+                }}
+                formControlProps={{
+                  fullWidth: true
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Button color="info" round onClick={() => getCert()}>
+                Query
+              </Button>
+            </Grid>
+          </Grid>
         </Paper>
       </div>
       <div>
-        {getJsonObject()}
-        {jsonobject_string.map(obj => (
-          <div key={obj.id}>
+        {certList.map(obj => (
+          <div key={obj.certID}>
             <ExpansionPanel>
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -247,7 +350,7 @@ export default function ViewAllCert() {
                 id="panel1a-header"
               >
                 <Typography className={classes.heading}>
-                  {obj.certid} - issued on: {obj.date}
+                  {obj.certID} - issued on: {obj.issueDate}
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
@@ -257,43 +360,49 @@ export default function ViewAllCert() {
                       <ListItem>
                         <ListItemText
                           primary="Certficate ID"
-                          secondary={obj.certid}
+                          secondary={obj.certID}
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
                           primary="Institution"
-                          secondary={obj.institute}
+                          secondary={obj.institution}
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemText
+                          primary="Issue Platform"
+                          secondary={obj.issuePlatform}
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
                           primary="Course ID"
-                          secondary={obj.course_code}
+                          secondary={obj.courseID}
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
-                          primary="Course Name"
-                          secondary={obj.course_name}
+                          primary="Course Title"
+                          secondary={obj.courseTitle}
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
                           primary="Teacher Name"
-                          secondary={obj.teacher_name}
+                          secondary={obj.teacherName}
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
                           primary="Certificate Description"
-                          secondary={obj.description}
+                          secondary={obj.certMsg}
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
                           primary="Issue Date"
-                          secondary={obj.date}
+                          secondary={obj.issueDate}
                         />
                       </ListItem>
                     </List>
@@ -339,7 +448,7 @@ export default function ViewAllCert() {
                             paper: classes.modal
                           }}
                           fullWidth={true}
-                          open={activeModal == obj.id}
+                          open={activeModal == obj.certID}
                           keepMounted
                           onClose={() => setModal(false)}
                           aria-labelledby="modal-slide-title"
@@ -369,10 +478,13 @@ export default function ViewAllCert() {
                           >
                             <TextField
                               required
-                              id="standard-basic"
+                              id="disabled"
                               label="Certificate ID"
+                              inputProps={{
+                                disabled: true
+                              }}
                               fullWidth
-                              defaultValue={obj.certid}
+                              defaultValue={obj.certID}
                               onChange={handleChangeCertID}
                             />
                             <TextField
@@ -386,9 +498,17 @@ export default function ViewAllCert() {
                             <TextField
                               required
                               id="standard-basic"
+                              label="Issue Platform"
+                              fullWidth
+                              defaultValue={obj.issuePlatform}
+                              onChange={handleChangeIssuePlatform}
+                            />
+                            <TextField
+                              required
+                              id="standard-basic"
                               label="Course Code"
                               fullWidth
-                              defaultValue={obj.course_code}
+                              defaultValue={obj.courseID}
                               onChange={handleChangeCourseCode}
                             />
                             <TextField
@@ -396,7 +516,7 @@ export default function ViewAllCert() {
                               id="standard-basic"
                               label="Course Name"
                               fullWidth
-                              defaultValue={obj.course_name}
+                              defaultValue={obj.courseTitle}
                               onChange={handleChangeCourseName}
                             />
                             <TextField
@@ -404,7 +524,7 @@ export default function ViewAllCert() {
                               id="standard-basic"
                               label="Teacher Name"
                               fullWidth
-                              defaultValue={obj.teacher_name}
+                              defaultValue={obj.teacherName}
                               onChange={handleChangeTeacherName}
                             />
                             <TextField
@@ -412,7 +532,7 @@ export default function ViewAllCert() {
                               id="standard-basic"
                               label="Certificate Description"
                               fullWidth
-                              defaultValue={obj.description}
+                              defaultValue={obj.certMsg}
                               onChange={handleChangeCertDescription}
                             />
                             <TextField
@@ -420,7 +540,7 @@ export default function ViewAllCert() {
                               id="standard-basic"
                               label="Issue Date"
                               fullWidth
-                              defaultValue={obj.date}
+                              defaultValue={obj.issueDate}
                               onChange={handleChangeDate}
                             />
                           </DialogContent>
@@ -432,13 +552,13 @@ export default function ViewAllCert() {
                             }
                           >
                             <Button onClick={() => closeAction()}>
-                              Never Mind
+                              Cancel
                             </Button>
                             <Button
                               onClick={() => confirmEditAction()}
                               color="success"
                             >
-                              Yes
+                              Edit
                             </Button>
                           </DialogActions>
                         </Dialog>

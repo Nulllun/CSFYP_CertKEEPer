@@ -32,7 +32,8 @@ npm start
 
 // To start the API server
 cd certkeeper-api
-npm install
+npm 
+(clear all the files in /wallet)
 node enrollAdmin_new.js
 npm start
 ```
@@ -42,10 +43,4 @@ admin frontend is in progress, to view
 cd frontend_admin
 npm install
 npm start
-```
-
-if you want to issue certificate, you should enroll admin identity first by running the following command
-```
-cd certkeeper-api
-node enrollAdmin_new.js
 ```

@@ -22,11 +22,23 @@ const useStyles = makeStyles(styles);
 
 export default function ViewAllCourse() {
   const classes = useStyles();
+
+  function readJSON() {
+    for (var i = 0; i < courseJsonData.length; i++) {
+      var obj = courseJsonData[i];
+      // if (obj.course_code === courseID) {
+      // }
+    }
+  }
+
   return (
     <div>
       <Paper>
-        <h4>Display all course info and can edit</h4>
+        <h4>Display all course info fetch from KEEP</h4>
       </Paper>
+      {/* <Paper>
+
+      </Paper> */}
     </div>
   );
 }

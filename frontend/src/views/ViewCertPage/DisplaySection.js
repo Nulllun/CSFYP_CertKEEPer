@@ -175,7 +175,6 @@ export default function DisplaySection() {
     // console.log(targetButton);
 
     genPDF();
-
     setDlButtonVisibility(false);
   };
 
@@ -217,7 +216,7 @@ export default function DisplaySection() {
               id="panel1a-header"
             >
               <Typography className={classes.heading}>
-                {obj.courseID} - {obj.certMsg}
+                {obj.courseID} - {obj.certMsg} - issued on: {obj.issueDate}
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
