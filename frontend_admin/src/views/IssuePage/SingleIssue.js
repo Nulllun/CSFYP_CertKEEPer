@@ -100,7 +100,7 @@ export default function SingleIssue() {
     console.log("issue button clicked");
     setModal(false);
     issueCert();
-    handleClickOpen();
+    // handleClickOpen();
   }
 
   async function issueCert() {
@@ -138,6 +138,7 @@ export default function SingleIssue() {
         console.log("Certificates issued");
       }
     }
+    handleClickOpen();
   }
 
   const handleClickOpen = () => {

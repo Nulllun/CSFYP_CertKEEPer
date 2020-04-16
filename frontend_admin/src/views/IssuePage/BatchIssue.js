@@ -12,6 +12,8 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import InfoArea from "components/InfoArea/InfoArea.js";
 import Button from "components/CustomButtons/Button.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
+import Success from "components/Typography/Success.js";
 
 // material-ui core components
 import Dialog from "@material-ui/core/Dialog";
@@ -28,6 +30,7 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Chip from "@material-ui/core/Chip";
 import Input from "@material-ui/core/Input";
+import Box from "@material-ui/core/Box";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
@@ -49,32 +52,40 @@ export default function SingleIssue() {
   const [courseID, setCourseID] = React.useState("");
   const [certType, setCertType] = React.useState("");
   const [recipientIDMultiple, setRecipientIDMultiple] = React.useState([]);
+  const [certMsg, setCertMsg] = React.useState("");
   const [certDateDay, setCertDateDay] = React.useState("");
   const [certDateMonth, setCertDateMonth] = React.useState("");
   const [certDateYear, setCertDateYear] = React.useState("");
   const [certDate, setCertDate] = React.useState("");
+  const [signature, setSignature] = React.useState("");
   const [modal, setModal] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [boxStateWaiting, setBoxStateWaiting] = React.useState("none");
 
   const handleChangeCID = event => {
     setCourseID(event.target.value);
     setRecipientIDMultiple([]);
   };
 
-  const handleChangeCertType = event => {
-    setCertType(event.target.value);
-  };
+  // const handleChangeCertType = event => {
+  //   setCertType(event.target.value);
+  // };
 
   const handleChangeMultipleRID = event => {
     setRecipientIDMultiple(event.target.value);
   };
 
+  const handleChangeCertMsg = event => {
+    setCertMsg(event.target.value);
+  };
+
   const handleChangeCertDate = date => {
-    console.log("here");
     setCertDateDay(new Date(date).getDate());
     setCertDateMonth(new Date(date).getMonth() + 1);
     setCertDateYear(new Date(date).getFullYear());
     setCertDate(certDateDay + "/" + certDateMonth + "/" + certDateYear);
+
+    console.log("date: " + certDate);
   };
 
   var course_string = [];
@@ -86,12 +97,18 @@ export default function SingleIssue() {
   }
 
   var sid_string = [];
+  var issuePlatform, course_name, institution, teacher_name;
   function setSIDMenuItem() {
     for (var i = 0; i < courseJsonData.length; i++) {
       var obj = courseJsonData[i];
       if (obj.course_code === courseID) {
-        for (var j = 0; j < obj.student.length; j++)
+        for (var j = 0; j < obj.student.length; j++) {
           sid_string[j] = obj.student[j];
+        }
+        issuePlatform = "KEEP";
+        course_name = obj.course_name;
+        institution = obj.institution;
+        teacher_name = obj.teacher_name;
       }
     }
   }
@@ -99,17 +116,53 @@ export default function SingleIssue() {
   function handleIssueSubmit() {
     console.log("issued clicked");
     setModal(false);
+    setBoxStateWaiting("block");
+    console.log(recipientIDMultiple);
+    issueCert();
+
+    // handleClickOpen();
+  }
+
+  async function issueCert() {
+    for (var i = 0; i < recipientIDMultiple.length; i++) {
+      var RID = recipientIDMultiple[i];
+      var certID = courseID + "-" + i;
+      console.log(certID);
+      let cert = {
+        certID: certID,
+        issuePlatform: issuePlatform,
+        institution: institution,
+        courseID: courseID,
+        courseTitle: course_name,
+        teacherName: teacher_name,
+        recipientID: RID,
+        certMsg: certMsg,
+        issueDate: certDate,
+        signature: signature
+      };
+      console.log(`Request is sent with ${cert}`);
+      if (cert !== null) {
+        let path = "http://localhost:5000/issue";
+        let response = await fetch(path, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            cert: cert,
+            recipientID: JSON.parse(RID)
+          })
+        });
+        let data = await response.json();
+        console.log(data);
+        if (response.status === 200) {
+          console.log("Certificates issued");
+        }
+      }
+    }
+    setBoxStateWaiting("none");
     handleClickOpen();
-    console.log(
-      "inputted data: " +
-        certDate +
-        "," +
-        courseID +
-        "," +
-        recipientIDMultiple +
-        "," +
-        certType
-    );
   }
 
   const handleClickOpen = () => {
@@ -233,6 +286,30 @@ export default function SingleIssue() {
         </Typography>
 
         <GridItem>
+          <Paper className={classes.paper}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography>Personalized Message</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} container>
+                <Grid item xs container direction="column" spacing={2}>
+                  <CustomInput
+                    id="message"
+                    inputProps={{
+                      placeholder: "None",
+                      onChange: handleChangeCertMsg
+                    }}
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </GridItem>
+
+        {/* <GridItem>
           <div className={classes.root}>
             <Paper className={classes.paper}>
               <Grid container spacing={2}>
@@ -261,7 +338,7 @@ export default function SingleIssue() {
               </Grid>
             </Paper>
           </div>
-        </GridItem>
+        </GridItem> */}
 
         <Typography>
           <br />
@@ -272,7 +349,7 @@ export default function SingleIssue() {
             <Paper className={classes.paper}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <Typography>issue date and time</Typography>
+                  <Typography>issue date</Typography>
                 </Grid>
                 <Grid item xs={12} sm={6} container>
                   <FormControl fullWidth>
@@ -301,6 +378,11 @@ export default function SingleIssue() {
               <Button color="info" round onClick={() => setModal(true)}>
                 Issue!
               </Button>
+              <Box display={boxStateWaiting}>
+                <Grid item xs={12} spacing={3}>
+                  <Success>Inserting certificates to hyperledger...</Success>
+                </Grid>
+              </Box>
             </div>
             <Dialog
               classes={{
