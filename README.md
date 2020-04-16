@@ -32,7 +32,7 @@ npm start
 
 // To start the API server
 cd certkeeper-api
-npm 
+npm install
 (clear all the files in /wallet)
 node enrollAdmin_new.js
 npm start
