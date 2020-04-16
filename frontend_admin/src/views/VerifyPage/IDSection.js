@@ -1,10 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import classNames from "classnames";
+// import classNames from "classnames";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // @material-ui/icons
 import PageviewIcon from "@material-ui/icons/Pageview";
-import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
+// import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
 import WbIncandescentIcon from "@material-ui/icons/WbIncandescent";
 
 // core components
@@ -12,13 +13,14 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import InfoArea from "components/InfoArea/InfoArea.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "components/CustomButtons/Button.js";
+import Danger from "components/Typography/Danger.js";
 
 // material-ui core components
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Radio from "@material-ui/core/Radio";
+// import Radio from "@material-ui/core/Radio";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
@@ -31,7 +33,7 @@ const useStyles = makeStyles(styles);
 
 export default function ProductSection() {
   const classes = useStyles();
-  const [selectedEnabled, setSelectedEnabled] = React.useState("a");
+  // const [selectedEnabled, setSelectedEnabled] = React.useState("a");
   const [input, setInput] = React.useState("");
   // const [cert, setCert] = React.useState(null);
   const [verifyResult, setVerifyResult] = React.useState(false);
@@ -49,22 +51,37 @@ export default function ProductSection() {
   const [recipientID, setRecipientID] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [issueDate, setIssueDate] = React.useState("");
-
-  const wrapperDiv = classNames(
-    classes.checkboxAndRadio,
-    classes.checkboxAndRadioHorizontal
+  const [boxStateInvalidCaptcha, setBoxStateInvalidCaptcha] = React.useState(
+    "none"
   );
+
+  const recaptchaRef = React.createRef();
+
+  function onChangeCAPTCHA(value) {
+    console.log("Captcha value:", value);
+    setBoxStateInvalidCaptcha("none");
+  }
+
+  // const wrapperDiv = classNames(
+  //   classes.checkboxAndRadio,
+  //   classes.checkboxAndRadioHorizontal
+  // );
 
   const handleChangeInput = event => {
     setInput(event.target.value);
   };
 
   function handleClick() {
-    console.log("clicked");
-    console.log(input);
-    setBoxState("none");
-    setBoxStateError("none");
-    verifyCert();
+    const recaptchaValue = recaptchaRef.current.getValue();
+    console.log("captcha:" + recaptchaValue);
+    if (recaptchaValue == "") {
+      setBoxStateInvalidCaptcha("block");
+    } else {
+      setBoxState("none");
+      setBoxStateError("none");
+      recaptchaRef.current.reset();
+      verifyCert();
+    }
   }
 
   async function verifyCert() {
@@ -96,8 +113,7 @@ export default function ProductSection() {
         setMessage(data.cert.certMsg);
         setIssueDate(data.cert.issueDate);
         setBoxState("block");
-      }
-      else{
+      } else {
         setBoxStateError("block");
       }
     }
@@ -119,13 +135,14 @@ export default function ProductSection() {
       <GridContainer justify="center">
         <GridItem xs={12} sm={12} md={8}>
           <InfoArea
-            title="Enter the ID of certificate / URL"
+            title="Enter the ID of certificate"
             description=""
             icon={PageviewIcon}
             iconColor="info"
           />
         </GridItem>
-        <GridItem>
+
+        <Grid item xs={12} sm={12} md={8}>
           <CustomInput
             id="certID"
             inputProps={{
@@ -135,7 +152,27 @@ export default function ProductSection() {
               fullWidth: true
             }}
           />
-        </GridItem>
+        </Grid>
+        <Grid container spacing={1}>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4}>
+            <form>
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey="6Le7HeoUAAAAAL2QVXhFf2V1ONcHH53HcbG9ZV4q"
+                onChange={onChangeCAPTCHA}
+              />
+            </form>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} sm={12} md={8}>
+          <Box display={boxStateInvalidCaptcha}>
+            <Grid item xs={12} spacing={3}>
+              <Danger>Invalid CAPTCHA</Danger>
+            </Grid>
+          </Box>
+        </Grid>
+
         {/* <GridContainer>
           <Grid item xs={12} sm={6}>
             <div className={wrapperDiv}>
@@ -216,60 +253,31 @@ export default function ProductSection() {
           <div className={classes.demo}>
             <List dense={dense}>
               <ListItem>
-                <ListItemText
-                  primary="Certficate ID"
-                  secondary={certID}
-                  // secondary="CERT-2100-01"
-                />
+                <ListItemText primary="Certficate ID" secondary={certID} />
               </ListItem>
               <ListItem>
-                <ListItemText
-                  primary="Institution"
-                  secondary={institution}
-                  // secondary="CUHK"
-                />
+                <ListItemText primary="Institution" secondary={institution} />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="Issue Platform"
                   secondary={issuePlatform}
-                  // secondary="KEEP"
                 />
               </ListItem>
               <ListItem>
-                <ListItemText
-                  primary="Title"
-                  secondary={courseTitle}
-                  // seconday="CSCI2100"
-                />
+                <ListItemText primary="Title" secondary={courseTitle} />
               </ListItem>
               <ListItem>
-                <ListItemText
-                  primary="Teacher Name"
-                  secondary={teacherName}
-                  // secondary="Prof. Irwin King"
-                />
+                <ListItemText primary="Teacher Name" secondary={teacherName} />
               </ListItem>
               <ListItem>
-                <ListItemText
-                  primary="RecipientID"
-                  secondary={recipientID}
-                  // secondary="1155091234"
-                />
+                <ListItemText primary="RecipientID" secondary={recipientID} />
               </ListItem>
               <ListItem>
-                <ListItemText
-                  primary="Message"
-                  secondary={message}
-                  // secondary="C+"
-                />
+                <ListItemText primary="Message" secondary={message} />
               </ListItem>
               <ListItem>
-                <ListItemText
-                  primary="Issue Date"
-                  secondary={issueDate}
-                  // secondary="1/4/2020"
-                />
+                <ListItemText primary="Issue Date" secondary={issueDate} />
               </ListItem>
             </List>
           </div>

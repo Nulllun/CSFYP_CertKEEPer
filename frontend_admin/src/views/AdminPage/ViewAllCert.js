@@ -21,6 +21,7 @@ import Close from "@material-ui/icons/Close";
 // core components
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import Danger from "components/Typography/Danger.js";
 
 // import component from "@material-ui/core
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -77,6 +78,9 @@ export default function ViewAllCert() {
   const [recipientID, setRecipientID] = React.useState("");
   const [searchField, setSearchField] = React.useState(null);
   const [searchBy, setSearchBy] = React.useState(2);
+  const [boxStateInvalidInput, setBoxStateInvalidInput] = React.useState(
+    "none"
+  );
 
   const handleChangeRecipientID = event => {
     setRecipientID(event.target.value);
@@ -123,6 +127,7 @@ export default function ViewAllCert() {
   };
 
   async function getCert() {
+    setBoxStateInvalidInput("none");
     let input = searchField;
     if (input !== undefined && input !== null) {
       if (searchBy == 1) {
@@ -145,7 +150,16 @@ export default function ViewAllCert() {
           setCertList(certList);
         }
       } else if (searchBy == 2) {
-        console.log("rid");
+        console.log(input.length);
+        console.log(input[0]);
+        for (var i = 0; i < input.length; i++) {
+          console.log("here");
+          if (input[i] < "0" || input[i] > "9") {
+            console.log("invalid");
+            setBoxStateInvalidInput("block");
+            return;
+          }
+        }
         let path = "http://localhost:5000/view";
         let response = await fetch(path, {
           method: "POST",
@@ -394,17 +408,24 @@ export default function ViewAllCert() {
               </FormControl>
             </Grid>
             <Grid item xs={4}>
-              <CustomInput
-                id="searchCriteria"
-                labelText="Enter here"
-                inputProps={{
-                  fullWidth: true,
-                  onChange: handleChangeSearchField
-                }}
-                formControlProps={{
-                  fullWidth: true
-                }}
-              />
+              <Grid item xs={12} spacing={3}>
+                <CustomInput
+                  id="searchCriteria"
+                  labelText="Enter here"
+                  inputProps={{
+                    fullWidth: true,
+                    onChange: handleChangeSearchField
+                  }}
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                />
+              </Grid>
+              <Box display={boxStateInvalidInput}>
+                <Grid item xs={12} spacing={3}>
+                  <Danger>Invalid input.</Danger>
+                </Grid>
+              </Box>
             </Grid>
             <Grid item xs={4}>
               <Button color="info" round onClick={() => getCert()}>
