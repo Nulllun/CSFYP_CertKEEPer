@@ -62,6 +62,8 @@ var course_name,
   targetButton,
   pdfname;
 
+var deleteCertID;
+
 export default function ViewAllCert() {
   const classes = useStyles();
   const [dense] = React.useState(false);
@@ -84,6 +86,9 @@ export default function ViewAllCert() {
     "none"
   );
   const [boxStateEmpty, setBoxStateEmpty] = React.useState("none");
+  const [modalDelete, setModalDelete] = React.useState(false);
+  const [activeModalDelete, setActiveModalDelete] = React.useState(null);
+  const [openDeletedDialog, setOpenDeletedDialog] = React.useState(false);
 
   const handleChangeRecipientID = event => {
     setRecipientID(event.target.value);
@@ -251,6 +256,27 @@ export default function ViewAllCert() {
     }
   }
 
+  async function deleteCert() {
+    let path = "http://localhost:5000/delete";
+    let response = await fetch(path, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        certID: deleteCertID
+      })
+    });
+    let data = await response.json();
+    console.log(data);
+    if (response.status === 200) {
+      console.log("Certificates deleted");
+      setOpenDeletedDialog(true);
+      getCert();
+    }
+  }
+
   const PDFstyle = StyleSheet.create({
     body: {
       paddingTop: 35,
@@ -379,9 +405,26 @@ export default function ViewAllCert() {
     issueCert();
   }
 
-  function deleteCert() {
+  function deleteCertClicked(obj) {
+    setActiveModalDelete(obj.certID);
     console.log("delete certificate");
-    // need implement
+    deleteCertID = obj.certID;
+    setTimeout(function() {
+      setModalDelete(true);
+    }, 1000);
+    console.log(deleteCertID);
+  }
+
+  function closeActionDelete() {
+    console.log("close modal");
+    setModalDelete(false);
+    setActiveModalDelete(null);
+  }
+
+  function confirmDelete() {
+    deleteCert();
+    setModalDelete(false);
+    setActiveModalDelete(null);
   }
 
   function presetEditCertValue(obj) {
@@ -395,6 +438,10 @@ export default function ViewAllCert() {
     setDate_edit(obj.issueDate);
     setIssuePlatform_edit(obj.issuePlatform);
     setRecipientID(obj.recipientID);
+  }
+
+  function handleCloseDeletedDialog() {
+    setOpenDeletedDialog(false);
   }
 
   return (
@@ -693,12 +740,76 @@ export default function ViewAllCert() {
                         <Button
                           color="danger"
                           round
-                          onClick={() => deleteCert()}
+                          onClick={() => deleteCertClicked(obj)}
                         >
                           Delete
                         </Button>
                       </Grid>
                     </Grid>
+                    <Dialog
+                      classes={{
+                        root: classes.center,
+                        paper: classes.modal
+                      }}
+                      open={activeModalDelete == obj.certID}
+                      keepMounted
+                      onClose={() => setModalDelete(false)}
+                      aria-labelledby="modal-slide-title"
+                      aria-describedby="modal-slide-description"
+                    >
+                      <DialogTitle
+                        id="classic-modal-slide-title"
+                        disableTypography
+                        className={classes.modalHeader}
+                      >
+                        <IconButton
+                          className={classes.modalCloseButton}
+                          key="close"
+                          aria-label="Close"
+                          color="inherit"
+                          onClick={() => closeActionDelete()}
+                        >
+                          <Close className={classes.modalClose} />
+                        </IconButton>
+                      </DialogTitle>
+                      <DialogContent
+                        id="modal-slide-description"
+                        className={classes.modalBody}
+                      >
+                        <h5>Are you sure you want to delete {obj.certID}?</h5>
+                        <h4 color="danger">This cannot be undone.</h4>
+                      </DialogContent>
+                      <DialogActions
+                        className={
+                          classes.modalFooter + " " + classes.modalFooterCenter
+                        }
+                      >
+                        <Button onClick={() => closeActionDelete()}>
+                          Go Back
+                        </Button>
+                        <Button
+                          onClick={() => confirmDelete(obj)}
+                          color="success"
+                        >
+                          Yes
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                    <Dialog
+                      onClose={handleCloseDeletedDialog}
+                      aria-labelledby="customized-dialog-title"
+                      open={openDeletedDialog}
+                    >
+                      <DialogTitle
+                        id="customized-dialog-title"
+                        onClose={handleCloseDeletedDialog}
+                      >
+                        Notification
+                      </DialogTitle>
+                      <DialogContent dividers>
+                        <Typography gutterBottom>Deleted.</Typography>
+                      </DialogContent>
+                    </Dialog>
                   </Grid>
                 </Box>
               </ExpansionPanelDetails>
