@@ -17,11 +17,13 @@ import keepLogo from "../../assets/img/keep_logo.png";
 // @material-ui/icons
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Close from "@material-ui/icons/Close";
+import SentimentVeryDissatisfiedRoundedIcon from "@material-ui/icons/SentimentVeryDissatisfiedRounded";
 
 // core components
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Danger from "components/Typography/Danger.js";
+import InfoArea from "components/InfoArea/InfoArea.js";
 
 // import component from "@material-ui/core
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -81,6 +83,7 @@ export default function ViewAllCert() {
   const [boxStateInvalidInput, setBoxStateInvalidInput] = React.useState(
     "none"
   );
+  const [boxStateEmpty, setBoxStateEmpty] = React.useState("none");
 
   const handleChangeRecipientID = event => {
     setRecipientID(event.target.value);
@@ -128,6 +131,7 @@ export default function ViewAllCert() {
 
   async function getCert() {
     setBoxStateInvalidInput("none");
+    setBoxStateEmpty("none");
     let input = searchField;
     if (input !== undefined && input !== null) {
       if (searchBy == 1) {
@@ -148,12 +152,14 @@ export default function ViewAllCert() {
         console.log(certList);
         if (response.status === 200) {
           setCertList(certList);
+          setBoxStateEmpty("none");
+        }
+        if (certList == "") {
+          setBoxStateEmpty("block");
         }
       } else if (searchBy == 2) {
-        console.log(input.length);
-        console.log(input[0]);
+        console.log("rid");
         for (var i = 0; i < input.length; i++) {
-          console.log("here");
           if (input[i] < "0" || input[i] > "9") {
             console.log("invalid");
             setBoxStateInvalidInput("block");
@@ -176,6 +182,10 @@ export default function ViewAllCert() {
         console.log(certList);
         if (response.status === 200) {
           setCertList(certList);
+          setBoxStateEmpty("none");
+        }
+        if (certList == "") {
+          setBoxStateEmpty("block");
         }
       } else {
         console.log("date");
@@ -195,6 +205,10 @@ export default function ViewAllCert() {
         console.log(certList);
         if (response.status === 200) {
           setCertList(certList);
+          setBoxStateEmpty("none");
+        }
+        if (certList == "") {
+          setBoxStateEmpty("block");
         }
       }
     }
@@ -330,9 +344,6 @@ export default function ViewAllCert() {
     message = obj.certMsg;
     date = obj.issueDate;
     targetButton = "button" + obj.certID;
-
-    // console.log(targetButton);
-
     genPDF();
     setDlButtonVisibility(false);
   };
@@ -356,8 +367,6 @@ export default function ViewAllCert() {
   function closeAction(obj) {
     console.log("close modal");
     presetEditCertValue(obj);
-    console.log(obj.institution);
-    console.log(institution_edit);
     setModal(false);
     setActiveModal(null);
   }
@@ -435,6 +444,7 @@ export default function ViewAllCert() {
           </Grid>
         </Paper>
       </div>
+
       <div>
         {certList.map(obj => (
           <div key={obj.certID}>
@@ -680,11 +690,9 @@ export default function ViewAllCert() {
                     <Grid container item xs={12} sm={12}>
                       <Grid>
                         <Button
-                          // id={buttonID(obj)}
                           color="danger"
                           round
                           onClick={() => deleteCert()}
-                          // onClick={() => console.log("click!")}
                         >
                           Delete
                         </Button>
@@ -697,6 +705,14 @@ export default function ViewAllCert() {
           </div>
         ))}
       </div>
+      <Box display={boxStateEmpty}>
+        <InfoArea
+          title="No result(s) found..."
+          description=""
+          icon={SentimentVeryDissatisfiedRoundedIcon}
+          iconColor="info"
+        />
+      </Box>
     </div>
   );
 }

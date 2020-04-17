@@ -111,7 +111,7 @@ export default function SingleIssue() {
       courseID: courseID,
       courseTitle: course_name,
       teacherName: teacher_name,
-      recipientID: recipientID,
+      recipientID: JSON.stringify(recipientID),
       certMsg: certMsg,
       issueDate: certDate,
       signature: signature
@@ -119,6 +119,7 @@ export default function SingleIssue() {
     console.log(`Request is sent with ${cert}`);
     console.log(typeof JSON.stringify(recipientID));
     console.log(typeof recipientID);
+    console.log("fgefdbgdahefasgfad");
     if (cert !== null) {
       let path = "http://localhost:5000/issue";
       let response = await fetch(path, {
@@ -129,7 +130,7 @@ export default function SingleIssue() {
         },
         body: JSON.stringify({
           cert: cert,
-          recipientID: JSON.parse(recipientID)
+          recipientID: JSON.stringify(recipientID)
         })
       });
       let data = await response.json();

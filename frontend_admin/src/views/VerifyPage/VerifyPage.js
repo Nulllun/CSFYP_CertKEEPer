@@ -16,9 +16,19 @@ const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
 
+const NodeRSA = require("node-rsa");
+const key = new NodeRSA({ b: 512 });
+
 export default function VerifyPage(props) {
   const classes = useStyles();
   const { ...rest } = props;
+
+  console.log("key? " + key);
+  console.log(key.generateKeyPair());
+  console.log(key.exportKey());
+
+  // const keyData = ''
+
   return (
     <div>
       <Header

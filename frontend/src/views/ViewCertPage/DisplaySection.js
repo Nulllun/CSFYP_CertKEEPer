@@ -56,6 +56,7 @@ export default function DisplaySection() {
   };
 
   async function getCert() {
+    console.log("recipientID: " + recipientID);
     let RID = recipientID;
     if (RID !== undefined && RID !== null) {
       let path = "http://localhost:5000/view";
@@ -66,6 +67,7 @@ export default function DisplaySection() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
+          searchBy: JSON.parse(2),
           recipientID: JSON.parse(RID)
         })
       });

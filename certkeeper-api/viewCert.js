@@ -32,16 +32,19 @@ router.post('/', async (req, res) => {
 
         // Evaluate the specified transaction.
         if (searchCriteria == 1){
+            // const result = await contract.evaluateTransaction('queryCert', req.body.certID);
             const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"certID": "${req.body.certID}", "docType": "CERT"}}`);
             console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
             res.status(200).json(JSON.parse(result.toString()));
         }
         else if (searchCriteria == 2){
-            const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipientID": ${req.body.recipientID}, "docType": "CERT"}}`);
+            // const result = await contract.evaluateTransaction('queryCert', req.body.recipientID);
+            const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"recipientID": "${req.body.recipientID}", "docType": "CERT"}}`);
             console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
             res.status(200).json(JSON.parse(result.toString()));
         }
         else if (searchCriteria == 3){
+            // const result = await contract.evaluateTransaction('queryCert', req.body.issueDate);
             const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"issueDate": "${req.body.issueDate}", "docType": "CERT"}}`);
             console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
             res.status(200).json(JSON.parse(result.toString()));

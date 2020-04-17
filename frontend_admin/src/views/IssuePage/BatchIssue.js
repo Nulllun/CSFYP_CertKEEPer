@@ -50,7 +50,7 @@ const MenuProps = {
 export default function SingleIssue() {
   const classes = useStyles();
   const [courseID, setCourseID] = React.useState("");
-  const [certType, setCertType] = React.useState("");
+  // const [certType, setCertType] = React.useState("");
   const [recipientIDMultiple, setRecipientIDMultiple] = React.useState([]);
   const [certMsg, setCertMsg] = React.useState("");
   const [certDateDay, setCertDateDay] = React.useState("");
@@ -135,7 +135,7 @@ export default function SingleIssue() {
         courseID: courseID,
         courseTitle: course_name,
         teacherName: teacher_name,
-        recipientID: RID,
+        recipientID: JSON.stringify(RID),
         certMsg: certMsg,
         issueDate: certDate,
         signature: signature
