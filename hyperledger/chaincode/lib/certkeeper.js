@@ -1,6 +1,7 @@
 'use strict';
 
 const { Contract } = require('fabric-contract-api');
+const ClientIdentity = require('fabric-shim').ClientIdentity;
 
 class CertKeeper extends Contract {
 
@@ -8,6 +9,7 @@ class CertKeeper extends Contract {
         // generate certificates for testing
         const certs = [
             {
+                certID: 'CERT-test',
                 recipientID: 'testID',
                 courseTitle: 'testCourseTitle',
                 grade: 'testGrade',
@@ -60,6 +62,9 @@ class CertKeeper extends Contract {
     async issueCert(ctx, certStr){
         let cert = JSON.parse(certStr);
         cert.docType = 'CERT';
+        let cid = new ClientIdentity(ctx.stub);
+        let mspID = cid.getMSPID();
+        cert.certID = `${mspID}-${cert.certID}`;
         await ctx.stub.putState(cert.certID, Buffer.from(JSON.stringify(cert)));
     }
 
