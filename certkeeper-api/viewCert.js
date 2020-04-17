@@ -32,7 +32,6 @@ router.post('/', async (req, res) => {
 
         // Evaluate the specified transaction.
         if (searchCriteria == 1){
-            // const result = await contract.evaluateTransaction('queryCert', req.body.certID);
             // const result = await contract.evaluateTransaction('queryCertByString', `{"selector": {"certID": "${req.body.certID}", "docType": "CERT"}}`);
             const result = await contract.evaluateTransaction('queryCert', req.body.certID);
             console.log(`Transaction has been evaluated, result is: ${result.toString()}`);

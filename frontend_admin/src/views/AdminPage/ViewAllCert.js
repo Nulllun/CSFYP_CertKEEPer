@@ -151,10 +151,11 @@ export default function ViewAllCert() {
         let certList = await response.json();
         console.log(certList);
         if (response.status === 200) {
-          setCertList(certList);
+          setCertList([certList]);
           setBoxStateEmpty("none");
         }
-        if (certList == "") {
+        if (certList.result == "Fail") {
+          setCertList([]);
           setBoxStateEmpty("block");
         }
       } else if (searchBy == 2) {
