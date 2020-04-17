@@ -5,7 +5,6 @@ const { Wallets, Gateway } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
 
-const NodeRSA = require('node-rsa');
 
 const { CertKeeperCert } = require('./CertKeeperCert');
 
@@ -32,29 +31,14 @@ router.post('/', async (req, res) => {
         const contract = network.getContract('certkeeper');
 
         // Evaluate the specified transaction.
-        const result = await contract.evaluateTransaction('queryCert', certID);
+        const result = await contract.submitTransaction('deleteCert', certID);
 
-        let certJson = JSON.parse(result.toString());
-        let verifyResult = 'no signature';
-        // if (certJson.signature !== '' && certJson.signature != undefined) {
-        //     let certContent = new CertKeeperCert();
-        //     certContent.readFromJson(certJson);
-
-        //     const keyBytes = await contract.evaluateTransaction('queryPubKey', certJson.signerID);
-        //     let rsa = new NodeRSA();
-        //     let rsaPubKey = JSON.parse(keyBytes.toString()).publicKey;
-        //     console.log(rsaPubKey);
-        //     await rsa.importKey(rsaPubKey, 'pkcs8-public-pem');
-        //     verifyResult = await rsa.verify(Buffer.from(JSON.stringify(certContent.outputCertContent())), Buffer.from(certJson.signature, 'hex'));
-        //     verifyResult = verifyResult.toString();
-        // }
-
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
-        res.status(200).json({ cert: certJson, verifyResult: verifyResult });
+        console.log(`Transaction has been submitted, result is: ${result.toString()}`);
+        res.status(200).json({ result: result.toString() });
 
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
-        res.status(404).json({ result: error.message });
+        res.status(404).json({ result: error });
     }
 });
 

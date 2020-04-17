@@ -9,8 +9,9 @@ Final Year Project 2019-2020
 Group: IK1901
 
 ## Prerequisites:
-Follow the instruction on this link and install the prerequisities:  
+Follow the instruction on these links to install the prerequisities and Docker images:  
 https://hyperledger-fabric.readthedocs.io/en/release-2.0/prereqs.html
+https://hyperledger-fabric.readthedocs.io/en/latest/install.html#
 
 ## To start: 
 
