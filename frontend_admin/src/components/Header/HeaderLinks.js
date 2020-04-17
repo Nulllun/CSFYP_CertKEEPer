@@ -30,22 +30,6 @@ export default function HeaderLinks(props) {
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
-        <Tooltip
-          id="backtokeep"
-          title="Back To KEEP"
-          placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
-        >
-          <Button
-            color="transparent"
-            href="https://course.keep.edu.hk/" //to keep course
-            className={classes.navLink}
-          >
-            <BackspaceIcon />
-          </Button>
-        </Tooltip>
-      </ListItem>
-      <ListItem className={classes.listItem}>
         <CustomDropdown
           noLiPadding
           buttonText="Action with Cretificates"
@@ -89,6 +73,22 @@ export default function HeaderLinks(props) {
             className={classes.navLink}
           >
             <AccountBoxIcon />
+          </Button>
+        </Tooltip>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        <Tooltip
+          id="backtokeep"
+          title="Back To KEEP"
+          placement={window.innerWidth > 959 ? "top" : "left"}
+          classes={{ tooltip: classes.tooltip }}
+        >
+          <Button
+            color="transparent"
+            href="https://course.keep.edu.hk/" //to keep course
+            className={classes.navLink}
+          >
+            <BackspaceIcon />
           </Button>
         </Tooltip>
       </ListItem>

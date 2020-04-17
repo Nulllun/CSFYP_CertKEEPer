@@ -49,7 +49,7 @@ export default function HomePage(props) {
               <Button
                 color="danger"
                 size="lg"
-                href="./login-page"
+                href="./verify-page"
                 rel="noopener noreferrer"
               >
                 Get Started

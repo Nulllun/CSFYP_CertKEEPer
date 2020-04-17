@@ -18,6 +18,19 @@ import AdminPage from "views/AdminPage/AdminPage.js";
 
 var hist = createBrowserHistory();
 
+const NodeRSA = require("node-rsa");
+const key = new NodeRSA({ b: 512 });
+
+// generate public key
+var keydata = key.exportKey("pkcs1-public-pem");
+var k2 = new NodeRSA(keydata, "pkcs1-public-pem");
+
+// generate private key
+// var keydata = key.exportKey("pkcs8");
+// var k2 = new NodeRSA(keydata, "pkcs8");
+
+localStorage.setItem("public key", k2);
+
 ReactDOM.render(
   <Router history={hist}>
     <Switch>

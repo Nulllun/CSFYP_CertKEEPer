@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
+// import keyJson from "../../json/key.json";
 
 // core components
 import Header from "components/Header/Header.js";
@@ -16,18 +17,9 @@ const dashboardRoutes = [];
 
 const useStyles = makeStyles(styles);
 
-const NodeRSA = require("node-rsa");
-const key = new NodeRSA({ b: 512 });
-
 export default function VerifyPage(props) {
   const classes = useStyles();
   const { ...rest } = props;
-
-  console.log("key? " + key);
-  console.log(key.generateKeyPair());
-  console.log(key.exportKey());
-
-  // const keyData = ''
 
   return (
     <div>
