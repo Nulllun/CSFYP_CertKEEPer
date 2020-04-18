@@ -35,7 +35,8 @@ npm start
 cd certkeeper-api
 npm install
 (clear all the files in /wallet)
-node enrollAdmin_new.js
+rm wallet/*
+node enrollAdmin.js
 npm start
 ```
 

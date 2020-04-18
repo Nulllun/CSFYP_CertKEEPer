@@ -2,76 +2,50 @@ const crypto = require('crypto');
 
 
 class CertKeeperCert {
-    constructor() {
-        this.content = {
-            // // the ID of the certificat, which is unique
-            // certID: "",
-            // // the platform that issue the certificate (e.g. LMS)
-            // issuePlatform: "",
-            // // the institution that offer the course (e.g. CUHK)
-            // institution: "",
-            // // information of the course taken {ID, title}
-            // courseID: "",
-            // courseTitle: "",
-            // // information of the teachers. For example, {ID: 0001 , name: Prof. King}
-            // teacherID: "",
-            // teacherName: "",
-            // // information of the recipient {ID, name}
-            // recipientID: "",
-            // recipientName: "",
-            // grade: "",
-            // // date in string representation
-            // issueDate: "",
-            // // information of the signer {ID, name, signature}
-            // signerID: "",
-            // signerName: ""
-        };
-        this.disclosed = false;
-        this.digest = "";
-        this.signature = "";
+    constructor(cert) {
+        if(cert != null){
+            this.certID = cert.certID;
+            this.content = cert.content;
+            this.disclosed = cert.disclosed;
+            this.digest = cert.digest;
+            this.signature = cert.signature;
+        }
+        else{
+            this.certID = "";
+            this.content = {};
+            this.disclosed = true;
+            this.digest = "";
+            this.signature = "";
+        }
+        
     }
 
     readContent(contentJson) {
-        // this.content.certID = contentJson.certID;
-        // this.content.issuePlatform = contentJson.issuePlatform;
-        // this.content.institution = contentJson.institution;
-        // this.content.courseID = contentJson.courseID;
-        // this.content.courseTitle = contentJson.courseTitle;
-        // this.content.teacherID = contentJson.teacherID;
-        // this.content.teacherName = contentJson.teacherName;
-        // this.content.recipientID = contentJson.recipientID;
-        // this.content.recipientName = contentJson.recipientName;
-        // this.content.grade = contentJson.grade;
-        // this.content.issueDate = contentJson.issueDate;
-        // this.content.signerID = contentJson.signerID;
-        // this.content.signerName = contentJson.signerName;
-        this.content = contentJson;
+        this.content = this.sortContent(contentJson);
         this.generateHash();
     }
 
+    sortContent(toSort) {
+        var self = this;
+        var ordered = {};
+        Object.keys(toSort).sort().forEach(function(key) {
+            if(typeof toSort[key] === 'object'){
+                ordered[key] = self.sortContent(toSort[key]);
+            }
+            else{
+                ordered[key] = toSort[key];
+            }
+        });
+        return ordered;
+    };
+
     getContent() {
-        // const json = {
-        //     certID: this.content.certID,
-        //     issuePlatform: this.content.issuePlatform,
-        //     institution: this.content.institution,
-        //     courseID: this.content.courseID,
-        //     courseTitle: this.content.courseTitle,
-        //     courseDescription: this.content.courseDescription,
-        //     teacherID: this.content.teacherID,
-        //     teacherName: this.content.teacherName,
-        //     recipientID: this.content.recipientID,
-        //     recipientName: this.content.recipientName,
-        //     grade: this.content.grade,
-        //     issueDate: this.content.issueDate,
-        //     signerID: this.content.signerID,
-        //     signerName: this.content.signerName
-        // }
-        return this.content;
+        return this.sortContent(this.content);
     }
 
     generateHash(){
         const hash = crypto.createHash('sha256');
-        hash.update(JSON.stringify(this.content));
+        hash.update(JSON.stringify(this.getContent()));
         let digest = hash.digest('hex');
         this.digest = digest;
         return digest;
@@ -88,7 +62,7 @@ class CertKeeperCert {
 
     verifyHash(){
         const hash = crypto.createHash('sha256');
-        hash.update(JSON.stringify(this.content));
+        hash.update(JSON.stringify(this.getContent()));
         let digest = hash.digest('hex');
         return this.digest == digest;
     }
@@ -103,12 +77,38 @@ class CertKeeperCert {
 
 }
 
+
+
+
 // the following is for testing
 
 // var a = new CertKeeperCert();
 // console.log(a);
+
+// // the ID of the certificat, which is unique
+    // certID: "",
+    // // the platform that issue the certificate (e.g. LMS)
+    // issuePlatform: "",
+    // // the institution that offer the course (e.g. CUHK)
+    // institution: "",
+    // // information of the course taken {ID, title}
+    // courseID: "",
+    // courseTitle: "",
+    // // information of the teachers. For example, {ID: 0001 , name: Prof. King}
+    // teacherID: "",
+// teacherName: "",
+    // // information of the recipient {ID, name}
+    // recipientID: "",
+    // recipientName: "",
+    // grade: "",
+    // // date in string representation
+    // issueDate: "",
+    // // information of the signer {ID, name, signature}
+    // signerID: "",
+    // signerName: ""
+
 // a.readContent({
-//     certID: "Org1MSP-4v324f",
+//     certID: "Org1MSP-test1",
 //     issuePlatform: "KEEP",
 //     institution: "CUHK",
 //     courseID: "CSCI2100",
@@ -122,8 +122,9 @@ class CertKeeperCert {
 //     signerID: "IK12421",
 //     signerName: "Iwrin"
 // });
+// console.log(a);
 
-// const keyPair1 = crypto.generateKeyPairSync('rsa', {
+// const keyPair = crypto.generateKeyPairSync('rsa', {
 //     modulusLength: 2048,
 //     publicKeyEncoding: {
 //       type: 'spki',
@@ -134,6 +135,8 @@ class CertKeeperCert {
 //       format: 'pem',
 //     }
 // });
+// a.generateSign(keyPair.privateKey);
 // console.log(a);
+// console.log(JSON.stringify(keyPair));
 
-module.exports = CertKeeperCert;
+module.exports.CertKeeperCert = CertKeeperCert;

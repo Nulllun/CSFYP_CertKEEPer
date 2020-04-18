@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
         // Evaluate the specified transaction.
         const result = await contract.submitTransaction('deleteCert', certID);
 
-        console.log(`Transaction has been submitted, result is: ${result.toString()}`);
+        console.log("Transaction has been submitted");
         res.status(200).json({ result: result.toString() });
 
     } catch (error) {

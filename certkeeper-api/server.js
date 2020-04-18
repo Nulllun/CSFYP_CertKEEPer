@@ -6,7 +6,7 @@ const verifyCert = require('./verifyCert.js');
 const issueCert = require('./issueCert.js');
 const register = require('./register.js');
 const deleteCert = require('./deleteCert.js');
-
+const discloseCert = require('./discloseCert.js');
 
 
 app.use(cors());
@@ -30,6 +30,8 @@ app.use("/verify", verifyCert);
 app.use("/issue", issueCert);
 app.use("/register", register);
 app.use("/delete", deleteCert);
+app.use("/disclose", discloseCert);
+
 
 const port = 5000;
 
