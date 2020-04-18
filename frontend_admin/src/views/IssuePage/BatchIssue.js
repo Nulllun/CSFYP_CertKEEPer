@@ -36,6 +36,8 @@ import styles from "assets/jss/material-kit-react/views/landingPageSections/prod
 
 const useStyles = makeStyles(styles);
 
+const stringHash = require("string-hash");
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -57,7 +59,6 @@ export default function SingleIssue() {
   const [certDateMonth, setCertDateMonth] = React.useState("");
   const [certDateYear, setCertDateYear] = React.useState("");
   const [certDate, setCertDate] = React.useState("");
-  const [signature, setSignature] = React.useState("");
   const [modal, setModal] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [boxStateWaiting, setBoxStateWaiting] = React.useState("none");
@@ -126,10 +127,11 @@ export default function SingleIssue() {
   async function issueCert() {
     for (var i = 0; i < recipientIDMultiple.length; i++) {
       var RID = recipientIDMultiple[i];
-      var certID = courseID + "-" + i;
-      console.log(certID);
+      var certID = recipientIDMultiple[i] + courseID + certMsg + certDate;
+      let certID_afterhash = stringHash(certID);
+      console.log(certID_afterhash);
       let cert = {
-        certID: certID,
+        type: "course",
         issuePlatform: issuePlatform,
         institution: institution,
         courseID: courseID,
@@ -138,7 +140,8 @@ export default function SingleIssue() {
         recipientID: JSON.stringify(RID),
         certMsg: certMsg,
         issueDate: certDate,
-        signature: signature
+        signerName: "Irwin",
+        signerID: "IK1901"
       };
       console.log(`Request is sent with ${cert}`);
       if (cert !== null) {
@@ -150,8 +153,10 @@ export default function SingleIssue() {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            cert: cert,
-            recipientID: JSON.parse(RID)
+            certID: certID_afterhash,
+            certContent: cert,
+            privateKey:
+              "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDIzNtjeDq0y9P0\nOVfyX4WOAcKlHWLVwUdNzmYPO6aORpJb1/jlikc7/qQBcviLk6rJbw70HDxk33xj\nd9XCEW3phsgFN0fu3dY4n8FI3pNG/6ghYyS5cG1lHGslzk95k0/f2CLyDU6B9WoL\nY25rusjqEN5KxznYQMbrH4ibI1f9ceYssxdbv02ILt0Ax5Nip0WCa91AUHOtJLBf\nlLm4vLauipyXUVcFQNpm3PD7NFOJU2vZrZuSki08r/d1+W4kptZEMqOnt4HoTkq0\nvEcw5NEHv4a6A+AsLpUfzxdVZotk8vU4+1PIzQaHearJdyCVt14uB9RZRpM2HNTj\nduCX55+zAgMBAAECggEAVRwPeU/CglNKmV+c2UyHjTNNzzJva+6qTF5Jf/dmlzNu\nYaNfCdvcaZ964Gpc0rxaTVrXWbyGFLNtQ7PNVJ6SmcLZEOznfmVkoUeFY1+DyTof\nh1dAf6EZnRu4hqO1p/A6kMRJu5LMTeU5d25DpUHcWumfbs6WxARgy9Pn0OngJ7nZ\nBLXqJrm1lljHApFYuEmuT+uHKQlNnwQULY9PExFAiPCYTDM8Nl1unEDnH9Rgb+EE\npoLR6e/pNUJLQz/KhIMSOxmnnuc3pzCAwSf+xvdXC+HFAvGrHxCHF/O3Zs/Q31pm\nBQ/u7yfyffqvmTPVKvjq3wk/vCWP/Nrh14nfkXNdsQKBgQDi53RD9vNSAw0eXgOS\nTWoAn+yQS96l6B6nc+ZVzN0PMVueoU5JwEZcFWk+ccFCysmuwE01qQ83Ihfew4VT\nO2WwBFqduTDQrLa7lT9kWy+s9wjtZNop3Xfr9I5QR0vI6QFXbfFuMcjECz11YyUL\n05NFkAb6Wc4PNx97gOXujhK2FwKBgQDijH6OHvW1ls36Uv1Cl9f/u2xXu3eot/oB\nm0SMfIYY+N6LRUqn4SekeZnbaXmNC91b7kTy+4oe6259sH1zxLCCAGcHfklwKiK4\nVvqvH+ULjt8tezfsKJmEwvoBVO1KjkWUSYlx/mSNCvXp1ILwxZ+znG99qPCPn2mX\nz1EWWvqAxQKBgQCITC4b0VCR2AFeV2zfyh69p1MLznc8w3T+c3FN4tR7FtQJMq37\nQUNCdx4UA3LqszN5BEycyiO4o4MhLeN9frVziPoBukdnYggWH+3HU7sMtAupxiYC\ndeVeWDXQZTNRyR0kLoeTANavZG0TgW20b/AMHhsC8UUFAMCpiGEV7kOxGwKBgGkQ\nEMzmLLsXAdU6UXtloeVWTQtuxDJ5h7bhA+xG/4VrPQHHk7TBZToQrrqjcpxnyTOO\nD2nEH6zxMB+YDsX2jIjtmNpPxcz/rXRh2gYHO5idnICiKTAbL/7y0TB260jtK/V2\nGQjFmmoSkDLtu//fFo4cWVQkWdOxcS3XFlrQvGWlAoGBAKnFKXYouGUPKw6Kn99s\nly14pJxhlpYGnm3NeZz8VJkxpOdvfPrSfL6W+0ZpnPbnwEBKymZ8R8VDXDIZGo9E\nzE523izoMJ/VRea0CNC7LT4OAJbYP/5dHz0i35rmzpyZM1r7AmVmikgwVqWKzvWN\nc8bsyRkQ7bxPHh0xoN7kVc54\n-----END PRIVATE KEY-----\n"
           })
         });
         let data = await response.json();
@@ -238,12 +243,12 @@ export default function SingleIssue() {
                     container
                     zeroMinWidth
                     direction="column"
-                    spacing={2}
+                    // spacing={2}
                     wrap="nowrap"
                   >
                     <FormControl className={classes.formControl}>
                       <Select
-                        labelId="demo-mutiple-chip-label"
+                        // labelId="demo-mutiple-chip-label"
                         id="demo-mutiple-chip"
                         multiple
                         value={recipientIDMultiple}
@@ -379,7 +384,7 @@ export default function SingleIssue() {
                 Issue!
               </Button>
               <Box display={boxStateWaiting}>
-                <Grid item xs={12} spacing={3}>
+                <Grid item xs={12}>
                   <Success>Inserting certificates to hyperledger...</Success>
                 </Grid>
               </Box>

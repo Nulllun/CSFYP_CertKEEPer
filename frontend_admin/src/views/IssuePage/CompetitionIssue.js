@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Datetime from "react-datetime";
-import courseJsonData from "../../json/course.json";
 
 // @material-ui/icons
 import Close from "@material-ui/icons/Close";
@@ -13,6 +12,7 @@ import GridItem from "components/Grid/GridItem.js";
 import InfoArea from "components/InfoArea/InfoArea.js";
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import Success from "components/Typography/Success.js";
 
 // material-ui core components
 import Dialog from "@material-ui/core/Dialog";
@@ -20,13 +20,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
-import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
+import Box from "@material-ui/core/Box";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
@@ -38,31 +36,32 @@ var certID_afterhash;
 
 export default function SingleIssue() {
   const classes = useStyles();
-  // const [certID, setCertID] = React.useState("");
-  const [courseID, setCourseID] = React.useState("");
-  const [recipientID, setRecipientID] = React.useState("");
-  const [certMsg, setCertMsg] = React.useState("");
   const [certDateDay, setCertDateDay] = React.useState("");
   const [certDateMonth, setCertDateMonth] = React.useState("");
   const [certDateYear, setCertDateYear] = React.useState("");
   const [certDate, setCertDate] = React.useState("");
   const [modal, setModal] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [boxStateWaiting, setBoxStateWaiting] = React.useState("none");
+  const [comp_name, setComp_name] = React.useState("");
+  const [org_name, setOrg_name] = React.useState("");
+  const [award, setAward] = React.useState("");
+  const [RID, setRID] = React.useState("");
 
-  // const handleChangeCertID = event => {
-  //   setCertID(event.target.value);
-  // };
+  const handleChangeCompName = event => {
+    setComp_name(event.target.value);
+  };
 
-  const handleChangeCID = event => {
-    setCourseID(event.target.value);
+  const handleChangeOrgName = event => {
+    setOrg_name(event.target.value);
+  };
+
+  const handleChangeAward = event => {
+    setAward(event.target.value);
   };
 
   const handleChangeRID = event => {
-    setRecipientID(event.target.value);
-  };
-
-  const handleChangeCertMsg = event => {
-    setCertMsg(event.target.value);
+    setRID(event.target.value);
   };
 
   const handleChangeCertDate = date => {
@@ -74,51 +73,24 @@ export default function SingleIssue() {
     console.log("date: " + certDate);
   };
 
-  var course_string = [];
-  function setCourseCodeMenuItem() {
-    for (var i = 0; i < courseJsonData.length; i++) {
-      var obj = courseJsonData[i];
-      course_string[i] = obj.course_code;
-    }
-  }
-
-  var sid_string = [];
-  var issuePlatform, course_name, institution, teacher_name;
-  function setSIDMenuItem() {
-    for (var i = 0; i < courseJsonData.length; i++) {
-      var obj = courseJsonData[i];
-      if (obj.course_code === courseID) {
-        for (var j = 0; j < obj.student.length; j++) {
-          sid_string[j] = obj.student[j];
-        }
-        issuePlatform = "KEEP";
-        course_name = obj.course_name;
-        institution = obj.institution;
-        teacher_name = obj.teacher_name;
-      }
-    }
-  }
-
   function handleIssueSubmit() {
-    console.log("issue button clicked");
+    console.log("issued clicked");
     setModal(false);
+    setBoxStateWaiting("block");
     issueCert();
-    // handleClickOpen();
   }
 
   async function issueCert() {
-    let certID = recipientID + courseID + certMsg + certDate;
+    var certID = RID + comp_name + award + certDate;
     certID_afterhash = stringHash(certID);
     console.log(certID_afterhash);
     let cert = {
-      type: "course",
-      issuePlatform: issuePlatform,
-      institution: institution,
-      courseID: courseID,
-      courseTitle: course_name,
-      teacherName: teacher_name,
-      recipientID: JSON.stringify(recipientID),
-      certMsg: certMsg,
+      type: "competition",
+      issuePlatform: "KEEP",
+      competitionName: comp_name,
+      organisationName: org_name,
+      award: award,
+      recipientID: RID,
       issueDate: certDate,
       signerName: "Irwin",
       signerID: "IK1901"
@@ -145,6 +117,7 @@ export default function SingleIssue() {
         console.log("Certificates issued");
       }
     }
+    setBoxStateWaiting("none");
     handleClickOpen();
   }
 
@@ -161,27 +134,27 @@ export default function SingleIssue() {
         <GridContainer justify="flex-start">
           <GridItem xs={12} sm={12} md={8}>
             <InfoArea
-              title="Enter the certificate infomation"
               description=""
+              title="Enter the certificate infomation"
               icon={CreateIcon}
               iconColor="info"
             />
           </GridItem>
         </GridContainer>
 
-        {/* <GridItem>
+        <GridItem>
           <Paper className={classes.paper}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <Typography>certificate ID</Typography>
+                <Typography>Competition Name</Typography>
               </Grid>
               <Grid item xs={12} sm={6} container>
                 <Grid item xs container direction="column" spacing={2}>
                   <CustomInput
-                    id="certid"
+                    id="comp_name"
                     inputProps={{
                       placeholder: "None",
-                      onChange: handleChangeCertID
+                      onChange: handleChangeCompName
                     }}
                     formControlProps={{
                       fullWidth: true
@@ -191,83 +164,6 @@ export default function SingleIssue() {
               </Grid>
             </Grid>
           </Paper>
-        </GridItem> */}
-
-        <Typography>
-          <br />
-        </Typography>
-
-        <GridItem>
-          <div className={classes.root}>
-            <Paper className={classes.paper} m={2}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Typography>course ID</Typography>
-                </Grid>
-                <Grid item xs={12} sm={6} container>
-                  <Grid item xs container direction="column" spacing={2}>
-                    <FormControl className={classes.formControl}>
-                      <Select
-                        value={courseID}
-                        onChange={handleChangeCID}
-                        displayEmpty
-                        className={classes.selectEmpty}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        {setCourseCodeMenuItem()}
-                        {course_string.map((course_code, index) => (
-                          <MenuItem key={index} value={course_code}>
-                            {course_code}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </Grid>
-                <Divider variant="middle" />
-              </Grid>
-            </Paper>
-          </div>
-        </GridItem>
-
-        <Typography>
-          <br />
-        </Typography>
-
-        <GridItem>
-          <div className={classes.root}>
-            <Paper className={classes.paper}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Typography>recipient ID</Typography>
-                </Grid>
-                <Grid item xs={12} sm={6} container>
-                  <Grid item xs container direction="column" spacing={2}>
-                    <FormControl className={classes.formControl}>
-                      <Select
-                        value={recipientID}
-                        onChange={handleChangeRID}
-                        displayEmpty
-                        className={classes.selectEmpty}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        {setSIDMenuItem()}
-                        {sid_string.map((sid, index) => (
-                          <MenuItem key={index} value={sid}>
-                            {sid}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Paper>
-          </div>
         </GridItem>
 
         <Typography>
@@ -278,15 +174,71 @@ export default function SingleIssue() {
           <Paper className={classes.paper}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <Typography>Personalized Message</Typography>
+                <Typography>Organisation Name</Typography>
               </Grid>
               <Grid item xs={12} sm={6} container>
                 <Grid item xs container direction="column" spacing={2}>
                   <CustomInput
-                    id="message"
+                    id="org_name"
                     inputProps={{
                       placeholder: "None",
-                      onChange: handleChangeCertMsg
+                      onChange: handleChangeOrgName
+                    }}
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </GridItem>
+
+        <Typography>
+          <br />
+        </Typography>
+
+        <GridItem>
+          <Paper className={classes.paper}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography>Award</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} container>
+                <Grid item xs container direction="column" spacing={2}>
+                  <CustomInput
+                    id="award"
+                    inputProps={{
+                      placeholder: "None",
+                      onChange: handleChangeAward
+                    }}
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </GridItem>
+
+        <Typography>
+          <br />
+        </Typography>
+
+        <GridItem>
+          <Paper className={classes.paper}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography>Recipient ID</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} container>
+                <Grid item xs container direction="column" spacing={2}>
+                  <CustomInput
+                    id="RID"
+                    inputProps={{
+                      placeholder: "None",
+                      onChange: handleChangeRID
                     }}
                     formControlProps={{
                       fullWidth: true
@@ -336,6 +288,11 @@ export default function SingleIssue() {
               <Button color="info" round onClick={() => setModal(true)}>
                 Issue!
               </Button>
+              <Box display={boxStateWaiting}>
+                <Grid item xs={12}>
+                  <Success>Inserting certificate to hyperledger...</Success>
+                </Grid>
+              </Box>
             </div>
             <Dialog
               classes={{

@@ -51,6 +51,10 @@ export default function ProductSection() {
   const [recipientID, setRecipientID] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [issueDate, setIssueDate] = React.useState("");
+  const [org_name, setOrg_name] = React.useState("");
+  const [comp_name, setComp_name] = React.useState("");
+  const [award, setAward] = React.useState("");
+  const [type, setType] = React.useState("");
   const [boxStateInvalidCaptcha, setBoxStateInvalidCaptcha] = React.useState(
     "none"
   );
@@ -61,11 +65,6 @@ export default function ProductSection() {
     console.log("Captcha value:", value);
     setBoxStateInvalidCaptcha("none");
   }
-
-  // const wrapperDiv = classNames(
-  //   classes.checkboxAndRadio,
-  //   classes.checkboxAndRadioHorizontal
-  // );
 
   const handleChangeInput = event => {
     setInput(event.target.value);
@@ -95,23 +94,30 @@ export default function ProductSection() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          certID: input
+          certID: input,
+          publicKey:
+            "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyMzbY3g6tMvT9DlX8l+F\njgHCpR1i1cFHTc5mDzumjkaSW9f45YpHO/6kAXL4i5OqyW8O9Bw8ZN98Y3fVwhFt\n6YbIBTdH7t3WOJ/BSN6TRv+oIWMkuXBtZRxrJc5PeZNP39gi8g1OgfVqC2Nua7rI\n6hDeSsc52EDG6x+ImyNX/XHmLLMXW79NiC7dAMeTYqdFgmvdQFBzrSSwX5S5uLy2\nroqcl1FXBUDaZtzw+zRTiVNr2a2bkpItPK/3dfluJKbWRDKjp7eB6E5KtLxHMOTR\nB7+GugPgLC6VH88XVWaLZPL1OPtTyM0Gh3mqyXcglbdeLgfUWUaTNhzU43bgl+ef\nswIDAQAB\n-----END PUBLIC KEY-----\n"
         })
       });
       let data = await response.json();
       console.log(data);
       if (response.status === 200) {
-        // setCert(data.cert);
+        setType(data.cert.content.type);
         setVerifyResult(data.verifyResult);
         setCertID(data.cert.certID);
-        setInstitution(data.cert.institution);
-        setIssuePlatform(data.cert.issuePlatform);
-        setCourseTitle(data.cert.courseTitle);
-        setTeacherName(data.cert.teacherName);
-        console.log(typeof data.cert.recipientID);
-        setRecipientID(data.cert.recipientID);
-        setMessage(data.cert.certMsg);
-        setIssueDate(data.cert.issueDate);
+        setIssuePlatform(data.cert.content.issuePlatform);
+        setRecipientID(data.cert.content.recipientID);
+        setIssueDate(data.cert.content.issueDate);
+        if (data.cert.content.type == "course") {
+          setInstitution(data.cert.content.institution);
+          setCourseTitle(data.cert.content.courseTitle);
+          setTeacherName(data.cert.content.teacherName);
+          setMessage(data.cert.content.certMsg);
+        } else if (data.cert.content.type == "competition") {
+          setComp_name(data.cert.content.competitionName);
+          setOrg_name(data.cert.content.organisationName);
+          setAward(data.cert.content.award);
+        }
         setBoxState("block");
       } else {
         setBoxStateError("block");
@@ -120,15 +126,20 @@ export default function ProductSection() {
   }
 
   const getResult = () => {
-    if (verifyResult) {
+    if (verifyResult == "true") {
       setVerificationResultText("True");
     } else {
-      // setVerificationResultText("False");
-
-      // signature part hasnt solved
-      setVerificationResultText("True");
+      setVerificationResultText("False");
     }
   };
+
+  function displayData() {
+    if (type == "course") {
+      console.log("course");
+    } else if (type == "competition") {
+      console.log("comp");
+    }
+  }
 
   return (
     <div className={classes.section}>
@@ -167,70 +178,11 @@ export default function ProductSection() {
         </Grid>
         <Grid item xs={12} sm={12} md={8}>
           <Box display={boxStateInvalidCaptcha}>
-            <Grid item xs={12} spacing={3}>
+            <Grid item xs={12}>
               <Danger>Invalid CAPTCHA</Danger>
             </Grid>
           </Box>
         </Grid>
-
-        {/* <GridContainer>
-          <Grid item xs={12} sm={6}>
-            <div className={wrapperDiv}>
-              <FormControlLabel
-                control={
-                  <Radio
-                    checked={selectedEnabled === "a"}
-                    onChange={() => setSelectedEnabled("a")}
-                    value="a"
-                    name="radio button enabled"
-                    aria-label="A"
-                    icon={
-                      <FiberManualRecord className={classes.radioUnchecked} />
-                    }
-                    checkedIcon={
-                      <FiberManualRecord className={classes.radioChecked} />
-                    }
-                    classes={{
-                      checked: classes.radio
-                    }}
-                  />
-                }
-                classes={{
-                  label: classes.label
-                }}
-                label="ID of certificate"
-              />
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <div className={wrapperDiv}>
-              <FormControlLabel
-                control={
-                  <Radio
-                    checked={selectedEnabled === "b"}
-                    onChange={() => setSelectedEnabled("b")}
-                    value="b"
-                    name="radio button enabled"
-                    aria-label="B"
-                    icon={
-                      <FiberManualRecord className={classes.radioUnchecked} />
-                    }
-                    checkedIcon={
-                      <FiberManualRecord className={classes.radioChecked} />
-                    }
-                    classes={{
-                      checked: classes.radio
-                    }}
-                  />
-                }
-                classes={{
-                  label: classes.label
-                }}
-                label="URL"
-              />
-            </div>
-          </Grid>
-        </GridContainer> */}
         <GridItem>
           <Button type="button" color="info" onClick={handleClick}>
             Submit
@@ -250,6 +202,7 @@ export default function ProductSection() {
             {getResult}
             <h4>Result: {verificationResultText}</h4>
           </div>
+          {displayData()}
           <div className={classes.demo}>
             <List dense={dense}>
               <ListItem>

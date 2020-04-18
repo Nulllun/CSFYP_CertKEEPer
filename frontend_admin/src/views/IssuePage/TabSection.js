@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import SingleIssue from "./SingleIssue.js";
 import BatchIssue from "./BatchIssue.js";
+import CompetitionIssue from "./CompetitionIssue.js";
 
 // @material-ui/icons
 
@@ -65,8 +66,9 @@ export default function InfoSection() {
         textColor="primary"
         centered
       >
-        <Tab label="Single" {...a11yProps(0)} />
-        <Tab label="Batch" {...a11yProps(1)} />
+        <Tab label="Single (Course)" {...a11yProps(0)} />
+        <Tab label="Batch (Course)" {...a11yProps(1)} />
+        <Tab label="Competition" {...a11yProps(2)} />
       </Tabs>
 
       <TabPanel value={value} index={0}>
@@ -75,6 +77,10 @@ export default function InfoSection() {
 
       <TabPanel value={value} index={1}>
         <BatchIssue />
+      </TabPanel>
+
+      <TabPanel value={value} index={2}>
+        <CompetitionIssue />
       </TabPanel>
     </div>
   );
