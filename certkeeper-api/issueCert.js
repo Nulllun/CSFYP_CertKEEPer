@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
         let cert = new CertKeeperCert();
         cert.certID = certID;
         cert.readContent(content);
-        if(content.signerID != "" && content.signerName != ""){
+        if(content.signerID != "" && content.signerName != "" && content.signerID != null && content.signerName != null){
             let privateKey = req.body.privateKey;
             cert.generateSign(privateKey);
         };
@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
 
         // Evaluate the specified transaction.
         await contract.submitTransaction('issueCert', JSON.stringify(cert));
-        
+
         console.log("Transaction has been submitted");
         res.status(200).json({ result: "Insertion is proposed to Hyperledger" });
     } catch (error) {
