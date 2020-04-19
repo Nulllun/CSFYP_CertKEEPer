@@ -49,6 +49,8 @@ const MenuProps = {
   }
 };
 
+var certIDList = [];
+
 export default function SingleIssue() {
   const classes = useStyles();
   const [courseID, setCourseID] = React.useState("");
@@ -67,10 +69,6 @@ export default function SingleIssue() {
     setCourseID(event.target.value);
     setRecipientIDMultiple([]);
   };
-
-  // const handleChangeCertType = event => {
-  //   setCertType(event.target.value);
-  // };
 
   const handleChangeMultipleRID = event => {
     setRecipientIDMultiple(event.target.value);
@@ -125,11 +123,13 @@ export default function SingleIssue() {
   }
 
   async function issueCert() {
+    certIDList = [];
     for (var i = 0; i < recipientIDMultiple.length; i++) {
       var RID = recipientIDMultiple[i];
       var certID = recipientIDMultiple[i] + courseID + certMsg + certDate;
       let certID_afterhash = stringHash(certID);
-      console.log(certID_afterhash);
+
+      certIDList[i] = "Org1MSP-" + certID_afterhash;
       let cert = {
         type: "course",
         issuePlatform: issuePlatform,
@@ -176,6 +176,19 @@ export default function SingleIssue() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  function returnCertIDList() {
+    var i;
+    var string = "";
+    for (i = 0; i < certIDList.length; i++) {
+      if (i == certIDList.length - 1) {
+        string = string + certIDList[i] + ".";
+      } else {
+        string = string + certIDList[i] + ", ";
+      }
+    }
+    return string;
+  }
 
   return (
     <div>
@@ -314,37 +327,6 @@ export default function SingleIssue() {
           </Paper>
         </GridItem>
 
-        {/* <GridItem>
-          <div className={classes.root}>
-            <Paper className={classes.paper}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Typography>certificate type</Typography>
-                </Grid>
-                <Grid item xs={12} sm={6} container>
-                  <Grid item xs container direction="column" spacing={2}>
-                    <FormControl className={classes.formControl}>
-                      <Select
-                        value={certType}
-                        onChange={handleChangeCertType}
-                        displayEmpty
-                        className={classes.selectEmpty}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={1}>Distinction</MenuItem>
-                        <MenuItem value={2}>Merit</MenuItem>
-                        <MenuItem value={3}>Pass</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Paper>
-          </div>
-        </GridItem> */}
-
         <Typography>
           <br />
         </Typography>
@@ -446,6 +428,9 @@ export default function SingleIssue() {
           </DialogTitle>
           <DialogContent dividers>
             <Typography gutterBottom>Issued.</Typography>
+            <Typography gutterBottom>
+              The certIDs are {returnCertIDList()}
+            </Typography>
           </DialogContent>
         </Dialog>
       </Paper>

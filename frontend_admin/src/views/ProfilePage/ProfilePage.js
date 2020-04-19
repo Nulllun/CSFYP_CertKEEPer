@@ -10,7 +10,7 @@ import GridItem from "components/Grid/GridItem.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import Parallax from "components/Parallax/Parallax.js";
 
-import profile from "assets/img/dummy-profile.png";
+import profile from "assets/img/irwin.png";
 
 import PersonalSection from "./Personal";
 

@@ -158,7 +158,7 @@ export default function DisplaySection() {
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>This is to certify that</Text>
-        <Text style={PDFstyle.title}>Chris Wong</Text>
+        <Text style={PDFstyle.title}>Daisy Mang</Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>
           successfuly completed and received {message} in
@@ -482,7 +482,7 @@ export default function DisplaySection() {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <InfoArea
-              title="My SID is 1155090001"
+              title="My SID is 1155094246"
               description=""
               icon={FaceTwoToneIcon}
               iconColor="info"

@@ -28,7 +28,7 @@ var name_current, occupation_current, institute_current, department_current;
 
 export default function InfoSection() {
   const classes = useStyles();
-  const [name, setName] = React.useState("Admin");
+  const [name, setName] = React.useState("Irwin King");
   const [occupation, setOccupation] = React.useState("Admin");
   const [institute, setInstitute] = React.useState(
     "The Chinese Univeristy of Hong Kong"

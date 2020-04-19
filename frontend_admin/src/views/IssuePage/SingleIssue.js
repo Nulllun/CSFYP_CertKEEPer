@@ -13,6 +13,7 @@ import GridItem from "components/Grid/GridItem.js";
 import InfoArea from "components/InfoArea/InfoArea.js";
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import Success from "components/Typography/Success.js";
 
 // material-ui core components
 import Dialog from "@material-ui/core/Dialog";
@@ -27,6 +28,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
+import Box from "@material-ui/core/Box";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
@@ -48,6 +50,7 @@ export default function SingleIssue() {
   const [certDate, setCertDate] = React.useState("");
   const [modal, setModal] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [boxStateWaiting, setBoxStateWaiting] = React.useState("none");
 
   // const handleChangeCertID = event => {
   //   setCertID(event.target.value);
@@ -102,8 +105,8 @@ export default function SingleIssue() {
   function handleIssueSubmit() {
     console.log("issue button clicked");
     setModal(false);
+    setBoxStateWaiting("block");
     issueCert();
-    // handleClickOpen();
   }
 
   async function issueCert() {
@@ -145,6 +148,7 @@ export default function SingleIssue() {
         console.log("Certificates issued");
       }
     }
+    setBoxStateWaiting("none");
     handleClickOpen();
   }
 
@@ -168,30 +172,6 @@ export default function SingleIssue() {
             />
           </GridItem>
         </GridContainer>
-
-        {/* <GridItem>
-          <Paper className={classes.paper}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Typography>certificate ID</Typography>
-              </Grid>
-              <Grid item xs={12} sm={6} container>
-                <Grid item xs container direction="column" spacing={2}>
-                  <CustomInput
-                    id="certid"
-                    inputProps={{
-                      placeholder: "None",
-                      onChange: handleChangeCertID
-                    }}
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
-        </GridItem> */}
 
         <Typography>
           <br />
@@ -336,6 +316,11 @@ export default function SingleIssue() {
               <Button color="info" round onClick={() => setModal(true)}>
                 Issue!
               </Button>
+              <Box display={boxStateWaiting}>
+                <Grid item xs={12}>
+                  <Success>Inserting certificate to hyperledger...</Success>
+                </Grid>
+              </Box>
             </div>
             <Dialog
               classes={{

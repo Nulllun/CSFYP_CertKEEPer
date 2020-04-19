@@ -2,11 +2,11 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 // @material-ui/icons
-import EditIcon from "@material-ui/icons/Edit";
+// import EditIcon from "@material-ui/icons/Edit";
 
 // core components
 import GridItem from "components/Grid/GridItem.js";
-import Button from "components/CustomButtons/Button.js";
+// import Button from "components/CustomButtons/Button.js";
 
 //material-ui components
 import Paper from "@material-ui/core/Paper";
@@ -30,7 +30,26 @@ export default function InfoSection() {
                 <Typography align="center">Name</Typography>
               </Grid>
               <Grid item xs={12} sm={6} container>
-                <Typography align="center">Chris Wong</Typography>
+                <Typography align="center">Daisy Mang</Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+        </div>
+      </GridItem>
+
+      <Typography>
+        <br />
+      </Typography>
+
+      <GridItem>
+        <div className={classes.root}>
+          <Paper className={classes.paper}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography align="center">Student ID</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} container>
+                <Typography align="center">1155094246</Typography>
               </Grid>
             </Grid>
           </Paper>
@@ -108,7 +127,7 @@ export default function InfoSection() {
                 <Typography align="center">Year</Typography>
               </Grid>
               <Grid item xs={12} sm={6} container>
-                <Typography align="center">2</Typography>
+                <Typography align="center">4</Typography>
               </Grid>
             </Grid>
           </Paper>
@@ -117,12 +136,12 @@ export default function InfoSection() {
       <Typography>
         <br />
       </Typography>
-      <GridItem>
+      {/* <GridItem>
         <Button type="button" color="info">
           Edit Profile
           <EditIcon />
         </Button>
-      </GridItem>
+      </GridItem> */}
     </div>
   );
 }

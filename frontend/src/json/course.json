@@ -3,28 +3,56 @@
   "course_code":"CSCI2100",
   "course_name":"Data Structure",
   "institution":"The Chinese University of Hong Kong",
-  "teacher_name":"Prof. Irwin King",
-  "student":[1155090001, 1155090002, 1155090003, 1155090004, 1155090005]
+  "teacher_name":"Professor KING Kuo Chin Irwin",
+  "student":[1155085438, 1155091784, 1155094246, 1155094333, 1155095678, 1155096321, 1155096899, 1155103456, 1155109097, 1155115157]
 },{
   "id":2,
-  "course_code":"UGFN1000",
-  "course_name":"In Dialogue With Nature",
+  "course_code":"CSCI3150",
+  "course_name":"Introduction to Operating Systems",
   "institution":"The Chinese University of Hong Kong",
-  "teacher_name":"Dr. Kiang Kai Ming",
-  "student":[1155090002, 1155071234, 1155102389]
+  "teacher_name":"Professor SHAO Zili",
+  "student":[1155091988, 1155091998, 1155092678, 1155093853, 1155099933, 1155101893, 1155103890, 1155108745, 1155113458]
 },{
-  "id": 3,
+  "id":3,
+  "course_code":"CSCI3160",
+  "course_name":"Design and Analysis of Algorithms",
+  "institution":"The Chinese University of Hong Kong",
+  "teacher_name":"Professor TAO Yufei",
+  "student":[1155063481, 1155078394, 1155070093, 1155091988, 1155091998, 1155092678, 1155093853, 1155099933, 1155101893, 1155103890, 1155108745, 1155113458]
+},{
+  "id":4,
   "course_code":"CSCI3310",
   "course_name":"Mobile Computing and Applications Developmen",
   "institution":"The Chinese University of Hong Kong",
-  "teacher_name":"Prof. Michael Lyu",
-  "student":[1155090001, 1155090002, 1155090003, 1155090004, 1155090005, 1155089876, 1155073432]
+  "teacher_name":"Dr. CHUI Yim Pan",
+  "student":[1155083901, 1155084348, 1155084877, 1155092333, 1155093490, 1155094246, 1155095677, 1155095678, 1155098899, 1155099345, 1155099899, 1155102334, 1155105638]
 },{
-  "id": 4,
+  "id":5,
+  "course_code":"CSCI4430",
+  "course_name":"Data Communication and Computer Networks",
+  "institution":"The Chinese University of Hong Kong",
+  "teacher_name":"Professor LEE Pak Ching",
+  "student":[1155091988, 1155091998, 1155092678, 1155093853, 1155099933, 1155101893, 1155103890, 1155108745, 1155113458]
+},{
+  "id":6,
   "course_code":"JASP2460",
   "course_name":"New Practical Japanese IV",
   "institution":"The Chinese University of Hong Kong",
-  "teacher_name":"Ms. Winkki Choi",
-  "student":[1155098903, 1155093475, 1155112345, 1155109283, 1155082148, 1155100987, 1155123378, 1155099090, 1155102335]
+  "teacher_name":"Ms. CHOI Wing Sum",
+  "student":[1155094246, 1155094247, 1155102677, 1155107899, 1155108456, 1155116775, 11551178893]
+},{
+  "id":7,
+  "course_code":"UGEA2100",
+  "course_name":"Outline of Chinese Culture",
+  "institution":"The Chinese University of Hong Kong",
+  "teacher_name":"Dr. TSE Sai Kit",
+  "student":[1155100485, 11551001098, 1155107890, 1155112189, 1155121188]
+},{
+  "id":8,
+  "course_code":"UGED2901",
+  "course_name":"Death and Immortality",
+  "institution":"The Chinese University of Hong Kong",
+  "teacher_name":"Dr. KWOK Pak Nin",
+  "student":[1155094246, 1155099321, 1155107329, 1155109900, 1155117892]
 }
 ]
