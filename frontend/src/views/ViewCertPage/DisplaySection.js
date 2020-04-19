@@ -14,10 +14,14 @@ import keepLogo from "../../assets/img/keep_logo.png";
 
 // @material-ui/icons
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import SentimentVeryDissatisfiedRoundedIcon from "@material-ui/icons/SentimentVeryDissatisfiedRounded";
+import FaceTwoToneIcon from "@material-ui/icons/FaceTwoTone";
 
 // core components
 import Button from "components/CustomButtons/Button.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
+import InfoArea from "components/InfoArea/InfoArea.js";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 // import component from "@material-ui/core
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -29,6 +33,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
+import Box from "@material-ui/core/Box";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/productStyle.js";
 
@@ -49,15 +54,16 @@ export default function DisplaySection() {
   const [dense] = React.useState(false);
   const [dlButtonVisibility, setDlButtonVisibility] = React.useState(true);
   const [certList, setCertList] = React.useState([]);
-  const [recipientID, setRecipientID] = React.useState(null);
+  // const [recipientID, setRecipientID] = React.useState(null);
+  const [boxStateEmpty, setBoxStateEmpty] = React.useState("none");
 
-  const handleChangeRecipientID = event => {
-    setRecipientID(event.target.value);
-  };
+  // const handleChangeRecipientID = event => {
+  //   setRecipientID(event.target.value);
+  // };
 
   async function getCert() {
-    console.log("recipientID: " + recipientID);
-    let RID = recipientID;
+    setBoxStateEmpty("none");
+    let RID = 1155090001;
     if (RID !== undefined && RID !== null) {
       let path = "http://localhost:5000/view";
       let response = await fetch(path, {
@@ -75,6 +81,41 @@ export default function DisplaySection() {
       console.log(certList);
       if (response.status === 200) {
         setCertList(certList);
+        setBoxStateEmpty("none");
+      }
+      if (certList.length == 0) {
+        setBoxStateEmpty("block");
+      }
+    }
+  }
+
+  async function setDiscloseCert(obj) {
+    var discloseOption_updated;
+    console.log("old: " + typeof obj.disclosed);
+    console.log("old: " + obj.disclosed);
+    if (obj.disclosed == "true") {
+      discloseOption_updated = "false";
+    } else if (obj.disclosed == "false") {
+      discloseOption_updated = "true";
+    }
+    console.log("new: " + typeof discloseOption_updated);
+    console.log("new: " + discloseOption_updated);
+    let RID = 1155090001;
+    if (RID !== undefined && RID !== null) {
+      let path = "http://localhost:5000/disclose";
+      let response = await fetch(path, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          certID: obj.certID,
+          discloseOption: discloseOption_updated
+        })
+      });
+      if (response.status === 200) {
+        getCert();
       }
     }
   }
@@ -165,17 +206,14 @@ export default function DisplaySection() {
   // }
 
   const setCertValue = obj => {
-    course_name = obj.courseTitle;
-    course_code = obj.courseID;
-    institute = obj.institution;
     certID = obj.certID;
-    teacher_name = obj.teacherName;
-    message = obj.certMsg;
-    date = obj.issueDate;
+    course_name = obj.content.courseTitle;
+    course_code = obj.content.courseID;
+    institute = obj.content.institution;
+    teacher_name = obj.content.teacherName;
+    message = obj.content.certMsg;
+    date = obj.content.issueDate;
     targetButton = "button" + obj.certID;
-
-    // console.log(targetButton);
-
     genPDF();
     setDlButtonVisibility(false);
   };
@@ -184,212 +222,291 @@ export default function DisplaySection() {
     return "button" + obj.certID;
   }
 
+  function toggleButtonID(obj) {
+    return "toggleButton" + obj.certID;
+  }
+
+  // const handleChangeToggle = event => {
+  //   console.log("toggled");
+  //   setCheckedA(event.target.checked);
+  //   setDiscloseCert(obj);
+  // }
+
+  function discloseBoolean(obj) {
+    if (obj.disclosed == "true") {
+      return true;
+    } else if (obj.disclosed == "false") {
+      return false;
+    }
+  }
+
+  function certType(obj) {
+    if (obj.content.type == "course") {
+      return (
+        <ExpansionPanel>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>
+              {obj.certID} - issued on: {obj.content.issueDate}
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Grid item xs={12} md={6}>
+              <div className={classes.demo}>
+                <List dense={dense}>
+                  <ListItem>
+                    <ListItemText
+                      primary="Certficate ID"
+                      secondary={obj.certID}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Institution"
+                      secondary={obj.content.institution}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Issue Platform"
+                      secondary={obj.content.issuePlatform}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Course ID"
+                      secondary={obj.content.courseID}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Course Title"
+                      secondary={obj.content.courseTitle}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Teacher Name"
+                      secondary={obj.content.teacherName}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Certificate Description"
+                      secondary={obj.content.certMsg}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Issue Date"
+                      secondary={obj.content.issueDate}
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </Grid>
+            <Box>
+              <Grid container direction={"row"} spacing={1}>
+                <Grid container item xs={12} sm={12}>
+                  <Grid>
+                    <Button
+                      // id={buttonID(obj)}
+                      color="warning"
+                      round
+                      onClick={() => setCertValue(obj)}
+                    >
+                      Generate PDF
+                    </Button>
+                  </Grid>
+                  <Grid>
+                    <Button
+                      id={buttonID(obj)}
+                      color="warning"
+                      disabled={dlButtonVisibility}
+                      round
+                    >
+                      Not Ready
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Grid container item xs={12} sm={12}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        id={toggleButtonID(obj)}
+                        checked={discloseBoolean(obj)}
+                        onChange={() => setDiscloseCert(obj)}
+                        value="disclose"
+                        classes={{
+                          switchBase: classes.switchBase,
+                          checked: classes.switchChecked,
+                          thumb: classes.switchIcon,
+                          iconChecked: classes.switchIconChecked,
+                          track: classes.switchBar
+                        }}
+                      />
+                    }
+                    classes={{
+                      label: classes.label
+                    }}
+                    label="Disclose to others"
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      );
+    } else if (obj.content.type == "competition") {
+      return (
+        <ExpansionPanel>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>
+              {obj.certID} - issued on: {obj.content.issueDate}
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Grid item xs={12} md={6}>
+              <div className={classes.demo}>
+                <List dense={dense}>
+                  <ListItem>
+                    <ListItemText
+                      primary="Certficate ID"
+                      secondary={obj.certID}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Organization"
+                      secondary={obj.content.organisationName}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Issue Platform"
+                      secondary={obj.content.issuePlatform}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Recipient ID"
+                      secondary={obj.content.recipientID}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Competition Name"
+                      secondary={obj.content.competitionName}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Award"
+                      secondary={obj.content.award}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Issue Date"
+                      secondary={obj.content.issueDate}
+                    />
+                  </ListItem>
+                </List>
+              </div>
+            </Grid>
+            <Box>
+              <Grid container direction={"row"} spacing={1}>
+                <Grid container item xs={12} sm={12}>
+                  <Grid>
+                    <Button
+                      // id={buttonID(obj)}
+                      color="warning"
+                      round
+                      onClick={() => setCertValue(obj)}
+                    >
+                      Generate PDF
+                    </Button>
+                  </Grid>
+                  <Grid>
+                    <Button
+                      id={buttonID(obj)}
+                      color="warning"
+                      disabled={dlButtonVisibility}
+                      round
+                    >
+                      Not Ready
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Grid container item xs={12} sm={12}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        id={toggleButtonID(obj)}
+                        checked={discloseBoolean(obj)}
+                        onChange={() => setDiscloseCert(obj)}
+                        value="disclose"
+                        classes={{
+                          switchBase: classes.switchBase,
+                          checked: classes.switchChecked,
+                          thumb: classes.switchIcon,
+                          iconChecked: classes.switchIconChecked,
+                          track: classes.switchBar
+                        }}
+                      />
+                    }
+                    classes={{
+                      label: classes.label
+                    }}
+                    label="Disclose to others"
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      );
+    }
+  }
+
   return (
     <div className={classes.section}>
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <CustomInput
-              id="recipientid"
-              labelText="Enter student ID"
-              inputProps={{
-                fullWidth: true,
-                onChange: handleChangeRecipientID
-              }}
-              formControlProps={{
-                fullWidth: true
-              }}
+            <InfoArea
+              title="My SID is 1155090001"
+              description=""
+              icon={FaceTwoToneIcon}
+              iconColor="info"
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Button color="info" round onClick={() => getCert()}>
-              Query
+              Query My Cert
             </Button>
           </Grid>
         </Grid>
       </Paper>
 
       {certList.map(obj => (
-        <div key={obj.certID}>
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>
-                {obj.courseID} - {obj.certMsg} - issued on: {obj.issueDate}
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Grid item xs={12} md={6}>
-                <div className={classes.demo}>
-                  <List dense={dense}>
-                    <ListItem>
-                      <ListItemText
-                        primary="Certficate ID"
-                        secondary={obj.certID}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Institution"
-                        secondary={obj.institution}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Issue Platform"
-                        secondary={obj.issuePlatform}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Course ID"
-                        secondary={obj.courseID}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Course Title"
-                        secondary={obj.courseTitle}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Teacher Name"
-                        secondary={obj.teacherName}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Certificate Description"
-                        secondary={obj.certMsg}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Issue Date"
-                        secondary={obj.issueDate}
-                      />
-                    </ListItem>
-                  </List>
-                </div>
-              </Grid>
-              <Grid>
-                <Button
-                  // id={buttonID(obj)}
-                  color="warning"
-                  round
-                  onClick={() => setCertValue(obj)}
-                >
-                  Generate PDF
-                </Button>
-              </Grid>
-              <Grid>
-                <Button
-                  id={buttonID(obj)}
-                  color="warning"
-                  disabled={dlButtonVisibility}
-                  round
-                  // onClick={() => setCertValue(obj)}
-                  // onClick={() => genPDF()}
-                >
-                  Not Ready
-                </Button>
-              </Grid>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <Typography>-</Typography>
-        </div>
+        <div key={obj.certID}>{certType(obj)}</div>
       ))}
-      {/* {getJsonObject()}
-      {jsonobject_string.map(obj => (
-        <div key={obj.id}>
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>
-                {obj.course_code} - {obj.description}
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Grid item xs={12} md={6}>
-                <div className={classes.demo}>
-                  <List dense={dense}>
-                    <ListItem>
-                      <ListItemText
-                        primary="Certficate ID"
-                        secondary={obj.certid}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Institution"
-                        secondary={obj.institution}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Course ID"
-                        secondary={obj.course_code}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Title"
-                        secondary={obj.course_name}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Teacher Name"
-                        secondary={obj.teacher_name}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Certificate Description"
-                        secondary={obj.description}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText primary="Issue Date" secondary={obj.date} />
-                    </ListItem>
-                  </List>
-                </div>
-              </Grid>
-              <Grid>
-                <Button
-                  // id={buttonID(obj)}
-                  color="warning"
-                  round
-                  onClick={() => setCertValue(obj)}
-                  // onClick={() => console.log("click!")}
-                >
-                  Generate PDF
-                </Button>
-              </Grid>
-              <Grid>
-                <Button
-                  id={buttonID(obj)}
-                  color="warning"
-                  disabled={dlButtonVisibility}
-                  round
-                  // onClick={() => setCertValue(obj)}
-                  // onClick={() => genPDF()}
-                >
-                  Not Ready
-                </Button>
-              </Grid>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <Typography>-</Typography>
-        </div>
-      ))} */}
+      <Box display={boxStateEmpty}>
+        <InfoArea
+          title="No result(s) found..."
+          description=""
+          icon={SentimentVeryDissatisfiedRoundedIcon}
+          iconColor="info"
+        />
+      </Box>
     </div>
   );
 }

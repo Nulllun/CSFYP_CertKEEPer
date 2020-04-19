@@ -398,10 +398,10 @@ export default function ViewAllCert() {
   // }
 
   const setCertValue = obj => {
+    certID = obj.certID;
     course_name = obj.content.courseTitle;
     course_code = obj.content.courseID;
     institute = obj.content.institution;
-    certID = obj.content.certID;
     teacher_name = obj.content.teacherName;
     message = obj.content.certMsg;
     date = obj.content.issueDate;

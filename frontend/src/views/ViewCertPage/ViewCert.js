@@ -37,7 +37,7 @@ export default function ViewCertPage(props) {
         <div className={classes.container}>
           <h1 className={classes.title}>View certificates</h1>
           <br />
-          <h3>View the certificates you issued here</h3>
+          <h3>View my certificates here</h3>
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>

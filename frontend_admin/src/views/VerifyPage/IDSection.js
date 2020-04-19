@@ -36,10 +36,6 @@ export default function ProductSection() {
   // const [selectedEnabled, setSelectedEnabled] = React.useState("a");
   const [input, setInput] = React.useState("");
   // const [cert, setCert] = React.useState(null);
-  const [verifyResult, setVerifyResult] = React.useState(false);
-  const [verificationResultText, setVerificationResultText] = React.useState(
-    "True"
-  );
   const [boxState, setBoxState] = React.useState("none");
   const [boxStateError, setBoxStateError] = React.useState("none");
   const [dense] = React.useState(false);
@@ -103,7 +99,6 @@ export default function ProductSection() {
       console.log(data);
       if (response.status === 200) {
         setType(data.cert.content.type);
-        setVerifyResult(data.verifyResult);
         setCertID(data.cert.certID);
         setIssuePlatform(data.cert.content.issuePlatform);
         setRecipientID(data.cert.content.recipientID);
@@ -125,19 +120,74 @@ export default function ProductSection() {
     }
   }
 
-  const getResult = () => {
-    if (verifyResult == "true") {
-      setVerificationResultText("True");
-    } else {
-      setVerificationResultText("False");
-    }
-  };
-
   function displayData() {
     if (type == "course") {
-      console.log("course");
+      // console.log("course");
+      return (
+        <div className={classes.demo}>
+          <List dense={dense}>
+            <ListItem>
+              <ListItemText primary="Certficate ID" secondary={certID} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Institution" secondary={institution} />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Issue Platform"
+                secondary={issuePlatform}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Title" secondary={courseTitle} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Teacher Name" secondary={teacherName} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="RecipientID" secondary={recipientID} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Message" secondary={message} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Issue Date" secondary={issueDate} />
+            </ListItem>
+          </List>
+        </div>
+      );
     } else if (type == "competition") {
-      console.log("comp");
+      // console.log("comp");
+      return (
+        <div className={classes.demo}>
+          <List dense={dense}>
+            <ListItem>
+              <ListItemText primary="Certficate ID" secondary={certID} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Organization" secondary={org_name} />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="Issue Platform"
+                secondary={issuePlatform}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="RecipientID" secondary={recipientID} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Competition Name" secondary={comp_name} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Award" secondary={award} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Issue Date" secondary={issueDate} />
+            </ListItem>
+          </List>
+        </div>
+      );
     }
   }
 
@@ -199,41 +249,9 @@ export default function ProductSection() {
             iconColor="info"
           />
           <div>
-            {getResult}
-            <h4>Result: {verificationResultText}</h4>
+            <h4>Result: True</h4>
           </div>
           {displayData()}
-          <div className={classes.demo}>
-            <List dense={dense}>
-              <ListItem>
-                <ListItemText primary="Certficate ID" secondary={certID} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="Institution" secondary={institution} />
-              </ListItem>
-              <ListItem>
-                <ListItemText
-                  primary="Issue Platform"
-                  secondary={issuePlatform}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="Title" secondary={courseTitle} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="Teacher Name" secondary={teacherName} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="RecipientID" secondary={recipientID} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="Message" secondary={message} />
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="Issue Date" secondary={issueDate} />
-              </ListItem>
-            </List>
-          </div>
         </Paper>
       </Box>
       <Box display={boxStateError}>

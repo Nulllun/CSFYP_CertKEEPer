@@ -13,7 +13,7 @@ class CertKeeperCert {
         else{
             this.certID = "";
             this.content = {};
-            this.disclosed = true;
+            this.disclosed = "true";
             this.digest = "";
             this.signature = "";
         }
