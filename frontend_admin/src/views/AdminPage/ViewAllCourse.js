@@ -48,9 +48,10 @@ export default function ViewAllCourse() {
       }
     }
     string = string + obj.student[i];
-    for (i = 0; i < studentJsonData.length; i++) {
-      if (obj.student[i] == studentJsonData[i].sid) {
-        string = string + studentJsonData[i].name;
+    for (j = 0; j < studentJsonData.length; j++) {
+      if (obj.student[i] == studentJsonData[j].sid) {
+        string = string + " " + studentJsonData[j].name;
+        break;
       }
     }
     return string;

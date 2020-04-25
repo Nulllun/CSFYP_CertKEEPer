@@ -504,7 +504,8 @@ export default function ViewAllCert() {
             id="panel1a-header"
           >
             <Typography className={classes.heading}>
-              {obj.certID} - issued on: {obj.content.issueDate}
+              {obj.certID} - {obj.content.courseID} - {obj.content.recipientID}{" "}
+              - issued on: {obj.content.issueDate}
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
@@ -818,7 +819,8 @@ export default function ViewAllCert() {
             id="panel1a-header"
           >
             <Typography className={classes.heading}>
-              {obj.certID} - issued on: {obj.content.issueDate}
+              {obj.certID} - {obj.content.competitionName} -{" "}
+              {obj.content.recipientID} - issued on: {obj.content.issueDate}
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>

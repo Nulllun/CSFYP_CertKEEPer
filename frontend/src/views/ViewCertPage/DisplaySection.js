@@ -250,7 +250,8 @@ export default function DisplaySection() {
             id="panel1a-header"
           >
             <Typography className={classes.heading}>
-              {obj.certID} - issued on: {obj.content.issueDate}
+              {obj.content.courseID} - {obj.content.certMsg} - issued on:{" "}
+              {obj.content.issueDate}
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
@@ -369,7 +370,8 @@ export default function DisplaySection() {
             id="panel1a-header"
           >
             <Typography className={classes.heading}>
-              {obj.certID} - issued on: {obj.content.issueDate}
+              {obj.content.competitionName} - {obj.content.award} - issued on:{" "}
+              {obj.content.issueDate}
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
