@@ -40,7 +40,7 @@ cd hyperledger/test-network
 ./network.sh deployCC
 ```
 
-After chaincode ha been successfully deployed, start REST API server
+After chaincode has been successfully deployed, start REST API server
 ```
 cd certkeeper-api
 npm install
@@ -69,8 +69,9 @@ npm start
 Admin frontend should be listening on port 3001
 
 
-After use, remember execute the following line
+After use, remember execute the following
 ```
+cd hyperledger/test-network
 ./network.sh down
 ```
 to completely shut down hyperledger fabric
