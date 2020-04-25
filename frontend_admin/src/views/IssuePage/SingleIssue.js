@@ -34,7 +34,8 @@ import styles from "assets/jss/material-kit-react/views/landingPageSections/prod
 
 const useStyles = makeStyles(styles);
 
-const stringHash = require("string-hash");
+// const stringHash = require("string-hash");
+var sha256 = require("js-sha256");
 
 var certID_afterhash;
 
@@ -111,7 +112,7 @@ export default function SingleIssue() {
 
   async function issueCert() {
     let certID = recipientID + courseID + certMsg + certDate;
-    certID_afterhash = stringHash(certID);
+    certID_afterhash = sha256(certID);
     console.log(certID_afterhash);
     let cert = {
       type: "course",
@@ -379,7 +380,7 @@ export default function SingleIssue() {
           </DialogTitle>
           <DialogContent dividers>
             <Typography gutterBottom>Issued.</Typography>
-            <Typography>The certID is Org1MSP-{certID_afterhash}.</Typography>
+            <Typography>The certID is KEEP-{certID_afterhash}.</Typography>
           </DialogContent>
         </Dialog>
       </Paper>

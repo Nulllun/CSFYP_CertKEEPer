@@ -39,14 +39,14 @@
   "course_name":"New Practical Japanese IV",
   "institution":"The Chinese University of Hong Kong",
   "teacher_name":"Ms. CHOI Wing Sum",
-  "student":[1155094246, 1155094247, 1155102677, 1155107899, 1155108456, 1155116775, 11551178893]
+  "student":[1155094246, 1155094247, 1155102677, 1155107899, 1155108456, 1155116775, 1155117889]
 },{
   "id":7,
   "course_code":"UGEA2100",
   "course_name":"Outline of Chinese Culture",
   "institution":"The Chinese University of Hong Kong",
   "teacher_name":"Dr. TSE Sai Kit",
-  "student":[1155100485, 11551001098, 1155107890, 1155112189, 1155121188]
+  "student":[1155100485, 1155100109, 1155107890, 1155112189, 1155121188]
 },{
   "id":8,
   "course_code":"UGED2901",

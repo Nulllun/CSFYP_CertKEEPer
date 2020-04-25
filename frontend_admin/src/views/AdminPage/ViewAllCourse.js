@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import courseJsonData from "../../json/course.json";
+import studentJsonData from "../../json/student.json";
 
 // @material-ui/icons
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -36,10 +37,22 @@ export default function ViewAllCourse() {
   function studentList(obj) {
     var string = "";
     var i;
+    var j;
     for (i = 0; i < obj.student.length - 1; i++) {
-      string = string + obj.student[i] + ", ";
+      string = string + obj.student[i] + " ";
+      for (j = 0; j < studentJsonData.length; j++) {
+        if (obj.student[i] == studentJsonData[j].sid) {
+          string = string + studentJsonData[j].name + ", ";
+          break;
+        }
+      }
     }
     string = string + obj.student[i];
+    for (i = 0; i < studentJsonData.length; i++) {
+      if (obj.student[i] == studentJsonData[i].sid) {
+        string = string + studentJsonData[i].name;
+      }
+    }
     return string;
   }
 

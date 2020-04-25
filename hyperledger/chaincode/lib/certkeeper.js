@@ -78,7 +78,8 @@ class CertKeeper extends Contract {
         cert.docType = 'CERT';
         let cid = new ClientIdentity(ctx.stub);
         let mspID = cid.getMSPID();
-        cert.certID = `${mspID}-${cert.certID}`;
+        // cert.certID = `${mspID}-${cert.certID}`;
+        cert.certID = `KEEP-${cert.certID}`;
         await ctx.stub.putState(cert.certID, Buffer.from(JSON.stringify(cert)));
     }
 

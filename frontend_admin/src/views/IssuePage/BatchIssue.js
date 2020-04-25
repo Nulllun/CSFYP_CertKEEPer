@@ -36,7 +36,8 @@ import styles from "assets/jss/material-kit-react/views/landingPageSections/prod
 
 const useStyles = makeStyles(styles);
 
-const stringHash = require("string-hash");
+// const stringHash = require("string-hash");
+var sha256 = require("js-sha256");
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -127,9 +128,9 @@ export default function SingleIssue() {
     for (var i = 0; i < recipientIDMultiple.length; i++) {
       var RID = recipientIDMultiple[i];
       var certID = recipientIDMultiple[i] + courseID + certMsg + certDate;
-      let certID_afterhash = stringHash(certID);
+      let certID_afterhash = sha256(certID);
 
-      certIDList[i] = "Org1MSP-" + certID_afterhash;
+      certIDList[i] = "KEEP-" + certID_afterhash;
       let cert = {
         type: "course",
         issuePlatform: issuePlatform,
