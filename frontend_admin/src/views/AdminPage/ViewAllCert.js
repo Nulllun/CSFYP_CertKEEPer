@@ -1152,7 +1152,7 @@ export default function ViewAllCert() {
       </div>
       <Box display={boxStateEmpty}>
         <InfoArea
-          title="No result(s) found..."
+          title="Result(s) not found..."
           description=""
           icon={SentimentVeryDissatisfiedRoundedIcon}
           iconColor="info"

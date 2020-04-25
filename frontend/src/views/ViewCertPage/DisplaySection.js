@@ -63,7 +63,7 @@ export default function DisplaySection() {
 
   async function getCert() {
     setBoxStateEmpty("none");
-    let RID = 1155090001;
+    let RID = 1155094246;
     if (RID !== undefined && RID !== null) {
       let path = "http://localhost:5000/view";
       let response = await fetch(path, {
