@@ -83,14 +83,6 @@ class CertKeeper extends Contract {
         await ctx.stub.putState(cert.certID, Buffer.from(JSON.stringify(cert)));
     }
 
-    async signCert(ctx, certID, signature){
-        var cert = await ctx.stub.getState(certID);
-        if(cert.signature == ''){
-            cert.signature = signature;
-            await ctx.stub.putState(certID, Buffer.from(JSON.stringify(cert)));
-        }
-    }
-
     async deleteCert(ctx, certID){
         await ctx.stub.deleteState(certID);
     }
