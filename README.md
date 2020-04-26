@@ -18,7 +18,7 @@ https://hyperledger-fabric.readthedocs.io/en/release-2.0/prereqs.html
 
 Follow this link to install Samples, Binaries, and Docker Images of Hyperledger:
 
-https://hyperledger-fabric.readthedocs.io/en/latest/install.html#
+https://hyperledger-fabric.readthedocs.io/en/release-2.0/install.html
 
 Use
 
