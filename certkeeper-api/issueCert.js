@@ -15,13 +15,13 @@ const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 router.post('/', async (req, res) => {
 
     try {
-        let certID = req.body.certID;
+        // let certID = req.body.certID;
         let content = req.body.certContent;
 
         const hash = crypto.createHash('sha256');
         hash.update(content.recipientID + content.courseID + content.certMsg + content.issueDate);
         let hashedCertID = hash.digest('hex');
-        certID = hashedCertID;
+        let certID = hashedCertID;
 
         let cert = new CertKeeperCert();
         cert.certID = certID;
