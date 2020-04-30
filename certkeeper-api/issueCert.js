@@ -18,10 +18,10 @@ router.post('/', async (req, res) => {
         let certID = req.body.certID;
         let content = req.body.certContent;
 
-        // const hash = crypto.createHash('sha256');
-        // hash.update(content.recipientID + content.courseID + content.certMsg + content.issueDate);
-        // let hashedCertID = hash.digest('hex');
-        // certID = hashedCertID;
+        const hash = crypto.createHash('sha256');
+        hash.update(content.recipientID + content.courseID + content.certMsg + content.issueDate);
+        let hashedCertID = hash.digest('hex');
+        certID = hashedCertID;
 
         let cert = new CertKeeperCert();
         cert.certID = certID;
