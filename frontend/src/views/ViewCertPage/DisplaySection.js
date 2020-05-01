@@ -147,6 +147,12 @@ export default function DisplaySection() {
     line: {
       fontSize: 12,
       color: "grey"
+    },
+    ID: {
+      fontSize: 8,
+      marginBottom: 20,
+      textAlign: "left",
+      color: "grey"
     }
   });
 
@@ -154,6 +160,7 @@ export default function DisplaySection() {
   const MyDocument = () => (
     <Document>
       <Page size="A4" style={PDFstyle.body}>
+        <Text style={PDFstyle.ID}>{certID}</Text>
         <Image style={PDFstyle.logo} src={keepLogo} />
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}></Text>
@@ -161,7 +168,7 @@ export default function DisplaySection() {
         <Text style={PDFstyle.title}>Daisy Mang</Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>
-          successfuly completed and received {message} in
+          successfully completed and received {message} in
         </Text>
         <Text style={PDFstyle.title}>
           {course_code}: {course_name}

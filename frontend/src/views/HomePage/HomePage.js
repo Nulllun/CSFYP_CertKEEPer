@@ -37,7 +37,8 @@ export default function HomePage(props) {
         <div className={classes.container}>
           <GridContainer>
             <GridItem xs={12} sm={12} md={6}>
-              <h1 className={classes.title}>certKEEPer</h1>
+              <h1 className={classes.title}>Welcome to certKEEPer, Daisy!</h1>
+              {/* <h1 className={classes.title}>certKEEPer</h1> */}
               <h4>
                 The Chinese University of Hong Kong
                 <br />

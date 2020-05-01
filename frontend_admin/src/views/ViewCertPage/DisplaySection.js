@@ -41,7 +41,8 @@ var course_name,
   teacher_name,
   date,
   targetButton,
-  pdfname;
+  pdfname,
+  message;
 
 export default function DisplaySection() {
   const classes = useStyles();
@@ -76,6 +77,12 @@ export default function DisplaySection() {
     line: {
       fontSize: 12,
       color: "grey"
+    },
+    ID: {
+      fontSize: 8,
+      marginBottom: 20,
+      textAlign: "left",
+      color: "grey"
     }
   });
 
@@ -83,6 +90,7 @@ export default function DisplaySection() {
   const MyDocument = () => (
     <Document>
       <Page size="A4" style={PDFstyle.body}>
+        <Text style={PDFstyle.ID}>{certID}</Text>
         <Image style={PDFstyle.logo} src={keepLogo} />
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}></Text>
@@ -90,7 +98,7 @@ export default function DisplaySection() {
         <Text style={PDFstyle.title}>Chris Wong</Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>
-          successfuly completed and received a passing grade in
+          successfully completed and received {message} in
         </Text>
         <Text style={PDFstyle.title}>
           {course_code}: {course_name}
@@ -142,6 +150,7 @@ export default function DisplaySection() {
     teacher_name = obj.teacher_name;
     date = obj.date;
     targetButton = "button" + obj.id;
+    message = obj.content.certMsg;
 
     console.log(targetButton);
 
