@@ -35,7 +35,7 @@ git clone git@github.com:Nulllun/CSFYP_CertKEEPer.git
 
 Start Hyperledger Fabric first
 ```
-cd hyperledger/test-network
+cd hyperledger/keep-network
 ./network.sh up createChannel -ca -s couchdb
 ./network.sh deployCC
 ```
