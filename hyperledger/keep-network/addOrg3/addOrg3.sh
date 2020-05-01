@@ -18,7 +18,7 @@ export VERBOSE=false
 # Print the usage message
 function printHelp () {
   echo "Usage: "
-  echo "  addOrg3.sh up|down|generate [-c <channel name>] [-t <timeout>] [-d <delay>] [-f <docker-compose-file>] [-s <dbtype>]"
+  echo "  addOrg3.sh up|down|generate|deployCC [-c <channel name>] [-t <timeout>] [-d <delay>] [-f <docker-compose-file>] [-s <dbtype>]"
   echo "  addOrg3.sh -h|--help (print this message)"
   echo "    <mode> - one of 'up', 'down', or 'generate'"
   echo "      - 'up' - add org3 to the sample network. You need to bring up the test network and create a channel first."
@@ -93,7 +93,7 @@ function generateOrg3() {
         echo "fabric-ca-client binary is not available to download"
     else
         echo "==> Done."
-      cd test-network/addOrg3/
+      cd keep-network/addOrg3/
     fi
     fi
 
@@ -109,7 +109,7 @@ function generateOrg3() {
     sleep 10
 
     echo "##########################################################"
-    echo "############ Create Org1 Identities ######################"
+    echo "############ Create Org3 Identities ######################"
     echo "##########################################################"
 
     createOrg3
@@ -201,6 +201,21 @@ function addOrg3 () {
     exit 1
   fi
 
+}
+
+function deployCC() {
+  echo "###############################################################"
+  echo "################### Deploy chaincode in Org3 ##################"
+  echo "###############################################################"
+  docker exec Org3cli ./scripts/org3-scripts/deployCCorg3.sh
+  if [ $? -ne 0 ]; then
+    echo "ERROR !!! Deploying chaincode failed"
+    exit 1
+  fi
+  echo "###############################################################"
+  echo "################# Deployment chaincode success ################"
+  echo "###############################################################"
+  exit 0
 }
 
 # Tear down running network
@@ -303,6 +318,8 @@ elif [ "$MODE" == "down" ]; then
   EXPMODE="Stopping network"
 elif [ "$MODE" == "generate" ]; then
   EXPMODE="Generating certs and organization definition for Org3"
+elif [ "$MODE" == "deployCC" ]; then
+  EXPMODE="Deploying chaincode for Org3"
 else
   printHelp
   exit 1
@@ -316,6 +333,8 @@ elif [ "${MODE}" == "down" ]; then ## Clear the network
 elif [ "${MODE}" == "generate" ]; then ## Generate Artifacts
   generateOrg3
   generateOrg3Definition
+elif [ "${MODE}" == "deployCC" ]; then ## Clear the network
+  deployCC
 else
   printHelp
   exit 1
