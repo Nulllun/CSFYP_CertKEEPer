@@ -5,7 +5,7 @@ const { Wallets, Gateway } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
 
-const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com','connection-org1.json');
+const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'keep-network', 'organizations', 'peerOrganizations', 'keep.example.com','connection-keep.json');
 const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
 // View user's own certs

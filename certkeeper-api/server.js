@@ -4,7 +4,7 @@ const app = express();
 const viewCert = require('./viewCert.js');
 const verifyCert = require('./verifyCert.js');
 const issueCert = require('./issueCert.js');
-const register = require('./register.js');
+// const register = require('./register.js');
 const deleteCert = require('./deleteCert.js');
 const discloseCert = require('./discloseCert.js');
 
@@ -28,7 +28,7 @@ app.post("/file", function (req, res) {
 app.use("/view", viewCert);
 app.use("/verify", verifyCert);
 app.use("/issue", issueCert);
-app.use("/register", register);
+// app.use("/register", register);
 app.use("/delete", deleteCert);
 app.use("/disclose", discloseCert);
 

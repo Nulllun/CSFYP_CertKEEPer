@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
 
 const { Wallets, Gateway } = require('fabric-network');
 const path = require('path');
@@ -7,15 +8,20 @@ const fs = require('fs');
 
 const { CertKeeperCert } = require('./CertKeeperCert');
 
-const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com','connection-org1.json');
+const ccpPath = path.resolve(__dirname, '..', 'hyperledger', 'keep-network', 'organizations', 'peerOrganizations', 'keep.example.com','connection-keep.json');
 const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
 // View user's own certs
 router.post('/', async (req, res) => {
 
     try {
-        let certID = req.body.certID;
+        // let certID = req.body.certID;
         let content = req.body.certContent;
+
+        const hash = crypto.createHash('sha256');
+        hash.update(content.recipientID + content.courseID + content.certMsg + content.issueDate);
+        let hashedCertID = hash.digest('hex');
+        let certID = hashedCertID;
 
         let cert = new CertKeeperCert();
         cert.certID = certID;
