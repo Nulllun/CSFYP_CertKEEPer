@@ -203,7 +203,7 @@ function addOrg3 () {
 
 }
 
-function deployCC() {
+function deployCC () {
   echo "###############################################################"
   echo "################### Deploy chaincode in Org3 ##################"
   echo "###############################################################"
@@ -212,9 +212,7 @@ function deployCC() {
     echo "ERROR !!! Deploying chaincode failed"
     exit 1
   fi
-  echo "###############################################################"
   echo "################# Deployment chaincode success ################"
-  echo "###############################################################"
   exit 0
 }
 
@@ -333,7 +331,7 @@ elif [ "${MODE}" == "down" ]; then ## Clear the network
 elif [ "${MODE}" == "generate" ]; then ## Generate Artifacts
   generateOrg3
   generateOrg3Definition
-elif [ "${MODE}" == "deployCC" ]; then ## Clear the network
+elif [ "${MODE}" == "deployCC" ]; then ## Deploy chaincode
   deployCC
 else
   printHelp

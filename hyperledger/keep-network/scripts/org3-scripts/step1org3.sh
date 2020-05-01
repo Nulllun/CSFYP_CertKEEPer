@@ -99,6 +99,7 @@ set +x
 # Compute a config update, based on the differences between config.json and modified_config.json, write it as a transaction to org3_update_in_envelope.pb
 createConfigUpdate ${CHANNEL_NAME} config.json modified_config.json org3_update_in_envelope.pb
 
+# The following command should be executed by the endorser in the channel
 echo
 echo "========= Config transaction to add org3 to network created ===== "
 echo
