@@ -1,0 +1,49 @@
+{
+    "name": "test-network-keep",
+    "version": "1.0.0",
+    "client": {
+        "organization": "Keep",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                }
+            }
+        }
+    },
+    "organizations": {
+        "Keep": {
+            "mspid": "KeepMSP",
+            "peers": [
+                "peer0.keep.example.com"
+            ],
+            "certificateAuthorities": [
+                "ca.keep.example.com"
+            ]
+        }
+    },
+    "peers": {
+        "peer0.keep.example.com": {
+            "url": "grpcs://localhost:${P0PORT}",
+            "tlsCACerts": {
+                "pem": "${PEERPEM}"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.keep.example.com",
+                "hostnameOverride": "peer0.keep.example.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.keep.example.com": {
+            "url": "https://localhost:${CAPORT}",
+            "caName": "ca-keep",
+            "tlsCACerts": {
+                "pem": "${CAPEM}"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}
