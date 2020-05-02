@@ -71,7 +71,7 @@ export default function ProductSection() {
   function handleClick() {
     const recaptchaValue = recaptchaRef.current.getValue();
     // console.log("captcha:" + recaptchaValue);
-    if (recaptchaValue == "") {
+    if (recaptchaValue === "") {
       setBoxStateInvalidCaptcha("block");
     } else {
       setBoxState("none");
@@ -107,21 +107,21 @@ export default function ProductSection() {
         setIssuePlatform(data.cert.content.issuePlatform);
         setRecipientID(data.cert.content.recipientID);
         setIssueDate(data.cert.content.issueDate);
-        if (data.cert.disclosed == "true") {
+        if (data.cert.disclosed === "true") {
           setBoxStateDisclose("block");
 
-          if (data.cert.content.type == "course") {
+          if (data.cert.content.type === "course") {
             setInstitution(data.cert.content.institution);
             setCourseTitle(data.cert.content.courseTitle);
             setTeacherName(data.cert.content.teacherName);
             setMessage(data.cert.content.certMsg);
-          } else if (data.cert.content.type == "competition") {
+          } else if (data.cert.content.type === "competition") {
             setComp_name(data.cert.content.competitionName);
             setOrg_name(data.cert.content.organisationName);
             setAward(data.cert.content.award);
           }
           setBoxState("block");
-        } else if (data.cert.disclosed == "false") {
+        } else if (data.cert.disclosed === "false") {
           setBoxState("block");
           setBoxStateNotDisclose("block");
         }
@@ -132,7 +132,7 @@ export default function ProductSection() {
   }
 
   function displayData() {
-    if (type == "course") {
+    if (type === "course") {
       // console.log("course");
       return (
         <div className={classes.demo}>
@@ -167,7 +167,7 @@ export default function ProductSection() {
           </List>
         </div>
       );
-    } else if (type == "competition") {
+    } else if (type === "competition") {
       // console.log("comp");
       return (
         <div className={classes.demo}>

@@ -86,7 +86,7 @@ export default function DisplaySection() {
         setCertList(certList);
         setBoxStateEmpty("none");
       }
-      if (certList.length == 0) {
+      if (certList.length === 0) {
         setBoxStateEmpty("block");
       }
     }
@@ -96,9 +96,9 @@ export default function DisplaySection() {
     var discloseOption_updated;
     console.log("old: " + typeof obj.disclosed);
     console.log("old: " + obj.disclosed);
-    if (obj.disclosed == "true") {
+    if (obj.disclosed === "true") {
       discloseOption_updated = "false";
-    } else if (obj.disclosed == "false") {
+    } else if (obj.disclosed === "false") {
       discloseOption_updated = "true";
     }
     console.log("new: " + typeof discloseOption_updated);
@@ -126,7 +126,7 @@ export default function DisplaySection() {
   function getStudentName(obj) {
     var i;
     for (i = 0; i < studentJsonData.length; i++) {
-      if (obj.content.recipientID == studentJsonData[i].sid) {
+      if (obj.content.recipientID === studentJsonData[i].sid) {
         return studentJsonData[i].name;
       }
     }
@@ -314,15 +314,15 @@ export default function DisplaySection() {
   // }
 
   function discloseBoolean(obj) {
-    if (obj.disclosed == "true") {
+    if (obj.disclosed === "true") {
       return true;
-    } else if (obj.disclosed == "false") {
+    } else if (obj.disclosed === "false") {
       return false;
     }
   }
 
   function certType(obj) {
-    if (obj.content.type == "course") {
+    if (obj.content.type === "course") {
       return (
         <ExpansionPanel>
           <ExpansionPanelSummary
@@ -442,7 +442,7 @@ export default function DisplaySection() {
           </ExpansionPanelDetails>
         </ExpansionPanel>
       );
-    } else if (obj.content.type == "competition") {
+    } else if (obj.content.type === "competition") {
       return (
         <ExpansionPanel>
           <ExpansionPanelSummary
