@@ -230,17 +230,13 @@ function genConfigBlock () {
   echo "###############################################################"
 
   # generate artifacts if they don't exist
-  if [ ! -d "../organizations/peerOrganizations/org3.example.com" ]; then
-    generateOrg3
-    generateOrg3Definition
-  fi
 
   CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /fabric-tools/) {print $1}')
   if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" == " " ]; then
     echo "Bringing up fabric-tool"
     fabricToolUp
   fi
-
+  docker cp $NEW_ORG_JSON fabricToolCLI:/opt/gopath/src/github.com/hyperledger/fabric/peer/new_org_json.json
   docker exec fabricToolCLI bash ./scripts/org3-scripts/genConfigBlock.sh
   if [ $? -ne 0 ]; then
     echo "ERROR !!! Generation of config block failed"
@@ -327,6 +323,10 @@ while [[ $# -ge 1 ]] ; do
     ;;
   -i )
     IMAGETAG=$(go env GOARCH)"-""$2"
+    shift
+    ;;
+  -j )
+    NEW_ORG_JSON="$2"
     shift
     ;;
   -verbose )
