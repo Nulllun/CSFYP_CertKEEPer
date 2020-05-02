@@ -130,7 +130,7 @@ export default function SingleIssue() {
       var certID = recipientIDMultiple[i] + courseID + certMsg + certDate;
       let certID_afterhash = sha256(certID);
 
-      certIDList[i] = "KEEP-" + certID_afterhash;
+      certIDList[i] = "KeepMSP-" + certID_afterhash;
       let cert = {
         type: "course",
         issuePlatform: issuePlatform,

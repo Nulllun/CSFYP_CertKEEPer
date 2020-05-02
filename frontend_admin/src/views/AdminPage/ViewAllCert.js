@@ -4,15 +4,13 @@ import {
   Page,
   Text,
   Image,
-  // View,
   Document,
   StyleSheet,
-  // Font,
   PDFDownloadLink
 } from "@react-pdf/renderer";
 import ReactDOM from "react-dom";
-// import jsonData from "../../json/cert.json";
 import keepLogo from "../../assets/img/keep_logo.png";
+import studentJsonData from "../../json/student.json";
 
 // @material-ui/icons
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -60,7 +58,10 @@ var course_name,
   date,
   // recipient_id,
   targetButton,
+  student_name,
   pdfname;
+
+var comp_name, org_name, award;
 
 var deleteCertID;
 
@@ -322,11 +323,6 @@ export default function ViewAllCert() {
       fontSize: 24,
       textAlign: "center"
     },
-    author: {
-      fontSize: 12,
-      textAlign: "center",
-      marginBottom: 40
-    },
     logo: {
       width: 250
     },
@@ -339,18 +335,45 @@ export default function ViewAllCert() {
     line: {
       fontSize: 12,
       color: "grey"
+    },
+    ID: {
+      fontSize: 8,
+      marginBottom: 20,
+      textAlign: "left",
+      color: "grey"
+    },
+    titleInline: {
+      fontSize: 24
+    },
+    lineComp: {
+      fontSize: 12,
+      color: "grey",
+      textAlign: "right"
     }
   });
+
+  function getStudentName(obj) {
+    var i;
+    console.log("del luna " + obj.content.recipientID);
+    for (i = 0; i < studentJsonData.length; i++) {
+      if (obj.content.recipientID == studentJsonData[i].sid) {
+        console.log("moon " + studentJsonData[i].sid);
+        return studentJsonData[i].name;
+      }
+    }
+    return "undefined";
+  }
 
   // Create Document Component
   const MyDocument = () => (
     <Document>
       <Page size="A4" style={PDFstyle.body}>
+        <Text style={PDFstyle.ID}>{certID}</Text>
         <Image style={PDFstyle.logo} src={keepLogo} />
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>This is to certify that</Text>
-        <Text style={PDFstyle.title}>Chris Wong</Text>
+        <Text style={PDFstyle.title}>{student_name}</Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>
           successfuly completed and received {message} in
@@ -372,7 +395,7 @@ export default function ViewAllCert() {
     </Document>
   );
 
-  const App = () => (
+  const CoursePDF = () => (
     <div>
       <PDFDownloadLink document={<MyDocument />} fileName={pdfname}>
         {({ blob, url, loading, error }) =>
@@ -386,16 +409,8 @@ export default function ViewAllCert() {
     console.log("generating PDF");
     pdfname = certID + ".pdf";
     const rootElement = document.getElementById(targetButton);
-    ReactDOM.render(<App />, rootElement);
+    ReactDOM.render(<CoursePDF />, rootElement);
   }
-
-  // var jsonobject_string = [];
-  // function getJsonObject() {
-  //   for (var i = 0; i < jsonData.length; i++) {
-  //     var obj = jsonData[i];
-  //     jsonobject_string[i] = obj;
-  //   }
-  // }
 
   const setCertValue = obj => {
     certID = obj.certID;
@@ -406,17 +421,67 @@ export default function ViewAllCert() {
     message = obj.content.certMsg;
     date = obj.content.issueDate;
     targetButton = "button" + obj.certID;
+    student_name = getStudentName(obj);
     genPDF();
+    setDlButtonVisibility(false);
+  };
+
+  const MyDocumentComp = () => (
+    <Document>
+      <Page size="A4" style={PDFstyle.body}>
+        <Text style={PDFstyle.ID}>{certID}</Text>
+        <Image style={PDFstyle.logo} src={keepLogo} />
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>Certificate of Recognition</Text>
+        <Text style={PDFstyle.header}>This award is given to</Text>
+        <Text style={PDFstyle.title}>{student_name}</Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>for winning</Text>
+        <Text style={PDFstyle.title}>
+          {award} in {comp_name}
+        </Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>organised by {org_name}</Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.lineComp}>{date}</Text>
+      </Page>
+    </Document>
+  );
+
+  const CompPDF = () => (
+    <div>
+      <PDFDownloadLink document={<MyDocumentComp />} fileName={pdfname}>
+        {({ blob, url, loading, error }) =>
+          loading ? "Loading document..." : "Download now!"
+        }
+      </PDFDownloadLink>
+    </div>
+  );
+
+  function genPDFComp() {
+    console.log("generating PDF");
+    pdfname = certID + ".pdf";
+    const rootElement = document.getElementById(targetButton);
+    ReactDOM.render(<CompPDF />, rootElement);
+  }
+
+  const setCertValueComp = obj => {
+    certID = obj.certID;
+    comp_name = obj.content.competitionName;
+    org_name = obj.content.organisationName;
+    award = obj.content.award;
+    date = obj.content.issueDate;
+    targetButton = "button" + obj.certID;
+    student_name = getStudentName(obj);
+    genPDFComp();
     setDlButtonVisibility(false);
   };
 
   function buttonID(obj) {
     return "button" + obj.certID;
   }
-
-  // React.useEffect(() => {
-  //   console.log("Do something after counter has changed", course_name_edit);
-  // }, [course_name_edit]);
 
   const editCert = obj => {
     setActiveModal(obj.certID);
@@ -504,74 +569,76 @@ export default function ViewAllCert() {
             id="panel1a-header"
           >
             <Typography className={classes.heading}>
-              {obj.certID} - {obj.content.courseID} - {obj.content.recipientID}{" "}
-              - issued on: {obj.content.issueDate}
+              {obj.content.courseID} - {obj.content.recipientID} -{" "}
+              {obj.content.certMsg} - issued on: {obj.content.issueDate}
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Grid item xs={12} md={6}>
-              <div className={classes.demo}>
-                <List dense={dense}>
-                  <ListItem>
-                    <ListItemText
-                      primary="Certficate ID"
-                      secondary={obj.certID}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Institution"
-                      secondary={obj.content.institution}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Issue Platform"
-                      secondary={obj.content.issuePlatform}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Student ID"
-                      secondary={obj.content.recipientID}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Course ID"
-                      secondary={obj.content.courseID}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Course Title"
-                      secondary={obj.content.courseTitle}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Teacher Name"
-                      secondary={obj.content.teacherName}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Certificate Description"
-                      secondary={obj.content.certMsg}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Issue Date"
-                      secondary={obj.content.issueDate}
-                    />
-                  </ListItem>
-                </List>
-              </div>
-            </Grid>
+            <Box display="flex" flexWrap="wrap" p={0} m={0}>
+              <Grid item xs={12} md={6}>
+                <div className={classes.demo}>
+                  <List dense={dense}>
+                    <ListItem>
+                      <ListItemText
+                        primary="Certficate ID"
+                        secondary={obj.certID}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Institution"
+                        secondary={obj.content.institution}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Issue Platform"
+                        secondary={obj.content.issuePlatform}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Student ID"
+                        secondary={obj.content.recipientID}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Course ID"
+                        secondary={obj.content.courseID}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Course Title"
+                        secondary={obj.content.courseTitle}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Teacher Name"
+                        secondary={obj.content.teacherName}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Certificate Description"
+                        secondary={obj.content.certMsg}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Issue Date"
+                        secondary={obj.content.issueDate}
+                      />
+                    </ListItem>
+                  </List>
+                </div>
+              </Grid>
+            </Box>
             <Box>
               <Grid container direction={"row"} spacing={1}>
-                <Grid container item xs={12} sm={12}>
+                <Grid item xs={12} sm={12}>
                   <Grid>
                     <Button
                       // id={buttonID(obj)}
@@ -593,7 +660,7 @@ export default function ViewAllCert() {
                     </Button>
                   </Grid>
                 </Grid>
-                <Grid container item xs={12} sm={12}>
+                <Grid item xs={12} sm={12}>
                   <Grid>
                     <Button
                       // id={buttonID(obj)}
@@ -733,7 +800,7 @@ export default function ViewAllCert() {
                     </Dialog>
                   </Grid>
                 </Grid>
-                <Grid container item xs={12} sm={12}>
+                <Grid item xs={12} sm={12}>
                   <Grid>
                     <Button
                       color="danger"
@@ -819,68 +886,70 @@ export default function ViewAllCert() {
             id="panel1a-header"
           >
             <Typography className={classes.heading}>
-              {obj.certID} - {obj.content.competitionName} -{" "}
-              {obj.content.recipientID} - issued on: {obj.content.issueDate}
+              {obj.content.competitionName} - {obj.content.recipientID} -{" "}
+              {obj.content.award} - issued on: {obj.content.issueDate}
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Grid item xs={12} md={6}>
-              <div className={classes.demo}>
-                <List dense={dense}>
-                  <ListItem>
-                    <ListItemText
-                      primary="Certficate ID"
-                      secondary={obj.certID}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Organization"
-                      secondary={obj.content.organisationName}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Issue Platform"
-                      secondary={obj.content.issuePlatform}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Recipient ID"
-                      secondary={obj.content.recipientID}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Competition Name"
-                      secondary={obj.content.competitionName}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Award"
-                      secondary={obj.content.award}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Issue Date"
-                      secondary={obj.content.issueDate}
-                    />
-                  </ListItem>
-                </List>
-              </div>
-            </Grid>
+            <Box display="flex" flexWrap="wrap" p={0} m={0}>
+              <Grid item xs={12} md={6}>
+                <div className={classes.demo}>
+                  <List dense={dense}>
+                    <ListItem>
+                      <ListItemText
+                        primary="Certficate ID"
+                        secondary={obj.certID}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Organization"
+                        secondary={obj.content.organisationName}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Issue Platform"
+                        secondary={obj.content.issuePlatform}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Recipient ID"
+                        secondary={obj.content.recipientID}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Competition Name"
+                        secondary={obj.content.competitionName}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Award"
+                        secondary={obj.content.award}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Issue Date"
+                        secondary={obj.content.issueDate}
+                      />
+                    </ListItem>
+                  </List>
+                </div>
+              </Grid>
+            </Box>
             <Box>
               <Grid container direction={"row"} spacing={1}>
-                <Grid container item xs={12} sm={12}>
+                <Grid item xs={12} sm={12}>
                   <Grid>
                     <Button
                       // id={buttonID(obj)}
                       color="warning"
                       round
-                      onClick={() => setCertValue(obj)}
+                      onClick={() => setCertValueComp(obj)}
                     >
                       Generate PDF
                     </Button>
@@ -896,7 +965,7 @@ export default function ViewAllCert() {
                     </Button>
                   </Grid>
                 </Grid>
-                <Grid container item xs={12} sm={12}>
+                <Grid item xs={12} sm={12}>
                   <Grid>
                     <Button
                       // id={buttonID(obj)}
@@ -1020,7 +1089,7 @@ export default function ViewAllCert() {
                     </Dialog>
                   </Grid>
                 </Grid>
-                <Grid container item xs={12} sm={12}>
+                <Grid item xs={12} sm={12}>
                   <Grid>
                     <Button
                       color="danger"

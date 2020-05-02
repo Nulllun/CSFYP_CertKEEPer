@@ -352,7 +352,7 @@ export default function SingleIssue() {
           </DialogTitle>
           <DialogContent dividers>
             <Typography gutterBottom>Issued.</Typography>
-            <Typography>The certID is KEEP-{certID_afterhash}.</Typography>
+            <Typography>The certID is KeepMSP-{certID_afterhash}.</Typography>
           </DialogContent>
         </Dialog>
       </Paper>
