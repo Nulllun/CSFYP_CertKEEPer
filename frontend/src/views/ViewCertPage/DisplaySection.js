@@ -11,6 +11,7 @@ import {
 import ReactDOM from "react-dom";
 // import jsonData from "../../json/cert.json";
 import keepLogo from "../../assets/img/keep_logo.png";
+import studentJsonData from "../../json/student.json";
 
 // @material-ui/icons
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -48,6 +49,8 @@ var course_name,
   date,
   targetButton,
   pdfname;
+
+var comp_name, org_name, award, student_name;
 
 export default function DisplaySection() {
   const classes = useStyles();
@@ -120,6 +123,16 @@ export default function DisplaySection() {
     }
   }
 
+  function getStudentName(obj) {
+    var i;
+    for (i = 0; i < studentJsonData.length; i++) {
+      if (obj.content.recipientID == studentJsonData[i].sid) {
+        return studentJsonData[i].name;
+      }
+    }
+    return "undefined";
+  }
+
   const PDFstyle = StyleSheet.create({
     body: {
       paddingTop: 35,
@@ -153,6 +166,14 @@ export default function DisplaySection() {
       marginBottom: 20,
       textAlign: "left",
       color: "grey"
+    },
+    titleInline: {
+      fontSize: 24
+    },
+    lineComp: {
+      fontSize: 12,
+      color: "grey",
+      textAlign: "right"
     }
   });
 
@@ -165,7 +186,7 @@ export default function DisplaySection() {
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>This is to certify that</Text>
-        <Text style={PDFstyle.title}>Daisy Mang</Text>
+        <Text style={PDFstyle.title}>{student_name}</Text>
         <Text style={PDFstyle.header}></Text>
         <Text style={PDFstyle.header}>
           successfully completed and received {message} in
@@ -222,6 +243,59 @@ export default function DisplaySection() {
     date = obj.content.issueDate;
     targetButton = "button" + obj.certID;
     genPDF();
+    setDlButtonVisibility(false);
+  };
+
+  const MyDocumentComp = () => (
+    <Document>
+      <Page size="A4" style={PDFstyle.body}>
+        <Text style={PDFstyle.ID}>{certID}</Text>
+        <Image style={PDFstyle.logo} src={keepLogo} />
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>Certificate of Recognition</Text>
+        <Text style={PDFstyle.header}>This award is given to</Text>
+        <Text style={PDFstyle.title}>{student_name}</Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>for winning</Text>
+        <Text style={PDFstyle.title}>
+          {award} in {comp_name}
+        </Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}>organised by {org_name}</Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.header}></Text>
+        <Text style={PDFstyle.lineComp}>{date}</Text>
+      </Page>
+    </Document>
+  );
+
+  const CompPDF = () => (
+    <div>
+      <PDFDownloadLink document={<MyDocumentComp />} fileName={pdfname}>
+        {({ blob, url, loading, error }) =>
+          loading ? "Loading document..." : "Download now!"
+        }
+      </PDFDownloadLink>
+    </div>
+  );
+
+  function genPDFComp() {
+    console.log("generating PDF");
+    pdfname = certID + ".pdf";
+    const rootElement = document.getElementById(targetButton);
+    ReactDOM.render(<CompPDF />, rootElement);
+  }
+
+  const setCertValueComp = obj => {
+    certID = obj.certID;
+    comp_name = obj.content.competitionName;
+    org_name = obj.content.organisationName;
+    award = obj.content.award;
+    date = obj.content.issueDate;
+    targetButton = "button" + obj.certID;
+    student_name = getStudentName(obj);
+    genPDFComp();
     setDlButtonVisibility(false);
   };
 
@@ -438,7 +512,7 @@ export default function DisplaySection() {
                       // id={buttonID(obj)}
                       color="warning"
                       round
-                      onClick={() => setCertValue(obj)}
+                      onClick={() => setCertValueComp(obj)}
                     >
                       Generate PDF
                     </Button>

@@ -354,10 +354,8 @@ export default function ViewAllCert() {
 
   function getStudentName(obj) {
     var i;
-    console.log("del luna " + obj.content.recipientID);
     for (i = 0; i < studentJsonData.length; i++) {
       if (obj.content.recipientID == studentJsonData[i].sid) {
-        console.log("moon " + studentJsonData[i].sid);
         return studentJsonData[i].name;
       }
     }
