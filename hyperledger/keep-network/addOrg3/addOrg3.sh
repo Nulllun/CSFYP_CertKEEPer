@@ -242,7 +242,7 @@ function genConfigBlock () {
     echo "ERROR !!! Generation of config block failed"
     exit 1
   fi
-  docker cp fabricToolCLI:/opt/gopath/src/github.com/hyperledger/fabric/peer/org3_update_in_envelope.pb ./org3_update_in_envelope.pb
+  docker cp fabricToolCLI:/opt/gopath/src/github.com/hyperledger/fabric/peer/org3_update_in_envelope.pb $JSON_OUTPUT_NAME
   echo "############# Generation of Config Block succeed ##############"
   docker stop fabricToolCLI
   docker rm fabricToolCLI
@@ -327,6 +327,10 @@ while [[ $# -ge 1 ]] ; do
     ;;
   -j )
     NEW_ORG_JSON="$2"
+    shift
+    ;;
+  -o )
+    JSON_OUTPUT_NAME="$2"
     shift
     ;;
   -verbose )
