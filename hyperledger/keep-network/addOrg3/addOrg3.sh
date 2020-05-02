@@ -156,6 +156,14 @@ function Org3Up () {
   fi
 }
 
+function fabricToolUp () {
+  IMAGE_TAG=$IMAGETAG docker-compose -f docker/docker-compose-tool.yaml up -d 2>&1
+  if [ $? -ne 0 ]; then
+    echo "ERROR !!!! Unable to start fabric tool"
+    exit 1
+  fi
+}
+
 # Generate the needed certificates, the genesis block and start the network.
 function addOrg3 () {
 
@@ -213,6 +221,35 @@ function deployCC () {
     exit 1
   fi
   echo "################# Deployment chaincode success ################"
+  exit 0
+}
+
+function genConfigBlock () {
+  echo "###############################################################"
+  echo "############### Generate config block for Org3 ################"
+  echo "###############################################################"
+
+  # generate artifacts if they don't exist
+  if [ ! -d "../organizations/peerOrganizations/org3.example.com" ]; then
+    generateOrg3
+    generateOrg3Definition
+  fi
+
+  CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /fabric-tools/) {print $1}')
+  if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" == " " ]; then
+    echo "Bringing up fabric-tool"
+    fabricToolUp
+  fi
+
+  docker exec fabricToolCLI bash ./scripts/org3-scripts/genConfigBlock.sh
+  if [ $? -ne 0 ]; then
+    echo "ERROR !!! Generation of config block failed"
+    exit 1
+  fi
+  docker cp fabricToolCLI:/opt/gopath/src/github.com/hyperledger/fabric/peer/org3_update_in_envelope.pb ./org3_update_in_envelope.pb
+  echo "############# Generation of Config Block succeed ##############"
+  docker stop fabricToolCLI
+  docker rm fabricToolCLI
   exit 0
 }
 
@@ -318,6 +355,8 @@ elif [ "$MODE" == "generate" ]; then
   EXPMODE="Generating certs and organization definition for Org3"
 elif [ "$MODE" == "deployCC" ]; then
   EXPMODE="Deploying chaincode for Org3"
+elif [ "$MODE" == "genConfigBlock" ]; then
+  EXPMODE="Generating config block for channel"
 else
   printHelp
   exit 1
@@ -333,6 +372,8 @@ elif [ "${MODE}" == "generate" ]; then ## Generate Artifacts
   generateOrg3Definition
 elif [ "${MODE}" == "deployCC" ]; then ## Deploy chaincode
   deployCC
+elif [ "${MODE}" == "genConfigBlock" ]; then ## Generate the config block for channel
+  genConfigBlock
 else
   printHelp
   exit 1
