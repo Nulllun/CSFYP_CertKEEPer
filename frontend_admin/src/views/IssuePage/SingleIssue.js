@@ -70,10 +70,11 @@ export default function SingleIssue() {
   };
 
   const handleChangeCertDate = date => {
-    setCertDateDay(new Date(date).getDate());
-    setCertDateMonth(new Date(date).getMonth() + 1);
-    setCertDateYear(new Date(date).getFullYear());
-    setCertDate(certDateDay + "/" + certDateMonth + "/" + certDateYear);
+    let dateObj = new Date(date);
+    // setCertDateDay(new Date(date).getDate());
+    // setCertDateMonth(new Date(date).getMonth() + 1);
+    // setCertDateYear(new Date(date).getFullYear());
+    setCertDate(`${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()}`);
 
     console.log("date: " + certDate);
   };
@@ -296,7 +297,7 @@ export default function SingleIssue() {
                       inputProps={{
                         placeholder: "None"
                       }}
-                      onChange={handleChangeCertDate}
+                      onChange={date => handleChangeCertDate(date)}
                       timeFormat={false}
                     />
                   </FormControl>
